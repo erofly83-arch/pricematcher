@@ -1,0 +1,2033 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Сравнение цен</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext x='50%25' y='50%25' dominant-baseline='central' text-anchor='middle' font-size='80'%3E%F0%9F%92%B2%3C/text%3E%3C/svg%3E" />
+    <script src="https://cdn.jsdelivr.net/npm/exceljs@4.3.0/dist/exceljs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Arial, sans-serif;
+            background: #f2f2f7;
+            padding: 16px;
+            color: #1c1c1e;
+        }
+
+        .container {
+            max-width: 100%;
+            margin: 0 авто;
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+        }
+
+        h1 {
+            font-size: 28px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #1c1c1e;
+            letter-spacing: -0.5px;
+        }
+
+        .upload-section {
+            display: grid;
+            grid-template-columns: 1.5fr 1.5fr 1fr;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .upload-card {
+            background: #f9f9fb;
+            border-radius: 12px;
+            padding: 12px;
+            border: 2px dashed #c7c7cc;
+            transition: all 0.2s;
+        }
+
+        .upload-card:hover {
+            border-color: #007aff;
+        }
+
+        .upload-card.my-price {
+            border-color: #34c759;
+            background: #f0fdf4;
+        }
+
+        .upload-card.my-price:hover {
+            border-color: #28a745;
+        }
+
+        .upload-label {
+            display: block;
+            font-size: 12px;
+            font-weight: 600;
+            color: #8e8e93;
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .upload-card.my-price .upload-label {
+            color: #34c759;
+        }
+
+        .file-input-wrapper {
+            position: relative;
+        }
+
+        .file-input-wrapper input[type="file"] {
+            position: absolute;
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+        }
+
+        .file-input-display {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 10px;
+            background: white;
+            border-radius: 8px;
+            font-size: 13px;
+            color: #007aff;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .file-input-display:hover {
+            background: #e8f4ff;
+        }
+
+        .upload-card.my-price .file-input-display {
+            color: #34c759;
+        }
+
+        .upload-card.my-price .file-input-display:hover {
+            background: #e6f9ec;
+        }
+
+        .upload-card.synonyms {
+            border-color: #ffcc00;
+            background: #fff9e6;
+        }
+
+        .upload-card.synonyms .upload-label {
+            color: #ff9500;
+        }
+
+        .search-box {
+            margin-bottom: 12px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 10px 12px;
+            border: 2px solid #e5e5ea;
+            border-radius: 10px;
+            font-size: 14px;
+            font-family: inherit;
+            transition: all 0.2s;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: #007aff;
+            background: #f0f7ff;
+        }
+
+        .controls {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 12px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 6px 10px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 12px;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            line-height: 1;
+            white-space: nowrap;
+        }
+
+        .btn span.icon {
+            font-size: 14px;
+        }
+
+        .btn-primary {
+            background: #007aff;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #0051d5;
+            transform: translateY(-1px);
+            box-shadow: 0 3px 8px rgba(0, 122, 255, 0.25);
+        }
+
+        .btn-success {
+            background: #34c759;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #28a745;
+            transform: translateY(-1px);
+            box-shadow: 0 3px 8px rgba(52, 199, 89, 0.25);
+        }
+
+        .btn-warning {
+            background: #ff9500;
+            color: white;
+        }
+
+        .btn-warning:hover {
+            background: #e08600;
+            transform: translateY(-1px);
+            box-shadow: 0 3px 8px rgba(255, 149, 0, 0.25);
+        }
+
+        .btn-danger {
+            background: #ff3b30;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #d70015;
+        }
+
+        .btn-secondary {
+            background: #f9f9fb;
+            color: #007aff;
+            border: 1px solid #e5e5ea;
+        }
+
+        .btn-secondary:hover {
+            background: #e8f4ff;
+        }
+
+        .btn-secondary.active {
+            background: #007aff;
+            color: white;
+        }
+
+        .btn:disabled {
+            background: #e5e5ea;
+            color: #aeaeb2;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .cart-badge {
+            background: #ff3b30;
+            color: white;
+            border-radius: 10px;
+            padding: 1px 6px;
+            font-size: 11px;
+            font-weight: 700;
+            min-width: 18px;
+            text-align: center;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+
+        .info-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 12px;
+            padding: 10px;
+            color: white;
+        }
+
+        .info-card:nth-child(2) {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+
+        .info-card:nth-child(3) {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+
+        .info-card:nth-child(4) {
+            background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+        }
+
+        .info-value {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 2px;
+            letter-spacing: -0.5px;
+        }
+
+        .info-label {
+            font-size: 11px;
+            opacity: 0.9;
+            font-weight: 500;
+        }
+
+        .hidden-columns {
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            border-radius: 12px;
+            padding: 8px 10px;
+            margin-bottom: 10px;
+            display: none;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .hidden-columns-label {
+            font-size: 12px;
+            font-weight: 600;
+            color: #856404;
+        }
+
+        .restore-column-btn {
+            padding: 4px 8px;
+            background: white;
+            border: 1px solid #ffc107;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 600;
+            color: #856404;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .restore-column-btn:hover {
+            background: #ffc107;
+            color: white;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+            border-radius: 12px;
+            border: 1px solid #e5e5ea;
+            max-height: 70vh;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 700px;
+        }
+
+        th {
+            background: #f9f9fb;
+            padding: 6px 8px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 11px;
+            color: #8e8e93;
+            border-bottom: 1px solid #e5e5ea;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            max-width: 150px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        th.col-barcode {
+            min-width: 140px;
+            max-width: 140px;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        th.col-barcode:hover {
+            background: #e8f4ff;
+        }
+
+        th.col-name {
+            min-width: 320px;
+            max-width: 320px;
+        }
+
+        th.col-actions {
+            min-width: 70px;
+            max-width: 70px;
+        }
+
+        .column-header {
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+        }
+
+        .column-header-checkbox {
+            display: flex;
+            align-items: center;
+            gap: 3px;
+            font-size: 9px;
+        }
+
+        .column-header-checkbox input[type="checkbox"] {
+            width: 13px;
+            height: 13px;
+            cursor: pointer;
+        }
+
+        .column-header-title {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 4px;
+            white-space: nowrap;
+            overflow: hidden;
+        }
+
+        .column-name-text {
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .edit-col-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #007aff;
+            font-size: 14px;
+            padding: 0 4px;
+            opacity: 0.5;
+            transition: all 0.2s;
+            flex-shrink: 0;
+            line-height: 1;
+        }
+
+        .edit-col-btn:hover {
+            opacity: 1;
+            background: #e8f4ff;
+            border-radius: 4px;
+            transform: scale(1.1);
+        }
+
+        td {
+            padding: 4px 8px;
+            border-bottom: 1px solid #f2f2f7;
+            font-size: 13px;
+            color: #1c1c1e;
+            max-width: 150px;
+            vertical-align: top;
+        }
+
+        td.col-barcode {
+            min-width: 140px;
+            max-width: 140px;
+        }
+
+        td.col-name {
+            min-width: 320px;
+            max-width: 320px;
+            line-height: 1.3;
+            padding: 0;
+        }
+
+        .name-cell {
+            width: 100%;
+        }
+
+        .name-item {
+            padding: 4px 8px;
+            border-bottom: 1px solid #e5e5ea;
+        }
+
+        .name-item:last-child {
+            border-bottom: none;
+        }
+
+        .name-compact {
+            padding: 4px 8px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        td.col-actions {
+            min-width: 70px;
+            max-width: 70px;
+        }
+
+        tr {
+            border-top: 1px solid #e5e5ea;
+        }
+
+        tr.group-border-top {
+            border-top: 2px solid #c7c7cc;
+        }
+
+        tr.group-border-bottom {
+            border-bottom: 2px solid #c7c7cc;
+        }
+
+        tr:hover {
+            background: #f9f9fb;
+        }
+
+        tr.my-price-row {
+            background: #f0fdf4;
+        }
+
+        tr.my-price-row:hover {
+            background: #e6f9ec;
+        }
+
+        tr.in-cart {
+            background: #d4f4dd;
+        }
+
+        tr.in-cart:hover {
+            background: #c0eeca;
+        }
+
+        tr.duplicate-row {
+            background: #ffe6f0 !important;
+        }
+
+        tr.duplicate-row:hover {
+            background: #ffd6e7 !important;
+        }
+
+        tr.duplicate-row.in-cart {
+            background: #ffc6d8 !important;
+        }
+
+        tr.duplicate-row.in-cart:hover {
+            background: #ffb6c8 !important;
+        }
+
+        /* Подсветка товаров, найденных по синонимам */
+        tr.synonym-row {
+            background: #e6f7ff !important;
+        }
+
+        tr.synonym-row:hover {
+            background: #d1efff !important;
+        }
+
+        tr.synonym-row.in-cart {
+            background: #b8e6ff !important;
+        }
+
+        tr.synonym-row.in-cart:hover {
+            background: #a3dcff !important;
+        }
+
+        .multi-value-container {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .value-variant {
+            display: flex;
+            flex-direction: column;
+            border-bottom: 1px dashed #e5e5ea;
+            padding-bottom: 2px;
+            position: relative;
+            padding-right: 15px;
+        }
+
+        .div-wrapper {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 14px;
+            height: 14px;
+            overflow: hidden;
+        }
+
+        .div-icon {
+            color: #ff3b30;
+            font-size: 14px;
+            line-height: 1;
+            font-weight: bold;
+            text-align: center;
+            pointer-events: none;
+        }
+
+        .div-select {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .value-variant:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .price-val.is-min {
+            color: #28a745;
+            font-weight: 700;
+        }
+
+        /* Цена кликабельна для копирования штрихкода */
+        .price-clickable {
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+
+        .price-clickable:hover {
+            background: #fff3cd;
+            padding: 2px 4px;
+            margin: -2px -4px;
+            border-radius: 4px;
+        }
+
+        .cart-btn {
+            background: transparent;
+            color: #34c759;
+            border: none;
+            padding: 2px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 18px;
+            transition: all 0.2s;
+        }
+
+        .cart-btn:hover {
+            background: #e6f9ec;
+            transform: scale(1.05);
+        }
+
+        .cart-btn.in-cart {
+            color: #34c759;
+        }
+
+        .barcode-cell {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .barcode-text {
+            flex: 1;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .copy-btn {
+            border: none;
+            background: #f2f2f7;
+            border-radius: 4px;
+            padding: 2px 4px;
+            font-size: 11px;
+            cursor: pointer;
+            color: #555;
+            flex-shrink: 0;
+        }
+
+        .copy-btn:hover {
+            background: #e0e0e4;
+        }
+
+        /* Скрытые колонки штрихкодов в UI */
+        .hidden-barcode-col {
+            display: none;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: #8e8e93;
+        }
+
+        .empty-state-icon {
+            font-size: 48px;
+            margin-bottom: 12px;
+        }
+
+        .empty-state h3 {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: #1c1c1e;
+        }
+
+        .empty-state p {
+            font-size: 13px;
+        }
+
+        @media (max-width: 900px) {
+            .upload-section {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .info-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>📊 Сравнение цен</h1>
+
+    <div class="upload-section">
+        <div class="upload-card my-price">
+            <label class="upload-label">🏷️ Мой прайс</label>
+            <div class="file-input-wrapper">
+                <input type="file" id="myPriceInput" accept=".csv,.xlsx,.xls"/>
+                <div class="file-input-display" title="Загрузить ваш прайс-файл">
+                    <span>📄 Выбрать файл</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="upload-card">
+            <label class="upload-label">📦 Прайсы для сравнения</label>
+            <div class="file-input-wrapper">
+                <input type="file" id="competitorInput" multiple accept=".csv,.xlsx,.xls"/>
+                <div class="file-input-display" title="Загрузить файлы поставщиков">
+                    <span>📁 Выбрать файлы</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="upload-card synonyms">
+            <label class="upload-label">🔗 Синонимы штрихкодов (JSON)</label>
+            <div class="file-input-wrapper">
+                <input type="file" id="synonymsInput" accept=".json"/>
+                <div class="file-input-display" title="Загрузить файл synonyms.json с группами штрихкодов">
+                    <span>🧩 Выбрать synonyms.json</span>
+                </div>
+            </div>
+            <div id="synonymsStatus" style="margin-top:6px;font-size:11px;color:#8e8e93;">
+                Файл синонимов не загружен
+            </div>
+        </div>
+    </div>
+
+    <div class="search-box">
+        <input type="text" id="searchInput" class="search-input"
+               placeholder="🔍 Поиск по названию товара..."
+               title="Введите название или часть названия для фильтрации товаров">
+    </div>
+
+    <div class="controls">
+        <button id="sortMatchesBtn" class="btn btn-secondary" disabled
+                title="Показывать сначала товары, которые есть в нескольких файлах">
+            <span class="icon">🔄</span> Совпадения
+        </button>
+        <button id="bigDiffBtn" class="btn btn-secondary" disabled
+                title="Показать только товары с совпадениями, где разница цен больше 10%">
+            <span class="icon">📊</span> Большая разница
+        </button>
+        <button id="showMyPriceBtn" class="btn btn-secondary" disabled
+                title="Показать только товары из вашего прайса">
+            <span class="icon">⭐</span> Мой прайс
+        </button>
+        <button id="showCartBtn" class="btn btn-secondary" disabled
+                title="Показать только товары, добавленные в корзину">
+            <span class="icon">🛒👁️</span> Корзина
+        </button>
+        <button id="compactMatchesBtn" class="btn btn-secondary" disabled
+                title="Уменьшить высоту строк с совпадениями, показывать все наименования в одну строку">
+            <span class="icon">📏</span> Компактно
+        </button>
+        <button id="maxCoverageBtn" class="btn btn-secondary" disabled
+                title="Сортировать по количеству поставщиков, у которых есть цена на товар">
+            <span class="icon">📊</span> Макс.совпадения
+        </button>
+        <button id="toggleFileBarcodesBtn" class="btn btn-secondary" disabled
+                title="Показать/скрыть колонки со штрихкодами по файлам">
+            <span class="icon">🔎</span> ШК по файлам
+        </button>
+        <button id="exportMyPriceBtn" class="btn btn-success" disabled
+                title="Скачать Excel с товарами из вашего прайса и выбранными ценами">
+            <span class="icon">⭐💾</span> Мой прайс
+        </button>
+        <button id="exportAllBtn" class="btn btn-success" disabled
+                title="Скачать Excel со всеми товарами и выбранными колонками">
+            <span class="icon">💾</span> Всё
+        </button>
+        <button id="exportCartBtn" class="btn btn-warning" disabled
+                title="Скачать Excel только с товарами из корзины">
+            <span class="icon">🛒💾</span> Корзина
+            <span id="cartBadge" class="cart-badge" style="display:none;">0</span>
+        </button>
+        <button id="clearCartBtn" class="btn btn-danger" disabled
+                title="Очистить все товары из корзины">
+            <span class="icon">🛒🗑️</span> Очистить корзину
+        </button>
+        <button id="clearBtn" class="btn btn-danger" disabled
+                title="Очистить все загруженные данные и начать заново">
+            <span class="icon">🗑️</span> Сбросить всё
+        </button>
+    </div>
+
+    <div id="infoPanel" class="info-grid" style="display:none;">
+        <div class="info-card">
+            <div class="info-value" id="productCount">0</div>
+            <div class="info-label">Уникальных товаров</div>
+        </div>
+        <div class="info-card">
+            <div class="info-value" id="fileCount">0</div>
+            <div class="info-label">Файлов загружено</div>
+        </div>
+        <div class="info-card">
+            <div class="info-value" id="columnCount">0</div>
+            <div class="info-label">Колонок данных</div>
+        </div>
+        <div class="info-card">
+            <div class="info-value" id="matchCount">0</div>
+            <div class="info-label">Совпадений по штрихкоду</div>
+        </div>
+    </div>
+
+    <div id="hiddenColumnsPanel" class="hidden-columns">
+        <span class="hidden-columns-label">🔍 Скрытые колонки:</span>
+        <div id="hiddenColumnsList"></div>
+    </div>
+
+    <div id="tableContainer">
+        <div class="empty-state">
+            <div class="empty-state-icon">📦</div>
+            <h3>Загрузите прайс-листы</h3>
+            <p>Загрузите ваш прайс и файлы конкурентов для автоматического сравнения</p>
+        </div>
+    </div>
+</div>
+
+<script>
+    // ======== СЛОВАРЬ СИНОНИМОВ ШТРИХКОДОВ (загружается из JSON) ========
+
+    let barcodeAliasMap = new Map();
+    let synonymsLoaded = false;
+
+    function resetBarcodeAliases() {
+        barcodeAliasMap = new Map();
+        synonymsLoaded = false;
+        const status = document.getElementById('synonymsStatus');
+        if (status) {
+            status.style.color = '#8e8e93';
+            status.textContent = 'Файл синонимов не загружен';
+        }
+    }
+
+    function loadBarcodeAliasesFromFile(file) {
+        const status = document.getElementById('synonymsStatus');
+        if (!file) {
+            resetBarcodeAliases();
+            return;
+        }
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            try {
+                const text = e.target.result;
+                const json = JSON.parse(text);
+                const map = new Map();
+                Object.keys(json).forEach(main => {
+                    const mainNorm = String(main).trim();
+                    if (!mainNorm) return;
+                    map.set(mainNorm, mainNorm);
+                    const list = json[main];
+                    if (Array.isArray(list)) {
+                        list.forEach(b => {
+                            const v = String(b).trim();
+                            if (v) map.set(v, mainNorm);
+                        });
+                    }
+                });
+                barcodeAliasMap = map;
+                synonymsLoaded = true;
+                if (status) {
+                    status.style.color = '#34c759';
+                    status.textContent = 'Файл синонимов загружен, групп: ' + Object.keys(json).length;
+                }
+                if (allFilesData.length > 0) {
+                    processData();
+                    renderTable();
+                    updateUI();
+                }
+            } catch (err) {
+                console.error('Ошибка чтения synonyms.json:', err);
+                resetBarcodeAliases();
+                if (status) {
+                    status.style.color = '#ff3b30';
+                    status.textContent = 'Ошибка: неверный формат JSON';
+                }
+                alert('Ошибка при чтении файла синонимов. Проверьте формат JSON.');
+            }
+        };
+        reader.onerror = () => {
+            resetBarcodeAliases();
+            if (status) {
+                status.style.color = '#ff3b30';
+                status.textContent = 'Ошибка чтения файла';
+            }
+            alert('Не удалось прочитать файл синонимов.');
+        };
+        reader.readAsText(file, 'utf-8');
+    }
+
+    function canonicalizeBarcode(rawBarcode) {
+        if (rawBarcode === undefined || rawBarcode === null) return { canonical: rawBarcode, wasSynonym: false };
+        const b = String(rawBarcode).trim();
+        if (!synonymsLoaded) return { canonical: b, wasSynonym: false };
+        const canon = barcodeAliasMap.get(b);
+        if (canon && canon !== b) {
+            return { canonical: canon, wasSynonym: true };
+        }
+        return { canonical: b, wasSynonym: false };
+    }
+
+    // ======== ОСНОВНОЙ КОД ПРИЛОЖЕНИЯ ========
+
+    let myPriceData = null;
+    let competitorFilesData = [];
+    let allFilesData = [];
+    let groupedData = [];
+    let allColumns = [];
+    let visibleColumns = new Set();
+    let cart = new Set();
+    let barcodeColumn = null;
+    let nameColumn = null;
+    let sortMode = 'default';
+    let compactMatches = false;
+    let searchQuery = '';
+    let barcodeSortOrder = 0;
+    let showFileBarcodes = false; // UI: отображать ли колонки ШК по файлам
+
+    const myPriceInput = document.getElementById('myPriceInput');
+    const competitorInput = document.getElementById('competitorInput');
+    const synonymsInput = document.getElementById('synonymsInput');
+    const searchInput = document.getElementById('searchInput');
+    const sortMatchesBtn = document.getElementById('sortMatchesBtn');
+    const bigDiffBtn = document.getElementById('bigDiffBtn');
+    const showMyPriceBtn = document.getElementById('showMyPriceBtn');
+    const showCartBtn = document.getElementById('showCartBtn');
+    const compactMatchesBtn = document.getElementById('compactMatchesBtn');
+    const maxCoverageBtn = document.getElementById('maxCoverageBtn');
+    const toggleFileBarcodesBtn = document.getElementById('toggleFileBarcodesBtn');
+    const exportMyPriceBtn = document.getElementById('exportMyPriceBtn');
+    const exportAllBtn = document.getElementById('exportAllBtn');
+    const exportCartBtn = document.getElementById('exportCartBtn');
+    const clearCartBtn = document.getElementById('clearCartBtn');
+    const clearBtn = document.getElementById('clearBtn');
+    const infoPanel = document.getElementById('infoPanel');
+    const hiddenColumnsPanel = document.getElementById('hiddenColumnsPanel');
+    const hiddenColumnsList = document.getElementById('hiddenColumnsList');
+    const tableContainer = document.getElementById('tableContainer');
+    const cartBadge = document.getElementById('cartBadge');
+
+    const BARCODE_SYNONYMS = [
+        'штрих-код', 'штрихкод', 'barcode', 'Штрих-код', 'Штрихкод', 'Barcode',
+        'код', 'Код', 'ean', 'EAN', 'ean13', 'EAN13', 'штрих код', 'Штрих код',
+        'bar_code', 'bar-code', 'product_code', 'sku', 'SKU', 'артикул', 'Артикул'
+    ];
+
+    const NAME_SYNONYMS = [
+        'название', 'name', 'Название', 'Name', 'наименование', 'Наименование',
+        'товар', 'Товар', 'product', 'Product', 'описание', 'Описание',
+        'product_name', 'title', 'Title', 'имя', 'Имя'
+    ];
+
+    myPriceInput.addEventListener('change', handleMyPriceUpload);
+    competitorInput.addEventListener('change', handleCompetitorUpload);
+    synonymsInput.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        loadBarcodeAliasesFromFile(file);
+    });
+    searchInput.addEventListener('input', handleSearch);
+    sortMatchesBtn.addEventListener('click', toggleSortMatches);
+    bigDiffBtn.addEventListener('click', toggleBigDiff);
+    showMyPriceBtn.addEventListener('click', toggleMyPriceView);
+    showCartBtn.addEventListener('click', toggleCartView);
+    compactMatchesBtn.addEventListener('click', toggleCompactMatches);
+    maxCoverageBtn.addEventListener('click', toggleMaxCoverage);
+    toggleFileBarcodesBtn.addEventListener('click', toggleFileBarcodesVisibility);
+exportMyPriceBtn.addEventListener('click', async () => await generateExcel('myprice'));
+exportAllBtn.addEventListener('click', async () => await generateExcel('all'));
+exportCartBtn.addEventListener('click', async () => await generateExcel('cart'));
+
+    clearCartBtn.addEventListener('click', clearCart);
+    clearBtn.addEventListener('click', clearAll);
+
+    function normalizeString(str) {
+        return str?.toString().trim().toLowerCase() || '';
+    }
+
+    function removeFileExtension(fileName) {
+        return fileName.replace(/\.(csv|xlsx|xls)$/i, '');
+    }
+
+    function handleSearch(e) {
+        searchQuery = e.target.value.toLowerCase().trim();
+        const wrapper = document.querySelector('.table-wrapper');
+        const scrollTop = wrapper ? wrapper.scrollTop : 0;
+        renderTable();
+        const newWrapper = document.querySelector('.table-wrapper');
+        if (newWrapper) newWrapper.scrollTop = scrollTop;
+    }
+
+    async function handleMyPriceUpload(e) {
+        try {
+            const file = e.target.files[0];
+            if (!file) return;
+            myPriceData = await parseFile(file, '🏷️ Мой прайс');
+            processAllData();
+        } catch (error) {
+            console.error("Ошибка загрузки файла:", error);
+            alert("Ошибка при загрузке файла: " + error.message);
+        }
+    }
+
+    async function handleCompetitorUpload(e) {
+        try {
+            const files = Array.from(e.target.files);
+            if (files.length === 0) return;
+            competitorFilesData = [];
+            for (const file of files) {
+                const fileData = await parseFile(file, removeFileExtension(file.name));
+                competitorFilesData.push(fileData);
+            }
+            processAllData();
+        } catch (error) {
+            console.error("Ошибка загрузки файлов:", error);
+            alert("Ошибка при загрузке файлов: " + error.message);
+        }
+    }
+
+    async function parseFile(file, fileName) {
+        try {
+            if (file.name.endsWith('.csv')) {
+                return await parseCSV(file, fileName);
+            } else {
+                return await parseExcel(file, fileName);
+            }
+        } catch (error) {
+            console.error("Ошибка парсинга:", error);
+            throw new Error("Не удалось прочитать файл");
+        }
+    }
+
+    function parseCSV(file, fileName) {
+        return new Promise(resolve => {
+            Papa.parse(file, {
+                header: true,
+                encoding: 'UTF-8',
+                skipEmptyLines: true,
+                complete: (results) => {
+                    resolve({
+                        fileName,
+                        data: results.data,
+                        isMyPrice: fileName === '🏷️ Мой прайс'
+                    });
+                }
+            });
+        });
+    }
+
+    function parseExcel(file, fileName) {
+        return new Promise(resolve => {
+            const reader = new FileReader();
+            reader.onload = e => {
+                const data = new Uint8Array(e.target.result);
+                const workbook = XLSX.read(data, {type: 'array'});
+                const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
+                const jsonData = XLSX.utils.sheet_to_json(firstSheet);
+                resolve({fileName, data: jsonData, isMyPrice: fileName === '🏷️ Мой прайс'});
+            };
+            reader.readAsArrayBuffer(file);
+        });
+    }
+
+    function processAllData() {
+        if (!myPriceData && competitorFilesData.length === 0) return;
+        allFilesData = [];
+        if (myPriceData) allFilesData.push(myPriceData);
+        allFilesData = allFilesData.concat(competitorFilesData);
+
+        autoDetectColumns();
+        processData();
+        updateHiddenColumnsPanel();
+        renderTable();
+        updateUI();
+    }
+
+    function autoDetectColumns() {
+        allColumns = [];
+        visibleColumns.clear();
+        barcodeColumn = null;
+        nameColumn = null;
+
+        if (allFilesData.length > 0 && allFilesData[0].data.length > 0) {
+            const firstFileColumns = Object.keys(allFilesData[0].data[0]);
+            barcodeColumn = firstFileColumns.find(col =>
+                BARCODE_SYNONYMS.some(syn => col.toLowerCase().includes(syn.toLowerCase()))
+            ) || firstFileColumns[0];
+
+            nameColumn = firstFileColumns.find(col =>
+                col !== barcodeColumn &&
+                NAME_SYNONYMS.some(syn => col.toLowerCase().includes(syn.toLowerCase()))
+            ) || (firstFileColumns.length > 1 ? firstFileColumns[1] : firstFileColumns[0]);
+        }
+
+        allFilesData.forEach(({fileName, data}) => {
+            if (data.length > 0) {
+                const fileColumns = Object.keys(data[0]);
+                fileColumns.forEach(colName => {
+                    if (colName === barcodeColumn || colName === nameColumn) return;
+                    const colKey = `${fileName}|${colName}`;
+                    allColumns.push({
+                        fileName,
+                        columnName: colName,
+                        displayName: `${fileName} - ${colName}`,
+                        key: colKey
+                    });
+                    visibleColumns.add(colKey);
+                });
+            }
+        });
+    }
+
+    function toggleColumn(colKey) {
+        const wrapper = document.querySelector('.table-wrapper');
+        const scrollTop = wrapper ? wrapper.scrollTop : 0;
+        if (visibleColumns.has(colKey)) visibleColumns.delete(colKey);
+        else visibleColumns.add(colKey);
+        updateHiddenColumnsPanel();
+        processData();
+        renderTable();
+        const newWrapper = document.querySelector('.table-wrapper');
+        if (newWrapper) newWrapper.scrollTop = scrollTop;
+    }
+
+    function updateHiddenColumnsPanel() {
+        const hiddenCols = allColumns.filter(col => !visibleColumns.has(col.key));
+        if (hiddenCols.length > 0) {
+            let html = '';
+            hiddenCols.forEach(col => {
+                html += `<button class="restore-column-btn" onclick="toggleColumn('${col.key}')" title="Показать колонку ${col.displayName}">
+                        ↩️ ${col.displayName}
+                    </button>`;
+            });
+            hiddenColumnsList.innerHTML = html;
+            hiddenColumnsPanel.style.display = 'flex';
+        } else {
+            hiddenColumnsPanel.style.display = 'none';
+        }
+    }
+
+    function processData() {
+        const barcodeMap = new Map();
+
+        allFilesData.forEach(({fileName, data, isMyPrice}) => {
+            data.forEach((row, index) => {
+                let rawBarcode = row[barcodeColumn];
+                if (!rawBarcode) return;
+
+                const { canonical, wasSynonym } = canonicalizeBarcode(rawBarcode);
+                const barcode = canonical;
+
+                if (!barcodeMap.has(barcode)) {
+                    barcodeMap.set(barcode, {
+                        barcode,
+                        names: [],
+                        values: new Map(),
+                        isInMyPrice: false,
+                        myPriceOrder: -1,
+                        filesWithBarcode: new Set(),
+                        namesByFile: new Map(),
+                        originalBarcodesByFile: new Map(),
+                        isSynonym: false
+                    });
+                }
+
+                const item = barcodeMap.get(barcode);
+                item.filesWithBarcode.add(fileName);
+                item.originalBarcodesByFile.set(fileName, rawBarcode);
+
+                if (wasSynonym) {
+                    item.isSynonym = true;
+                }
+
+                if (isMyPrice) {
+                    item.isInMyPrice = true;
+                    item.myPriceOrder = index;
+                }
+
+                const currentRowName = row[nameColumn];
+                if (currentRowName) {
+                    const nameObj = {fileName, name: currentRowName};
+                    if (!item.names.some(n => n.fileName === fileName && n.name === currentRowName)) {
+                        item.names.push(nameObj);
+                    }
+                    if (!item.namesByFile.has(fileName)) {
+                        item.namesByFile.set(fileName, currentRowName);
+                    }
+                }
+
+                Object.keys(row).forEach(colName => {
+                    if (colName !== barcodeColumn && colName !== nameColumn) {
+                        const key = `${fileName}|${colName}`;
+                        const value = row[colName];
+                        if (value !== undefined && value !== null && value !== '') {
+                            if (!item.values.has(key)) {
+                                item.values.set(key, []);
+                            }
+                            item.values.get(key).push({val: value, rowName: currentRowName, originalBarcode: rawBarcode});
+                        }
+                    }
+                });
+            });
+        });
+
+        groupedData = Array.from(barcodeMap.values()).map(item => {
+            const visibleCols = allColumns.filter(col => visibleColumns.has(col.key));
+            const numericValues = [];
+            visibleCols.forEach(col => {
+                const valuesArr = item.values.get(col.key);
+                if (valuesArr && valuesArr.length > 0) {
+                    valuesArr.forEach(vObj => {
+                        const numValue = parseFloat(String(vObj.val).replace(/[^0-9.,]/g, '').replace(',', '.'));
+                        if (!isNaN(numValue) && numValue > 0) {
+                            numericValues.push(numValue);
+                        }
+                    });
+                }
+            });
+
+            let priceDiffPercent = 0;
+            if (numericValues.length > 1) {
+                const minPrice = Math.min(...numericValues);
+                const maxPrice = Math.max(...numericValues);
+                if (minPrice > 0) {
+                    priceDiffPercent = ((maxPrice - minPrice) / minPrice) * 100;
+                }
+            }
+
+            let isDuplicate = false;
+            for (const [key, valuesArr] of item.values.entries()) {
+                if (valuesArr && valuesArr.length > 1) {
+                    isDuplicate = true;
+                    break;
+                }
+            }
+
+            const filesWithPrices = new Set();
+            for (const [key, valuesArr] of item.values.entries()) {
+                if (valuesArr && valuesArr.length > 0) {
+                    const fileName = key.split('|')[0];
+                    filesWithPrices.add(fileName);
+                }
+            }
+            const coverageCount = filesWithPrices.size;
+
+            return {
+                barcode: item.barcode,
+                names: item.names,
+                namesByFile: item.namesByFile,
+                values: item.values,
+                isInMyPrice: item.isInMyPrice,
+                myPriceOrder: item.myPriceOrder,
+                originalFileCount: item.filesWithBarcode.size,
+                priceDiffPercent,
+                isDuplicate,
+                coverageCount,
+                isSynonym: item.isSynonym,
+                originalBarcodesByFile: item.originalBarcodesByFile
+            };
+        });
+    }
+
+    function toggleCart(barcode) {
+        const wrapper = document.querySelector('.table-wrapper');
+        const scrollTop = wrapper ? wrapper.scrollTop : 0;
+        if (cart.has(barcode)) cart.delete(barcode);
+        else cart.add(barcode);
+        updateCartUI();
+        renderTable();
+        const newWrapper = document.querySelector('.table-wrapper');
+        if (newWrapper) newWrapper.scrollTop = scrollTop;
+    }
+
+    function clearCart() {
+        const wrapper = document.querySelector('.table-wrapper');
+        const scrollTop = wrapper ? wrapper.scrollTop : 0;
+        cart.clear();
+        updateCartUI();
+        renderTable();
+        const newWrapper = document.querySelector('.table-wrapper');
+        if (newWrapper) newWrapper.scrollTop = scrollTop;
+    }
+
+    function updateCartUI() {
+        const cartSize = cart.size;
+        if (cartSize > 0) {
+            cartBadge.textContent = cartSize;
+            cartBadge.style.display = 'block';
+            exportCartBtn.disabled = false;
+            clearCartBtn.disabled = false;
+            showCartBtn.disabled = false;
+        } else {
+            cartBadge.style.display = 'none';
+            exportCartBtn.disabled = true;
+            clearCartBtn.disabled = true;
+            showCartBtn.disabled = true;
+            if (sortMode === 'cart') {
+                sortMode = 'default';
+                showCartBtn.classList.remove('active');
+                renderTable();
+            }
+        }
+    }
+
+    function toggleSortMatches() {
+        const wrapper = document.querySelector('.table-wrapper');
+        const scrollTop = wrapper ? wrapper.scrollTop : 0;
+        if (sortMode === 'matches') {
+            sortMode = 'default';
+            sortMatchesBtn.classList.remove('active');
+        } else {
+            sortMode = 'matches';
+            sortMatchesBtn.classList.add('active');
+            bigDiffBtn.classList.remove('active');
+            showMyPriceBtn.classList.remove('active');
+            showCartBtn.classList.remove('active');
+            maxCoverageBtn.classList.remove('active');
+        }
+        renderTable();
+        const newWrapper = document.querySelector('.table-wrapper');
+        if (newWrapper) newWrapper.scrollTop = scrollTop;
+    }
+
+    function toggleBigDiff() {
+        const wrapper = document.querySelector('.table-wrapper');
+        const scrollTop = wrapper ? wrapper.scrollTop : 0;
+        if (sortMode === 'bigdiff') {
+            sortMode = 'default';
+            bigDiffBtn.classList.remove('active');
+        } else {
+            sortMode = 'bigdiff';
+            bigDiffBtn.classList.add('active');
+            sortMatchesBtn.classList.remove('active');
+            showMyPriceBtn.classList.remove('active');
+            showCartBtn.classList.remove('active');
+            maxCoverageBtn.classList.remove('active');
+        }
+        renderTable();
+        const newWrapper = document.querySelector('.table-wrapper');
+        if (newWrapper) newWrapper.scrollTop = scrollTop;
+    }
+
+    function toggleMyPriceView() {
+        const wrapper = document.querySelector('.table-wrapper');
+        const scrollTop = wrapper ? wrapper.scrollTop : 0;
+        if (sortMode === 'myprice') {
+            sortMode = 'default';
+            showMyPriceBtn.classList.remove('active');
+        } else {
+            sortMode = 'myprice';
+            showMyPriceBtn.classList.add('active');
+            sortMatchesBtn.classList.remove('active');
+            bigDiffBtn.classList.remove('active');
+            showCartBtn.classList.remove('active');
+            maxCoverageBtn.classList.remove('active');
+        }
+        renderTable();
+        const newWrapper = document.querySelector('.table-wrapper');
+        if (newWrapper) newWrapper.scrollTop = scrollTop;
+    }
+
+    function toggleCartView() {
+        const wrapper = document.querySelector('.table-wrapper');
+        const scrollTop = wrapper ? wrapper.scrollTop : 0;
+        if (sortMode === 'cart') {
+            sortMode = 'default';
+            showCartBtn.classList.remove('active');
+        } else {
+            sortMode = 'cart';
+            showCartBtn.classList.add('active');
+            sortMatchesBtn.classList.remove('active');
+            bigDiffBtn.classList.remove('active');
+            showMyPriceBtn.classList.remove('active');
+            maxCoverageBtn.classList.remove('active');
+        }
+        renderTable();
+        const newWrapper = document.querySelector('.table-wrapper');
+        if (newWrapper) newWrapper.scrollTop = scrollTop;
+    }
+
+    function toggleMaxCoverage() {
+        const wrapper = document.querySelector('.table-wrapper');
+        const scrollTop = wrapper ? wrapper.scrollTop : 0;
+        if (sortMode === 'maxcoverage') {
+            sortMode = 'default';
+            maxCoverageBtn.classList.remove('active');
+        } else {
+            sortMode = 'maxcoverage';
+            maxCoverageBtn.classList.add('active');
+            sortMatchesBtn.classList.remove('active');
+            bigDiffBtn.classList.remove('active');
+            showMyPriceBtn.classList.remove('active');
+            showCartBtn.classList.remove('active');
+        }
+        renderTable();
+        const newWrapper = document.querySelector('.table-wrapper');
+        if (newWrapper) newWrapper.scrollTop = scrollTop;
+    }
+
+    function toggleCompactMatches() {
+        const wrapper = document.querySelector('.table-wrapper');
+        const scrollTop = wrapper ? wrapper.scrollTop : 0;
+        compactMatches = !compactMatches;
+        if (compactMatches) compactMatchesBtn.classList.add('active');
+        else compactMatchesBtn.classList.remove('active');
+        renderTable();
+        const newWrapper = document.querySelector('.table-wrapper');
+        if (newWrapper) newWrapper.scrollTop = scrollTop;
+    }
+
+    function toggleBarcodeSort() {
+        const wrapper = document.querySelector('.table-wrapper');
+        const scrollTop = wrapper ? wrapper.scrollTop : 0;
+        if (barcodeSortOrder === 0) barcodeSortOrder = 1;
+        else if (barcodeSortOrder === 1) barcodeSortOrder = -1;
+        else barcodeSortOrder = 0;
+        renderTable();
+        const newWrapper = document.querySelector('.table-wrapper');
+        if (newWrapper) newWrapper.scrollTop = scrollTop;
+    }
+
+    function toggleFileBarcodesVisibility() {
+        showFileBarcodes = !showFileBarcodes;
+        if (showFileBarcodes) {
+            toggleFileBarcodesBtn.classList.add('active');
+        } else {
+            toggleFileBarcodesBtn.classList.remove('active');
+        }
+        renderTable();
+    }
+
+    function getSortedData() {
+        let data = [...groupedData];
+
+        if (searchQuery) {
+            data = data.filter(item =>
+                item.names.some(n => n.name.toLowerCase().includes(searchQuery))
+            );
+        }
+
+        if (sortMode === 'matches') {
+            data.sort((a, b) => {
+                if (a.originalFileCount > 1 && b.originalFileCount === 1) return -1;
+                if (a.originalFileCount === 1 && b.originalFileCount > 1) return 1;
+                return 0;
+            });
+        } else if (sortMode === 'bigdiff') {
+            data = data.filter(item => item.originalFileCount > 1 && item.priceDiffPercent > 10);
+            data.sort((a, b) => b.priceDiffPercent - a.priceDiffPercent);
+        } else if (sortMode === 'myprice') {
+            data = data.filter(item => item.isInMyPrice);
+            data.sort((a, b) => a.myPriceOrder - b.myPriceOrder);
+        } else if (sortMode === 'cart') {
+            data = data.filter(item => cart.has(item.barcode));
+        } else if (sortMode === 'maxcoverage') {
+            data.sort((a, b) => b.coverageCount - a.coverageCount);
+        }
+
+        if (barcodeSortOrder !== 0) {
+            data.sort((a, b) => {
+                const bcA = String(a.barcode);
+                const bcB = String(b.barcode);
+                return barcodeSortOrder === 1 ? bcA.localeCompare(bcB) : bcB.localeCompare(bcA);
+            });
+        }
+
+        return data;
+    }
+
+    function copyBarcode(barcode, btn) {
+        if (!navigator.clipboard) return;
+        navigator.clipboard.writeText(String(barcode)).then(() => {
+            const orig = btn.textContent;
+            btn.textContent = '✓';
+            setTimeout(() => {
+                btn.textContent = orig;
+            }, 600);
+        }).catch(() => {
+        });
+    }
+
+    function copyBarcodeFromPrice(barcode) {
+        if (!navigator.clipboard) return;
+        navigator.clipboard.writeText(String(barcode)).then(() => {
+            console.log('Скопирован штрихкод:', barcode);
+        }).catch(() => {});
+    }
+
+    function editColumnName(colKey) {
+        const col = allColumns.find(c => c.key === colKey);
+        if (!col) return;
+        const newName = prompt('Новое название колонки:', col.displayName);
+        if (newName && newName.trim() !== '' && newName.trim() !== col.displayName) {
+            col.displayName = newName.trim();
+            const wrapper = document.querySelector('.table-wrapper');
+            const scrollTop = wrapper ? wrapper.scrollTop : 0;
+            updateHiddenColumnsPanel();
+            renderTable();
+            const newWrapper = document.querySelector('.table-wrapper');
+            if (newWrapper) newWrapper.scrollTop = scrollTop;
+        }
+    }
+
+    function renderTable() {
+        const dataToShow = getSortedData();
+
+        if (dataToShow.length === 0) {
+            tableContainer.innerHTML = `
+                <div class="empty-state">
+                    <div class="empty-state-icon">⚠️</div>
+                    <h3>Нет данных для отображения</h3>
+                    <p>Проверьте содержимое загруженных файлов или измените фильтры</p>
+                </div>`;
+            return;
+        }
+
+        const visibleCols = allColumns.filter(col => visibleColumns.has(col.key));
+
+        let html = '<div class="table-wrapper"><table><thead><tr>';
+        html += `<th class="col-actions">Корзина</th>`;
+
+        let sortIcon = '';
+        if (barcodeSortOrder === 1) sortIcon = ' ▲';
+        else if (barcodeSortOrder === -1) sortIcon = ' ▼';
+        html += `<th class="col-barcode" onclick="toggleBarcodeSort()" title="Нажмите для сортировки по штрихкоду">Штрихкод (канонический)${sortIcon}</th>`;
+
+        // Колонки со штрихкодами по файлам (по умолчанию скрыты)
+        allFilesData.forEach(({fileName}, idx) => {
+            const extraClass = showFileBarcodes ? '' : 'hidden-barcode-col';
+            html += `<th class="col-barcode file-barcode-col ${extraClass}" data-file-index="${idx}" title="Штрихкод из файла ${fileName}">Штрихкод (${fileName})</th>`;
+        });
+
+        html += `<th class="col-name">${nameColumn}</th>`;
+
+        visibleCols.forEach(col => {
+            const checked = visibleColumns.has(col.key) ? 'checked' : '';
+            html += `<th title="${col.displayName}">
+                    <div class="column-header">
+                        <div class="column-header-checkbox">
+                            <input type="checkbox" ${checked} onchange="toggleColumn('${col.key}')" />
+                            <span>Вкл</span>
+                        </div>
+                        <div class="column-header-title">
+                            <span class="column-name-text">${col.displayName}</span>
+                            <button class="edit-col-btn" onclick="editColumnName('${col.key}')" title="Переименовать колонку">✏️</button>
+                        </div>
+                    </div>
+                </th>`;
+        });
+
+        html += '</tr></thead><tbody>';
+
+        dataToShow.forEach((item, index) => {
+            const inCart = cart.has(item.barcode);
+            let rowClass = '';
+            
+            if (item.isSynonym) rowClass = 'synonym-row';
+            else if (item.isDuplicate) rowClass = 'duplicate-row';
+            
+            if (inCart) {
+                if (item.isSynonym) rowClass = 'in-cart synonym-row';
+                else if (item.isDuplicate) rowClass = 'in-cart duplicate-row';
+                else rowClass = 'in-cart';
+            } else if (item.isInMyPrice && !item.isDuplicate && !item.isSynonym) {
+                rowClass = 'my-price-row';
+            }
+
+            const prev = dataToShow[index - 1];
+            const next = dataToShow[index + 1];
+            const isGroupStart = !prev || prev.barcode !== item.barcode;
+            const isGroupEnd = !next || next.barcode !== item.barcode;
+            if (isGroupStart) rowClass += (rowClass ? ' ' : '') + 'group-border-top';
+            if (isGroupEnd) rowClass += (rowClass ? ' ' : '') + 'group-border-bottom';
+
+            html += `<tr class="${rowClass}">`;
+            html += `<td class="col-actions">
+                    <button class="cart-btn ${inCart ? 'in-cart' : ''}"
+                            title="${inCart ? 'Убрать из корзины' : 'Добавить в корзину'}"
+                            onclick="toggleCart('${item.barcode}')">
+                        ${inCart ? '✓' : '🛒'}
+                    </button>
+                </td>`;
+
+            html += `<td class="col-barcode">
+                    <div class="barcode-cell">
+                        <span class="barcode-text" title="${item.barcode}">${item.barcode}</span>
+                        <button class="copy-btn" title="Скопировать штрихкод"
+                                onclick="copyBarcode('${item.barcode}', this)">📋</button>
+                    </div>
+                </td>`;
+
+            // Ячейки с ШК по файлам
+            allFilesData.forEach(({fileName}, idx) => {
+                const extraClass = showFileBarcodes ? '' : 'hidden-barcode-col';
+                const origBarcode = item.originalBarcodesByFile.get(fileName) || '—';
+                html += `<td class="col-barcode file-barcode-col ${extraClass}" data-file-index="${idx}">
+                        <div class="barcode-cell">
+                            <span class="barcode-text" title="${origBarcode}">${origBarcode}</span>
+                            ${origBarcode !== '—' ? `<button class="copy-btn" title="Скопировать штрихкод" onclick="copyBarcode('${origBarcode}', this)">📋</button>` : ''}
+                        </div>
+                    </td>`;
+            });
+
+            if (compactMatches && item.names.length > 1) {
+                const text = item.names.map(n => n.name).join(' | ');
+                html += `<td class="col-name">
+                        <div class="name-compact" title="${text}">
+                            ${text}
+                        </div>
+                    </td>`;
+            } else {
+                if (item.names.length > 0) {
+                    html += `<td class="col-name"><div class="name-cell">`;
+                    const uniqueNames = new Set(item.names.map(n => n.name));
+                    uniqueNames.forEach(name => {
+                        html += `<div class="name-item">${name}</div>`;
+                    });
+                    html += `</div></td>`;
+                } else {
+                    html += `<td class="col-name">Без названия</td>`;
+                }
+            }
+
+            const numericValues = [];
+            visibleCols.forEach(col => {
+                const valuesArr = item.values.get(col.key);
+                if (valuesArr) {
+                    valuesArr.forEach(vObj => {
+                        const numValue = parseFloat(String(vObj.val).replace(/[^0-9.,]/g, '').replace(',', '.'));
+                        if (!isNaN(numValue) && numValue > 0) {
+                            numericValues.push(numValue);
+                        }
+                    });
+                }
+            });
+
+            const globalMin = numericValues.length > 0 ? Math.min(...numericValues) : null;
+            const globalMax = numericValues.length > 0 ? Math.max(...numericValues) : null;
+            const hasMultipleGlobals = numericValues.length > 1;
+
+            visibleCols.forEach(col => {
+                const valuesArr = item.values.get(col.key);
+                let cellContent = '—';
+
+                if (valuesArr && valuesArr.length > 0) {
+                    cellContent = '<div class="multi-value-container">';
+                    valuesArr.forEach((vObj, vIndex) => {
+                        let displayValue;
+                        let isMin = false;
+                        let isMax = false;
+                        let numValue = null;
+
+                        const parsed = parseFloat(String(vObj.val).replace(/[^0-9.,]/g, '').replace(',', '.'));
+                        if (!isNaN(parsed) && parsed > 0) {
+                            numValue = parsed;
+                            displayValue = parsed.toFixed(2) + ' ₽';
+
+                            if (hasMultipleGlobals && parsed === globalMin) {
+                                isMin = true;
+                            }
+
+                            if (hasMultipleGlobals && parsed === globalMax && globalMax >= 3 * globalMin) {
+                                isMax = true;
+                            }
+                        } else {
+                            displayValue = vObj.val;
+                        }
+
+                        const barcodeForCopy = vObj.originalBarcode || item.barcode;
+                        let innerHtml = `<span class="price-clickable" onclick="copyBarcodeFromPrice('${barcodeForCopy}')" title="Клик → копировать штрихкод ${barcodeForCopy}">${displayValue}</span>`;
+                        
+                        if (isMin) {
+                            innerHtml = `<span class="price-val is-min price-clickable" onclick="copyBarcodeFromPrice('${barcodeForCopy}')" title="Клик → копировать штрихкод ${barcodeForCopy}">${displayValue}</span>`;
+                        }
+
+                        if (isMax && numValue) {
+                            innerHtml = `<span class="price-clickable" onclick="copyBarcodeFromPrice('${barcodeForCopy}')" title="Клик → копировать штрихкод ${barcodeForCopy}">${displayValue}</span>
+                                <div class="div-wrapper" title="Цена указана за блок? Разделите на количество штук">
+                                    <div class="div-icon">÷</div>
+                                    <select class="div-select" onchange="dividePrice('${item.barcode}','${col.key}', ${vIndex}, this.value); this.value='';">
+                                        <option value="" disabled selected>÷</option>
+                                        ${Array.from({length: 99}, (_, i) => i + 2).map(n => `<option value="${n}">${n}</option>`).join('')}
+                                    </select>
+                                </div>`;
+                        }
+
+                        cellContent += `<div class="value-variant">${innerHtml}</div>`;
+                    });
+                    cellContent += '</div>';
+                }
+
+                html += `<td>${cellContent}</td>`;
+            });
+
+            html += '</tr>';
+        });
+
+        html += '</tbody></table></div>';
+        tableContainer.innerHTML = html;
+    }
+
+    function dividePrice(barcode, colKey, valueIndex, factorStr) {
+        const factor = parseFloat(factorStr);
+        if (!factor || factor <= 0) return;
+
+        const item = groupedData.find(x => String(x.barcode) === String(barcode));
+        if (!item) return;
+
+        const valuesArr = item.values.get(colKey);
+        if (!valuesArr || !valuesArr[valueIndex]) return;
+
+        const vObj = valuesArr[valueIndex];
+        const numValue = parseFloat(String(vObj.val).replace(/[^0-9.,]/g, '').replace(',', '.'));
+        if (isNaN(numValue) || numValue <= 0) return;
+
+        vObj.val = numValue / factor;
+
+        const wrapper = document.querySelector('.table-wrapper');
+        const scrollTop = wrapper ? wrapper.scrollTop : 0;
+        renderTable();
+        const newWrapper = document.querySelector('.table-wrapper');
+        if (newWrapper) newWrapper.scrollTop = scrollTop;
+    }
+
+async function generateExcel(mode) {
+    const visibleCols = allColumns.filter(col => visibleColumns.has(col.key));
+    const fileNames = allFilesData.map(f => f.fileName);
+    const hasMyPrice = !!myPriceData;
+    const myPriceFileName = hasMyPrice ? '🏷️ Мой прайс' : null;
+
+    let dataToExport = [];
+    if (mode === 'cart') {
+        dataToExport = groupedData.filter(item => cart.has(item.barcode));
+    } else if (mode === 'myprice') {
+        dataToExport = groupedData
+            .filter(item => item.isInMyPrice)
+            .sort((a, b) => a.myPriceOrder - b.myPriceOrder);
+    } else {
+        dataToExport = groupedData;
+    }
+
+    const workbook = new ExcelJS.Workbook();
+    const worksheet = workbook.addWorksheet('Сравнение');
+
+    // Заголовки
+    const headers = ['Штрихкод (канонический)'];
+
+    // ШК по файлам
+    fileNames.forEach(fileName => headers.push(`Штрихкод (${fileName})`));
+
+    // Наименования: сначала Мой прайс (если есть), потом остальные
+    const nameFileOrder = [];
+    if (hasMyPrice) {
+        nameFileOrder.push(myPriceFileName);
+    }
+    fileNames.forEach(fn => {
+        if (!hasMyPrice || fn !== myPriceFileName) nameFileOrder.push(fn);
+    });
+
+    nameFileOrder.forEach(fileName => {
+        headers.push(`Наименование (${fileName})`);
+    });
+
+    // Остальные колонки (цены и т.п.)
+    visibleCols.forEach(col => headers.push(col.displayName));
+    
+    worksheet.addRow(headers);
+
+    dataToExport.forEach(item => {
+        let maxDepth = 0;
+        visibleCols.forEach(col => {
+            const valuesArr = item.values.get(col.key);
+            if (valuesArr && valuesArr.length > maxDepth) {
+                maxDepth = valuesArr.length;
+            }
+        });
+        if (maxDepth === 0) maxDepth = 1;
+
+        for (let d = 0; d < maxDepth; d++) {
+            const row = [item.barcode];
+
+            // ШК по файлам
+            fileNames.forEach(fileName => {
+                const origBarcode = item.originalBarcodesByFile.get(fileName) || '';
+                row.push(origBarcode);
+            });
+
+            // Наименования по файлам (в порядке nameFileOrder)
+            nameFileOrder.forEach(fileName => {
+                const name = item.namesByFile && item.namesByFile.has(fileName)
+                    ? item.namesByFile.get(fileName)
+                    : '';
+                row.push(name || '');
+            });
+
+            const priceStartCol = row.length;
+            const numericValuesInRow = [];
+            const numericColsInRow = [];
+
+            visibleCols.forEach((col, idx) => {
+                const valuesArr = item.values.get(col.key);
+                let cellValue = '';
+
+                if (valuesArr && valuesArr.length > d) {
+                    const vObj = valuesArr[d];
+                    const numValue = parseFloat(String(vObj.val).replace(/[^0-9.,]/g, '').replace(',', '.'));
+                    if (!isNaN(numValue) && numValue > 0) {
+                        cellValue = numValue;
+                        numericValuesInRow.push(numValue);
+                        numericColsInRow.push(priceStartCol + idx);
+                    } else {
+                        cellValue = vObj.val;
+                    }
+                }
+
+                row.push(cellValue);
+            });
+
+            const excelRow = worksheet.addRow(row);
+
+            // Подсветка строк
+            if (item.isSynonym) {
+                excelRow.eachCell((cell) => {
+                    cell.fill = {
+                        type: 'pattern',
+                        pattern: 'solid',
+                        fgColor: {argb: 'FFE6F7FF'}
+                    };
+                });
+            } else if (item.isDuplicate) {
+                excelRow.eachCell((cell) => {
+                    cell.fill = {
+                        type: 'pattern',
+                        pattern: 'solid',
+                        fgColor: {argb: 'FFFFE6F0'}
+                    };
+                });
+            }
+
+            // Подсветка минимальной цены
+            if (numericValuesInRow.length > 1) {
+                const minValue = Math.min(...numericValuesInRow);
+                numericColsInRow.forEach((colIdx, i) => {
+                    if (numericValuesInRow[i] === minValue) {
+                        const cell = excelRow.getCell(colIdx + 1);
+                        cell.font = {
+                            color: {argb: 'FF28A745'},
+                            bold: true
+                        };
+                    }
+                });
+            }
+        }
+    });
+
+    // === Ширины и группировка столбцов ===
+    const fileBarcodesStart = 2;
+    const fileBarcodesEnd = 1 + fileNames.length;
+    const namesStart = fileBarcodesEnd + 1;
+    const namesEnd = namesStart + nameFileOrder.length - 1;
+
+    worksheet.columns.forEach((column, idx) => {
+        const colIndex1 = idx + 1;
+        if (colIndex1 === 1) {
+            column.width = 15; // канонический ШК
+        } else if (colIndex1 >= fileBarcodesStart && colIndex1 <= fileBarcodesEnd) {
+            column.width = 13;  // узкие ШК по файлам
+        } else if (colIndex1 >= namesStart && colIndex1 <= namesEnd) {
+            if (hasMyPrice && nameFileOrder[0] === myPriceFileName && colIndex1 === namesStart) {
+                column.width = 50; // Мой прайс открытый
+            } else {
+                column.width = 20;  // свернутые имена
+            }
+        } else {
+            column.width = 10;
+        }
+    });
+
+    // Группировка ШК по файлам
+    if (fileNames.length > 0) {
+        worksheet.properties.outlineProperties = { summaryBelow: true };
+        for (let c = fileBarcodesStart; c <= fileBarcodesEnd; c++) {
+            const col = worksheet.getColumn(c);
+            col.outlineLevel = 1;
+            col.hidden = true;
+        }
+    }
+
+    // Группировка наименований (кроме моего прайса)
+    if (nameFileOrder.length > 1) {
+        worksheet.properties.outlineProperties = { summaryBelow: true };
+        const start = hasMyPrice ? namesStart + 1 : namesStart;
+        const end = namesEnd;
+        for (let c = start; c <= end; c++) {
+            const col = worksheet.getColumn(c);
+            col.outlineLevel = 1;
+            col.hidden = true;
+        }
+    }
+
+    worksheet.views = [
+        {state: 'frozen', xSplit: 0, ySplit: 1}
+    ];
+
+    worksheet.eachRow((row) => {
+        row.eachCell((cell) => {
+            cell.border = {
+                top: {style: 'thin'},
+                left: {style: 'thin'},
+                bottom: {style: 'thin'},
+                right: {style: 'thin'}
+            };
+        });
+    });
+
+    // Подпись в заголовке о группах
+    const headerRow = worksheet.getRow(1);
+    headerRow.font = {bold: true};
+    headerRow.fill = {
+        type: 'pattern',
+        pattern: 'solid',
+        fgColor: {argb: 'FFE0E0E0'}
+    };
+    headerRow.alignment = {vertical: 'middle', horizontal: 'center'};
+
+    // Добавим пояснение в первые ячейки:
+    headerRow.getCell(fileBarcodesStart).note = 'Группа: Штрихкоды по файлам. Разверните через + в панели группировки.';
+    headerRow.getCell(namesStart).note = 'Группа: Наименования по файлам. Мой прайс открыт, остальные свернуты.';
+
+    const buffer = await workbook.xlsx.writeBuffer();
+
+    const now = new Date();
+    const yyyy = now.getFullYear();
+    const mm = String(now.getMonth() + 1).padStart(2, '0');
+    const dd = String(now.getDate()).padStart(2, '0');
+
+    let fileName = `monitoring-${yyyy}-${mm}-${dd}.xlsx`;
+    if (mode === 'cart') fileName = `monitoring-cart-${yyyy}-${mm}-${dd}.xlsx`;
+    if (mode === 'myprice') fileName = `monitoring-myprice-${yyyy}-${mm}-${dd}.xlsx`;
+
+    const blob = new Blob([buffer], {
+        type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    });
+    saveAs(blob, fileName);
+}
+
+
+    function updateUI() {
+        const hasData = groupedData.length > 0;
+        const hasMyPrice = myPriceData !== null;
+
+        exportAllBtn.disabled = !hasData;
+        exportMyPriceBtn.disabled = !hasMyPrice || !hasData;
+        clearBtn.disabled = !hasData;
+        sortMatchesBtn.disabled = !hasData;
+        bigDiffBtn.disabled = !hasData;
+        showMyPriceBtn.disabled = !hasMyPrice || !hasData;
+        compactMatchesBtn.disabled = !hasData;
+        maxCoverageBtn.disabled = !hasData;
+        toggleFileBarcodesBtn.disabled = !hasData;
+        searchInput.disabled = !hasData;
+
+        if (hasData) {
+            infoPanel.style.display = 'grid';
+            const matchCount = groupedData.filter(item => item.originalFileCount > 1).length;
+            document.getElementById('productCount').textContent = groupedData.length;
+            document.getElementById('fileCount').textContent = allFilesData.length;
+            document.getElementById('columnCount').textContent = allColumns.length;
+            document.getElementById('matchCount').textContent = matchCount;
+        } else {
+            infoPanel.style.display = 'none';
+        }
+    }
+
+    function clearAll() {
+        myPriceData = null;
+        competitorFilesData = [];
+        allFilesData = [];
+        groupedData = [];
+        allColumns = [];
+        visibleColumns.clear();
+        cart.clear();
+        barcodeColumn = null;
+        nameColumn = null;
+        sortMode = 'default';
+        compactMatches = false;
+        searchQuery = '';
+        barcodeSortOrder = 0;
+        showFileBarcodes = false;
+
+        myPriceInput.value = '';
+        competitorInput.value = '';
+        synonymsInput.value = '';
+        resetBarcodeAliases();
+        searchInput.value = '';
+        sortMatchesBtn.classList.remove('active');
+        bigDiffBtn.classList.remove('active');
+        showMyPriceBtn.classList.remove('active');
+        showCartBtn.classList.remove('active');
+        compactMatchesBtn.classList.remove('active');
+        maxCoverageBtn.classList.remove('active');
+        toggleFileBarcodesBtn.classList.remove('active');
+        hiddenColumnsPanel.style.display = 'none';
+        updateCartUI();
+
+        tableContainer.innerHTML = `
+            <div class="empty-state">
+                <div class="empty-state-icon">📦</div>
+                <h3>Загрузите прайс-листы</h3>
+                <p>Загрузите ваш прайс и файлы конкурентов для автоматического сравнения</p>
+            </div>`;
+        updateUI();
+    }
+
+    window.toggleColumn = toggleColumn;
+    window.toggleCart = toggleCart;
+    window.copyBarcode = copyBarcode;
+    window.copyBarcodeFromPrice = copyBarcodeFromPrice;
+    window.toggleBarcodeSort = toggleBarcodeSort;
+    window.dividePrice = dividePrice;
+    window.editColumnName = editColumnName;
+</script>
+</body>
+</html>

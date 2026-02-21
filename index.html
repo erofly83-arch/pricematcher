@@ -1391,14 +1391,7 @@ function samePrice(a, b) {
                     .map(c => c.key)
             );
 
-            let isDuplicate = false;
-            for (const [key, valuesArr] of item.values.entries()) {
-                if (!priceKeys.has(key)) continue;
-                if (valuesArr && valuesArr.length > 1) {
-                    isDuplicate = true;
-                    break;
-                }
-            }
+            const isDuplicate = false;
             const filesWithPrices = new Set();
             for (const [key, valuesArr] of item.values.entries()) {
                 if (valuesArr && valuesArr.length > 0) {
@@ -1732,13 +1725,11 @@ return { barcode: item.barcode, packQty, autoDivFactor,
             let rowClass = '';
             
             if (item.isSynonym) rowClass = 'synonym-row';
-            else if (item.isDuplicate) rowClass = 'duplicate-row';
             
             if (inCart) {
                 if (item.isSynonym) rowClass = 'in-cart synonym-row';
-                else if (item.isDuplicate) rowClass = 'in-cart duplicate-row';
                 else rowClass = 'in-cart';
-            } else if (item.isInMyPrice && !item.isDuplicate && !item.isSynonym) {
+            } else if (item.isInMyPrice && !item.isSynonym) {
                 rowClass = 'my-price-row';
             }
 
@@ -1978,14 +1969,11 @@ return { barcode: item.barcode, packQty, autoDivFactor,
     });
     const _xlH=worksheet.addRow(headers);
     _xlH.alignment={vertical:'middle',horizontal:'center',wrapText:true};
-    _xlH.height=36;
+    _xlH.height=50;
 
     // Данные
     dataToExport.forEach(item=>{
-        let maxDepth=0;
-        excelCols.forEach(col=>{const va=item.values.get(col.key);if(va&&va.length>maxDepth)maxDepth=va.length;});
-        if(maxDepth===0)maxDepth=1;
-        for(let d=0;d<maxDepth;d++){
+        {
             const row=[item.barcode];
             fileNames.forEach(fn=>row.push(item.originalBarcodesByFile.get(fn)||''));
             nameFileOrder.forEach(fn=>row.push((item.namesByFile&&item.namesByFile.get(fn))||''));
@@ -1993,34 +1981,57 @@ return { barcode: item.barcode, packQty, autoDivFactor,
             const numericColsInRow=[];
             const _eg={'нал':[],'бн':[],'other':[]};
             const _ei={'нал':[],'бн':[],'other':[]};
+            const _multiValCols=new Set();
             excelCols.forEach((col,idx)=>{
                 const va=item.values.get(col.key);let cellValue='';
-                if(va&&va.length>d){
-                    const vObj=va[d];
-                    const num=parseFloat(String(vObj.val).replace(/[^0-9.,]/g,'').replace(',','.'));
-                    if(!isNaN(num)&&num>0){
-                        if(col.metaType){cellValue=Math.round(num);}
-                        else{
-                            cellValue=roundPrice(num);
-                            if(isPriceLikeColumn(col.columnName)){
-                                numericColsInRow.push(priceStartCol+idx);
-                                if(col.fileName!==MY_PRICE_FILE_NAME){
-                                    const _g=getColPayGroup(col);
-                                    _eg[_g].push(roundPrice(num));
-                                    _ei[_g].push({ci:priceStartCol+idx,vi:_eg[_g].length-1});
-                                }
+                if(va&&va.length>0){
+                    if(!col.metaType&&isPriceLikeColumn(col.columnName)){
+                        const uniquePrices=[];
+                        va.forEach(vObj=>{
+                            const num=parseFloat(String(vObj.val).replace(/[^0-9.,]/g,'').replace(',','.'));
+                            if(!isNaN(num)&&num>0){const r=roundPrice(num);if(!uniquePrices.includes(r))uniquePrices.push(r);}
+                        });
+                        if(uniquePrices.length===1){
+                            cellValue=uniquePrices[0];
+                            numericColsInRow.push(priceStartCol+idx);
+                            if(col.fileName!==MY_PRICE_FILE_NAME){
+                                const _g=getColPayGroup(col);
+                                _eg[_g].push(uniquePrices[0]);
+                                _ei[_g].push({ci:priceStartCol+idx,vi:_eg[_g].length-1});
                             }
+                        } else if(uniquePrices.length>1){
+                            cellValue=uniquePrices.map(p=>String(p).replace('.',',')).join(' / ');
+                            _multiValCols.add(priceStartCol+idx);
+                            if(col.fileName!==MY_PRICE_FILE_NAME){
+                                const _g=getColPayGroup(col);
+                                uniquePrices.forEach(p=>{_eg[_g].push(p);_ei[_g].push({ci:priceStartCol+idx,vi:_eg[_g].length-1});});
+                            }
+                        } else {
+                            cellValue=va[0]?.val||'';
                         }
-                    } else {cellValue=vObj.val;}
+                    } else if(col.metaType){
+                        const num=parseFloat(String(va[0].val).replace(/[^0-9.,]/g,'').replace(',','.'));
+                        cellValue=(!isNaN(num)&&num>0)?Math.round(num):(va[0].val||'');
+                    } else {
+                        cellValue=va[0]?.val||'';
+                    }
                 }
                 row.push(cellValue);
             });
             const excelRow=worksheet.addRow(row);
             numericColsInRow.forEach(ci=>{const c=excelRow.getCell(ci+1);if(typeof c.value==='number')c.numFmt='0.0';});
-            if(item.isSynonym) excelRow.eachCell(cell=>{cell.fill={type:'pattern',pattern:'solid',fgColor:{argb:'FFE6F7FF'}};});
-            else if(item.isDuplicate) excelRow.eachCell(cell=>{cell.fill={type:'pattern',pattern:'solid',fgColor:{argb:'FFFFE6F0'}};});
+            if(item.isSynonym){excelRow.getCell(1).fill={type:'pattern',pattern:'solid',fgColor:{argb:'FFE6F7FF'}};}
             ['нал','бн','other'].forEach(g=>{
-                if(_eg[g].length>1){const mn=Math.min(..._eg[g]);_ei[g].forEach(({ci,vi})=>{if(_eg[g][vi]===mn)excelRow.getCell(ci+1).font={color:{argb:'FF28A745'},bold:true};});}
+                if(_eg[g].length>1){
+                    const mn=Math.min(..._eg[g]);
+                    const minCells=new Set();
+                    _ei[g].forEach(({ci,vi})=>{if(_eg[g][vi]===mn)minCells.add(ci);});
+                    minCells.forEach(ci=>{
+                        const cell=excelRow.getCell(ci+1);
+                        cell.fill={type:'pattern',pattern:'solid',fgColor:{argb:'FFFFCCCC'}};
+                        cell.font={color:{argb:'FF000000'}};
+                    });
+                }
             });
         }
     });
@@ -2060,10 +2071,6 @@ return { barcode: item.barcode, packQty, autoDivFactor,
     headerRow.height=36;
     // Мой прайс колонки в заголовке — зелёный цвет
     excelCols.forEach((col,idx)=>{
-        if(!col.metaType&&col.fileName===MY_PRICE_FILE_NAME){
-            const cell=headerRow.getCell(priceStartColBase+idx+1);
-            cell.font={bold:true,color:{argb:'FF28A745'}};
-        }
     });
     if(fbS<=headers.length)headerRow.getCell(fbS).note='Штрихкоды по файлам';
     if(nsS<=headers.length)headerRow.getCell(nsS).note='Наименования по файлам';

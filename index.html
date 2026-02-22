@@ -9,77 +9,409 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-<style> * { margin: 0; padding: 0; box-sizing: border-box; }body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Arial, sans-serif; background: #f2f2f7; padding: 16px; color: #1c1c1e; }.container { max-width: 100%; margin: 0 авто; background: white; border-radius: 16px; padding: 24px; box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08); }h1 { font-size: 28px; font-weight: 600; margin-bottom: 20px; color: #1c1c1e; letter-spacing: -0.5px; }.upload-section { display: grid; grid-template-columns: 1.5fr 1.5fr 1fr; gap: 12px; margin-bottom: 12px; }.upload-card { background: #f9f9fb; border-radius: 12px; padding: 12px; border: 2px dashed #c7c7cc; transition: all 0.2s; }.upload-card:hover { border-color: #007aff; }.upload-card.my-price { border-color: #34c759; background: #f0fdf4; }.upload-card.my-price:hover { border-color: #28a745; }.upload-label { display: block; font-size: 12px; font-weight: 600; color: #8e8e93; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px; }.upload-card.my-price .upload-label { color: #34c759; }.file-input-wrapper { position: relative; }.file-input-wrapper input[type="file"] { position: absolute; opacity: 0; width: 100%; height: 100%; cursor: pointer; }.file-input-display { display: flex; align-items: center; gap: 6px; padding: 8px 10px; background: white; border-radius: 8px; font-size: 13px; color: #007aff; font-weight: 500; cursor: pointer; transition: all 0.2s; }.file-input-display:hover { background: #e8f4ff; }.upload-card.my-price .file-input-display { color: #34c759; }.upload-card.my-price .file-input-display:hover { background: #e6f9ec; }.upload-card.synonyms { border-color: #ffcc00; background: #fff9e6; }.upload-card.synonyms .upload-label { color: #ff9500; }.search-box { margin-bottom: 12px; }.search-input { width: 100%; padding: 10px 12px; border: 2px solid #e5e5ea; border-radius: 10px; font-size: 14px; font-family: inherit; transition: all 0.2s; }.search-input:focus { outline: none; border-color: #007aff; background: #f0f7ff; }.controls { display: flex; gap: 6px; margin-bottom: 12px; flex-wrap: wrap; }.btn { padding: 6px 10px; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 12px; transition: all 0.2s; display: flex; align-items: center; gap: 4px; line-height: 1; white-space: nowrap; }.btn span.icon { font-size: 14px; }.btn-primary { background: #007aff; color: white; }.btn-primary:hover { background: #0051d5; transform: translateY(-1px); box-shadow: 0 3px 8px rgba(0, 122, 255, 0.25); }.btn-success { background: #34c759; color: white; }.btn-success:hover { background: #28a745; transform: translateY(-1px); box-shadow: 0 3px 8px rgba(52, 199, 89, 0.25); }.btn-warning { background: #ff9500; color: white; }.btn-warning:hover { background: #e08600; transform: translateY(-1px); box-shadow: 0 3px 8px rgba(255, 149, 0, 0.25); }.btn-danger { background: #ff3b30; color: white; }.btn-danger:hover { background: #d70015; }.btn-secondary { background: #f9f9fb; color: #007aff; border: 1px solid #e5e5ea; }.btn-secondary:hover { background: #e8f4ff; }.btn-secondary.active { background: #007aff; color: white; }.btn:disabled { background: #e5e5ea; color: #aeaeb2; cursor: not-allowed; transform: none; }.cart-badge { background: #ff3b30; color: white; border-radius: 10px; padding: 1px 6px; font-size: 11px; font-weight: 700; min-width: 18px; text-align: center; }.info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 10px; margin-bottom: 12px; }.info-card { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 12px; padding: 10px; color: white; }.info-card:nth-child(2) { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); }.info-card:nth-child(3) { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); }.info-card:nth-child(4) { background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); }.info-value { font-size: 22px; font-weight: 700; margin-bottom: 2px; letter-spacing: -0.5px; }.info-label { font-size: 11px; opacity: 0.9; font-weight: 500; }.hidden-columns { background: #fff3cd; border: 1px solid #ffc107; border-radius: 12px; padding: 8px 10px; margin-bottom: 10px; display: none; align-items: center; gap: 8px; flex-wrap: wrap; }.hidden-columns-label { font-size: 12px; font-weight: 600; color: #856404; }.restore-column-btn { padding: 4px 8px; background: white; border: 1px solid #ffc107; border-radius: 6px; font-size: 11px; font-weight: 600; color: #856404; cursor: pointer; transition: all 0.2s; }.restore-column-btn:hover { background: #ffc107; color: white; }.table-wrapper { overflow-x: auto; border-radius: 12px; border: 1px solid #e5e5ea; max-height: 70vh; }table { width: 100%; border-collapse: collapse; min-width: 700px; }th { background: #f9f9fb; padding: 4px 6px; text-align: left; font-weight: 600; font-size: 11px; color: #8e8e93; border-bottom: 1px solid #e5e5ea; position: sticky; top: 0; z-index: 10; letter-spacing: 0.3px; max-width: 160px; overflow: visible; vertical-align: top; }th.col-barcode { min-width: 140px; max-width: 140px; cursor: pointer; user-select: none; }th.col-barcode:hover { background: #e8f4ff; }th.col-name { min-width: 320px; max-width: 320px; }th.col-actions { min-width: 70px; max-width: 70px; }.column-header { display: flex; flex-direction: column; gap: 2px; min-width: 80px; }.column-header-title { display: flex; align-items: center; gap: 3px; }.column-name-text { overflow: hidden; text-overflow: ellipsis; white-space: normal; word-break: break-word; font-size: 10px; line-height: 1.3; }
-.column-file-name { font-size: 10px; color: #007aff; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-transform: none; letter-spacing: 0; border-bottom: 1px solid #e5e5ea; padding-bottom: 2px; margin-bottom: 2px; }td { padding: 4px 8px; border-bottom: 1px solid #f2f2f7; font-size: 13px; color: #1c1c1e; max-width: 150px; vertical-align: top; }td.col-barcode { min-width: 140px; max-width: 140px; }td.col-name { min-width: 320px; max-width: 320px; line-height: 1.3; padding: 0; }.name-cell { width: 100%; }.name-item { padding: 4px 8px; border-bottom: 1px solid #e5e5ea; }.name-item:last-child { border-bottom: none; }.name-compact { padding: 4px 8px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }td.col-actions { min-width: 70px; max-width: 70px; }tr { border-top: 1px solid #e5e5ea; }tr.group-border-top { border-top: 2px solid #c7c7cc; }tr.group-border-bottom { border-bottom: 2px solid #c7c7cc; }tr:hover { background: #f9f9fb; }tr.my-price-row { background: #f0fdf4; }tr.my-price-row:hover { background: #e6f9ec; }tr.in-cart { background: #d4f4dd; }tr.in-cart:hover { background: #c0eeca; }tr.duplicate-row { background: #ffe6f0 !important; }tr.duplicate-row:hover { background: #ffd6e7 !important; }tr.duplicate-row.in-cart { background: #ffc6d8 !important; }tr.duplicate-row.in-cart:hover { background: #ffb6c8 !important; }/* Подсветка товаров, найденных по синонимам */ tr.synonym-row { background: #e6f7ff !important; }tr.synonym-row:hover { background: #d1efff !important; }tr.synonym-row.in-cart { background: #b8e6ff !important; }tr.synonym-row.in-cart:hover { background: #a3dcff !important; }.multi-value-container { display: flex; flex-direction: column; gap: 4px; }.value-variant { display: flex; flex-direction: column; border-bottom: 1px dashed #e5e5ea; padding-bottom: 2px; position: relative; padding-right: 15px; }.div-wrapper { position: absolute; top: 0; right: 0; width: 14px; height: 14px; overflow: hidden; }.div-icon { color: #ff3b30; font-size: 14px; line-height: 1; font-weight: bold; text-align: center; pointer-events: none; }.div-select { position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer; font-size: 16px; }.value-variant:last-child { border-bottom: none; padding-bottom: 0; }.price-val.is-min { color: #28a745; font-weight: 700; }/* Цена кликабельна для копирования штрихкода */ .price-clickable { cursor: pointer; transition: all 0.15s; }.price-clickable:hover { background: #fff3cd; padding: 2px 4px; margin: -2px -4px; border-radius: 4px; }.cart-btn { background: transparent; color: #34c759; border: none; padding: 2px; border-radius: 6px; cursor: pointer; font-size: 18px; transition: all 0.2s; }.cart-btn:hover { background: #e6f9ec; transform: scale(1.05); }.cart-btn.in-cart { color: #34c759; }.barcode-cell { display: flex; align-items: center; gap: 4px; }.barcode-text { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }.copy-btn { border: none; background: #f2f2f7; border-radius: 4px; padding: 2px 4px; font-size: 11px; cursor: pointer; color: #555; flex-shrink: 0; }.copy-btn:hover { background: #e0e0e4; }/* Скрытые колонки штрихкодов в UI */ .hidden-barcode-col { display: none; }.empty-state { text-align: center; padding: 40px 20px; color: #8e8e93; }.empty-state-icon { font-size: 48px; margin-bottom: 12px; }.empty-state h3 { font-size: 18px; font-weight: 600; margin-bottom: 6px; color: #1c1c1e; }.empty-state p { font-size: 13px; }@media (max-width: 900px) { .upload-section { grid-template-columns: 1fr; } }@media (max-width: 768px) { .info-grid { grid-template-columns: repeat(2, 1fr); } } 
-.auto-div-badge {
-  display: inline-block;
-  margin-left: 4px;
-  color: #ffcc00;
-  font-weight: 900;
-  font-size: 13px;
-  line-height: 1;
-  text-shadow: 0 1px 0 rgba(0,0,0,0.15);
-}
-.legend-panel{display:flex;flex-wrap:wrap;gap:8px;align-items:flex-start;background:#f9f9fb;border:1px solid #e5e5ea;border-radius:10px;padding:8px 12px;margin-bottom:10px;font-size:12px;}.legend-item{display:flex;align-items:center;gap:5px;white-space:normal;max-width:500px;line-height:1.3;}.legend-swatch{width:16px;height:16px;border-radius:3px;border:1px solid rgba(0,0,0,0.1);flex-shrink:0;}
-:root { --global-nav-h: 52px; }
+<style>
+/* ===== RESET ===== */
+* { margin: 0; padding: 0; box-sizing: border-box; }
 
-.global-nav{
+/* ===== BODY & BACKGROUND ===== */
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Arial, sans-serif;
+  background: linear-gradient(135deg, #4f8ef7 0%, #7c3aed 55%, #a21caf 100%);
+  min-height: 100vh;
+  padding: 0 0 32px 0;
+  color: #1c1c1e;
+}
+
+/* ===== GLOBAL NAV ===== */
+.global-nav {
   position: sticky;
   top: 0;
   z-index: 5000;
-  background: #ffffff;
-  box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+  background: linear-gradient(90deg, #3b6fd4 0%, #6d28d9 60%, #9c1ac4 100%);
+  box-shadow: 0 4px 20px rgba(80,0,120,0.35);
   border-bottom: none;
 }
-
-.global-nav__inner{
+.global-nav__inner {
   max-width: 100%;
   margin: 0 auto;
-  padding: 10px 24px;
+  padding: 0 24px;
   display: flex;
   align-items: center;
   gap: 12px;
   flex-wrap: wrap;
+  min-height: 52px;
 }
-
-.global-nav__brand{
+.global-nav__brand {
   text-decoration: none;
   font-weight: 800;
-  color: #1c1c1e;
+  font-size: 17px;
+  color: #ffffff;
   white-space: nowrap;
+  letter-spacing: -0.3px;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.2);
 }
-
-.global-nav__links{
+.global-nav__links {
   display: flex;
-  gap: 8px;
+  gap: 6px;
   flex-wrap: wrap;
   align-items: center;
 }
-
-.global-nav__link{
+.global-nav__link {
   text-decoration: none;
   font-size: 13px;
   font-weight: 650;
-  color: #007aff;
-  background: rgba(0,122,255,0.08);
-  border: 1px solid rgba(0,122,255,0.18);
-  padding: 6px 10px;
+  color: rgba(255,255,255,0.88);
+  background: rgba(255,255,255,0.13);
+  border: 1px solid rgba(255,255,255,0.22);
+  padding: 7px 14px;
   border-radius: 999px;
   white-space: nowrap;
   transition: transform .12s ease, background .12s ease;
 }
-
-.global-nav__link:hover{
+.global-nav__link:hover {
   transform: translateY(-1px);
-  background: rgba(0,122,255,0.14);
-}
-
-.global-nav__link.is-active{
+  background: rgba(255,255,255,0.24);
   color: #fff;
-  background: #007aff;
-  border-color: #007aff;
+}
+.global-nav__link.is-active {
+  color: #6d28d9;
+  background: #ffffff;
+  border-color: #ffffff;
+  font-weight: 700;
 }
 
+/* ===== MAIN CONTAINER ===== */
+.container {
+  max-width: 100%;
+  margin: 20px 16px 0;
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 24px;
+  box-shadow: 0 8px 40px rgba(80,0,120,0.22);
+}
+
+h1 {
+  font-size: 26px;
+  font-weight: 700;
+  margin-bottom: 20px;
+  color: #1c1c1e;
+  letter-spacing: -0.5px;
+}
+
+/* ===== UPLOAD SECTION ===== */
+.upload-section {
+  display: grid;
+  grid-template-columns: 1.5fr 1.5fr 1fr;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+.upload-card {
+  background: #f5f3ff;
+  border-radius: 14px;
+  padding: 12px;
+  border: 2px dashed #a78bfa;
+  transition: all 0.2s;
+}
+.upload-card:hover { border-color: #6d28d9; }
+.upload-card.my-price { border-color: #34c759; background: #f0fdf4; }
+.upload-card.my-price:hover { border-color: #28a745; }
+.upload-label {
+  display: block;
+  font-size: 12px;
+  font-weight: 700;
+  color: #6d28d9;
+  margin-bottom: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.upload-card.my-price .upload-label { color: #34c759; }
+.file-input-wrapper { position: relative; }
+.file-input-wrapper input[type="file"] { position: absolute; opacity: 0; width: 100%; height: 100%; cursor: pointer; }
+.file-input-display {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  background: white;
+  border-radius: 10px;
+  font-size: 13px;
+  color: #1a73e8;
+  font-weight: 600;
+  cursor: pointer;
+  border: 1px solid #c4b5fd;
+  transition: all 0.2s;
+}
+.file-input-display:hover { background: #ede9fe; border-color: #7c3aed; }
+.upload-card.my-price .file-input-display { color: #34c759; border-color: #a7f3c3; }
+.upload-card.my-price .file-input-display:hover { background: #e6f9ec; }
+.upload-card.synonyms { border-color: #ffcc00; background: #fff9e6; }
+.upload-card.synonyms .upload-label { color: #ff9500; }
+
+/* ===== SEARCH ===== */
+.search-box { margin-bottom: 14px; }
+.search-input {
+  width: 100%;
+  padding: 10px 14px;
+  border: 2px solid #c4b5fd;
+  border-radius: 12px;
+  font-size: 14px;
+  font-family: inherit;
+  background: #faf8ff;
+  transition: all 0.2s;
+}
+.search-input:focus { outline: none; border-color: #7c3aed; background: #f3f0ff; box-shadow: 0 0 0 3px rgba(124,58,237,0.1); }
+
+/* ===== CONTROLS (grouped) ===== */
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 14px;
+  align-items: center;
+}
+.controls-group {
+  display: flex;
+  gap: 5px;
+  flex-wrap: wrap;
+  align-items: center;
+  background: #f5f3ff;
+  border: 1px solid #ddd6fe;
+  border-radius: 12px;
+  padding: 6px 10px;
+}
+.controls-group-label {
+  font-size: 10px;
+  font-weight: 700;
+  color: #7c3aed;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-right: 2px;
+  white-space: nowrap;
+}
+.controls-group.export-group { background: #f0fdf4; border-color: #bbf7d0; }
+.controls-group.export-group .controls-group-label { color: #16a34a; }
+.controls-group.danger-group { background: #fff1f2; border-color: #fecdd3; }
+.controls-group.danger-group .controls-group-label { color: #e11d48; }
+
+/* ===== BUTTONS ===== */
+.btn {
+  padding: 7px 12px;
+  border: none;
+  border-radius: 9px;
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 12px;
+  transition: all 0.18s;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  line-height: 1;
+  white-space: nowrap;
+}
+.btn span.icon { font-size: 14px; }
+.btn-primary { background: #1a73e8; color: white; }
+.btn-primary:hover { background: #1558c0; transform: translateY(-1px); box-shadow: 0 3px 10px rgba(26,115,232,0.35); }
+.btn-success { background: #1a73e8; color: white; }
+.btn-success:hover { background: #1558c0; transform: translateY(-1px); box-shadow: 0 3px 10px rgba(26,115,232,0.35); }
+.btn-warning { background: #ff9500; color: white; }
+.btn-warning:hover { background: #e08600; transform: translateY(-1px); box-shadow: 0 3px 8px rgba(255,149,0,0.3); }
+.btn-danger { background: #e11d48; color: white; }
+.btn-danger:hover { background: #be123c; transform: translateY(-1px); box-shadow: 0 3px 8px rgba(225,29,72,0.3); }
+.btn-secondary {
+  background: #ffffff;
+  color: #1a73e8;
+  border: 1.5px solid #c4b5fd;
+}
+.btn-secondary:hover { background: #ede9fe; border-color: #7c3aed; color: #7c3aed; }
+.btn-secondary.active { background: #1a73e8; color: white; border-color: #1a73e8; }
+.btn:disabled { background: #e5e5ea; color: #aeaeb2; cursor: not-allowed; transform: none; box-shadow: none; border-color: #e5e5ea; }
+.cart-badge {
+  background: #e11d48;
+  color: white;
+  border-radius: 10px;
+  padding: 1px 6px;
+  font-size: 11px;
+  font-weight: 700;
+  min-width: 18px;
+  text-align: center;
+}
+
+/* ===== INFO CARDS ===== */
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 10px;
+  margin-bottom: 14px;
+}
+.info-card {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 14px;
+  padding: 12px 16px;
+  color: white;
+}
+.info-card:nth-child(2) { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); }
+.info-card:nth-child(3) { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); }
+.info-card:nth-child(4) { background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); }
+.info-value { font-size: 22px; font-weight: 700; margin-bottom: 2px; letter-spacing: -0.5px; }
+.info-label { font-size: 11px; opacity: 0.9; font-weight: 500; }
+
+/* ===== HIDDEN COLUMNS PANEL ===== */
+.hidden-columns {
+  background: #fff3cd;
+  border: 1px solid #ffc107;
+  border-radius: 12px;
+  padding: 8px 10px;
+  margin-bottom: 10px;
+  display: none;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.hidden-columns-label { font-size: 12px; font-weight: 600; color: #856404; }
+.restore-column-btn {
+  padding: 4px 8px;
+  background: white;
+  border: 1px solid #ffc107;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #856404;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.restore-column-btn:hover { background: #ffc107; color: white; }
+
+/* ===== LEGEND ===== */
+.legend-panel {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: flex-start;
+  background: #f5f3ff;
+  border: 1px solid #ddd6fe;
+  border-radius: 12px;
+  padding: 8px 14px;
+  margin-bottom: 12px;
+  font-size: 12px;
+}
+.legend-item { display: flex; align-items: center; gap: 5px; white-space: normal; max-width: 500px; line-height: 1.3; }
+.legend-swatch { width: 16px; height: 16px; border-radius: 3px; border: 1px solid rgba(0,0,0,0.1); flex-shrink: 0; }
+
+/* ===== TABLE ===== */
+.table-wrapper {
+  overflow-x: auto;
+  border-radius: 14px;
+  border: 1.5px solid #ddd6fe;
+  max-height: 200vh;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 700px;
+}
+th {
+  background: #f5f3ff;
+  padding: 5px 8px;
+  text-align: left;
+  font-weight: 700;
+  font-size: 11px;
+  color: #6d28d9;
+  border-bottom: 2px solid #c4b5fd;
+  border-right: 1px solid #ddd6fe;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  letter-spacing: 0.3px;
+  max-width: 160px;
+  overflow: visible;
+  vertical-align: top;
+}
+th:last-child { border-right: none; }
+th.col-barcode { min-width: 140px; max-width: 140px; cursor: pointer; user-select: none; }
+th.col-barcode:hover { background: #ede9fe; }
+th.col-name { min-width: 320px; max-width: 320px; }
+th.col-actions { min-width: 55px; max-width: 55px; }
+.column-header { display: flex; flex-direction: column; gap: 2px; min-width: 80px; }
+th.col-meta, th.col-my-price { min-width: 55px; max-width: 55px; }
+th.col-meta .column-header, th.col-my-price .column-header { min-width: 40px; }
+.column-header-title { display: flex; align-items: center; gap: 3px; }
+.column-name-text { overflow: hidden; text-overflow: ellipsis; white-space: normal; word-break: break-word; font-size: 10px; line-height: 1.3; }
+.column-file-name { font-size: 10px; color: #1a73e8; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-transform: none; letter-spacing: 0; border-bottom: 1px solid #ddd6fe; padding-bottom: 2px; margin-bottom: 2px; }
+
+td {
+  padding: 4px 8px;
+  border-bottom: 1px solid #f0ebff;
+  border-right: 1px solid #e8e0fa;
+  font-size: 13px;
+  color: #1c1c1e;
+  max-width: 150px;
+  vertical-align: top;
+}
+td:last-child { border-right: none; }
+td.col-barcode { min-width: 140px; max-width: 140px; }
+td.col-name { min-width: 320px; max-width: 320px; line-height: 1.3; padding: 0; }
+.name-cell { width: 100%; }
+.name-item { padding: 4px 8px; border-bottom: 1px solid #e8e0fa; }
+.name-item:last-child { border-bottom: none; }
+.name-compact { padding: 4px 8px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+td.col-actions { min-width: 44px; max-width: 44px; }
+
+tr { border-top: 1px solid #f0ebff; }
+tr.group-border-top { border-top: 2px solid #a78bfa; }
+tr.group-border-bottom { border-bottom: 2px solid #a78bfa; }
+tr:hover { background: #f8f6ff; }
+tr.my-price-row { background: #f0fdf4; }
+tr.my-price-row:hover { background: #e6f9ec; }
+tr.in-cart { background: #d4f4dd; }
+tr.in-cart:hover { background: #c0eeca; }
+tr.duplicate-row { background: #ffe6f0 !important; }
+tr.duplicate-row:hover { background: #ffd6e7 !important; }
+tr.duplicate-row.in-cart { background: #ffc6d8 !important; }
+tr.duplicate-row.in-cart:hover { background: #ffb6c8 !important; }
+tr.synonym-row { background: #e6f7ff !important; }
+tr.synonym-row:hover { background: #d1efff !important; }
+tr.synonym-row.in-cart { background: #b8e6ff !important; }
+tr.synonym-row.in-cart:hover { background: #a3dcff !important; }
+
+/* ===== MULTI-VALUE ===== */
+.multi-value-container { display: flex; flex-direction: column; gap: 4px; }
+.value-variant { display: flex; flex-direction: column; border-bottom: 1px dashed #e8e0fa; padding-bottom: 2px; position: relative; padding-right: 15px; }
+.div-wrapper { position: absolute; top: 0; right: 0; width: 14px; height: 14px; overflow: hidden; }
+.div-icon { color: #e11d48; font-size: 14px; line-height: 1; font-weight: bold; text-align: center; pointer-events: none; }
+.div-select { position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer; font-size: 16px; }
+.value-variant:last-child { border-bottom: none; padding-bottom: 0; }
+.price-val.is-min { color: #16a34a; font-weight: 700; }
+.price-clickable { cursor: pointer; transition: all 0.15s; }
+.price-clickable:hover { background: #fff3cd; padding: 2px 4px; margin: -2px -4px; border-radius: 4px; }
+
+/* ===== CART BUTTON ===== */
+.cart-btn { background: transparent; color: #34c759; border: none; padding: 1px; border-radius: 5px; cursor: pointer; font-size: 13px; line-height: 1; transition: all 0.2s; }
+.cart-btn:hover { background: #e6f9ec; transform: scale(1.05); }
+.cart-btn.in-cart { color: #34c759; }
+
+/* ===== BARCODE CELL ===== */
+.barcode-cell { display: flex; align-items: center; gap: 4px; }
+.barcode-text { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.copy-btn { border: none; background: #ede9fe; border-radius: 4px; padding: 2px 5px; font-size: 11px; cursor: pointer; color: #7c3aed; flex-shrink: 0; }
+.copy-btn:hover { background: #c4b5fd; }
+
+/* ===== HIDDEN BARCODE COLS ===== */
+.hidden-barcode-col { display: none; }
+
+/* ===== EMPTY STATE ===== */
+.empty-state { text-align: center; padding: 40px 20px; color: #8e8e93; }
+.empty-state-icon { font-size: 48px; margin-bottom: 12px; }
+.empty-state h3 { font-size: 18px; font-weight: 600; margin-bottom: 6px; color: #1c1c1e; }
+.empty-state p { font-size: 13px; }
+
+/* ===== AUTO DIV BADGE ===== */
+.auto-div-badge { display: inline-block; margin-left: 4px; color: #ffcc00; font-weight: 900; font-size: 13px; line-height: 1; text-shadow: 0 1px 0 rgba(0,0,0,0.15); }
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 900px) { .upload-section { grid-template-columns: 1fr; } .container { margin: 12px 8px 0; padding: 16px; } }
+@media (max-width: 768px) { .info-grid { grid-template-columns: repeat(2, 1fr); } }
+
+:root { --global-nav-h: 52px; }
 </style>
 </head>
 <body>
@@ -152,58 +484,80 @@
     </div>
 
     <div class="controls">
-        <button id="sortMatchesBtn" class="btn btn-secondary" disabled
-                title="Показывать сначала товары, которые есть в нескольких файлах">
-            <span class="icon">🔄</span> Совпадения
-        </button>
-        <button id="bigDiffBtn" class="btn btn-secondary" disabled
-                title="Показать только товары с совпадениями, где разница цен больше 10%">
-            <span class="icon">📊</span> Большая разница
-        </button>
-        <button id="showMyPriceBtn" class="btn btn-secondary" disabled
-                title="Показать только товары из вашего прайса">
-            <span class="icon">⭐</span> Мой прайс
-        </button>
-        <button id="showCartBtn" class="btn btn-secondary" disabled
-                title="Показать только товары, добавленные в корзину">
-            <span class="icon">🛒👁️</span> Корзина
-        </button>
-        <button id="compactMatchesBtn" class="btn btn-secondary" disabled
-                title="Уменьшить высоту строк с совпадениями, показывать все наименования в одну строку">
-            <span class="icon">📏</span> Компактно
-        </button>
-        <button id="maxCoverageBtn" class="btn btn-secondary" disabled
-                title="Сортировать по количеству поставщиков, у которых есть цена на товар">
-            <span class="icon">📊</span> Макс.совпадения
-        </button>
-        <button id="toggleFileBarcodesBtn" class="btn btn-secondary" disabled
-                title="Показать/скрыть колонки со штрихкодами по файлам">
-            <span class="icon">🔎</span> ШК по файлам
-        </button>
-        <button id="exportMyPriceBtn" class="btn btn-success" disabled
-                title="Скачать Excel с товарами из вашего прайса и выбранными ценами">
-            <span class="icon">⭐💾</span> Мой прайс
-        </button>
-        <button id="exportAllBtn" class="btn btn-success" disabled
-                title="Скачать Excel со всеми товарами и выбранными колонками">
-            <span class="icon">💾</span> Всё
-        </button>
-        <button id="exportCartBtn" class="btn btn-warning" disabled
-                title="Скачать Excel только с товарами из корзины">
-            <span class="icon">🛒💾</span> Корзина
-            <span id="cartBadge" class="cart-badge" style="display:none;">0</span>
-        </button>
-        <button id="clearCartBtn" class="btn btn-danger" disabled
-                title="Очистить все товары из корзины">
-            <span class="icon">🛒🗑️</span> Очистить корзину
-        </button>
-        <button id="sortPayBtn" class="btn btn-secondary" disabled title="Нал → Бн"><span class="icon">💳</span> Нал/Бн</button>
-        <button id="clearBtn" class="btn btn-danger" disabled
-                title="Очистить все загруженные данные и начать заново">
-            <span class="icon">🗑️</span> Сбросить всё
-        </button>
-    </div>
+        <!-- ГРУППА: Фильтры и отображение -->
+        <div class="controls-group">
+            <span class="controls-group-label">🔍 Фильтры</span>
+            <button id="sortMatchesBtn" class="btn btn-secondary" disabled
+                    title="Показывать сначала товары, которые есть в нескольких файлах">
+                <span class="icon">🔄</span> Совпадения
+            </button>
+            <button id="bigDiffBtn" class="btn btn-secondary" disabled
+                    title="Показать только товары с совпадениями, где разница цен больше 10%">
+                <span class="icon">📊</span> Большая разница
+            </button>
+            <button id="showMyPriceBtn" class="btn btn-secondary" disabled
+                    title="Показать только товары из вашего прайса">
+                <span class="icon">⭐</span> Мой прайс
+            </button>
+            <button id="showCartBtn" class="btn btn-secondary" disabled
+                    title="Показать только товары, добавленные в корзину">
+                <span class="icon">🛒👁️</span> Корзина
+            </button>
+            <button id="maxCoverageBtn" class="btn btn-secondary" disabled
+                    title="Сортировать по количеству поставщиков, у которых есть цена на товар">
+                <span class="icon">📊</span> Поиск новинок
+            </button>
+        </div>
 
+        <!-- ГРУППА: Вид таблицы -->
+        <div class="controls-group">
+            <span class="controls-group-label">🖥️ Вид</span>
+            <button id="compactMatchesBtn" class="btn btn-secondary" disabled
+                    title="Уменьшить высоту строк с совпадениями, показывать все наименования в одну строку">
+                <span class="icon">📏</span> Компактно
+            </button>
+            <button id="toggleFileBarcodesBtn" class="btn btn-secondary" disabled
+                    title="Показать/скрыть колонки со штрихкодами по файлам">
+                <span class="icon">🔎</span> ШК по файлам
+            </button>
+            <button id="sortPayBtn" class="btn btn-secondary" disabled title="Нал → Бн"><span class="icon">💳</span> Нал/Бн</button>
+        </div>
+
+        <!-- ГРУППА: Экспорт -->
+        <div class="controls-group export-group">
+            <span class="controls-group-label">💾 Экспорт</span>
+            <button id="exportMyPriceBtn" class="btn btn-success" disabled
+                    title="Скачать Excel с товарами из вашего прайса и выбранными ценами">
+                <span class="icon">⭐💾</span> Мой прайс
+            </button>
+            <button id="exportAllBtn" class="btn btn-success" disabled
+                    title="Скачать Excel со всеми товарами и выбранными колонками">
+                <span class="icon">💾</span> Всё
+            </button>
+            <button id="exportCurrentBtn" class="btn btn-success" disabled
+                    title="Скачать Excel с учётом текущего поиска, фильтров и сортировки">
+                <span class="icon">🔍💾</span> Текущий вид
+            </button>
+            <button id="exportCartBtn" class="btn btn-warning" disabled
+                    title="Скачать Excel только с товарами из корзины">
+                <span class="icon">🛒💾</span> Корзина
+                <span id="cartBadge" class="cart-badge" style="display:none;">0</span>
+            </button>
+        </div>
+
+        <!-- ГРУППА: Управление корзиной и сброс -->
+        <div class="controls-group danger-group">
+            <span class="controls-group-label">⚠️ Очистка</span>
+            <button id="clearCartBtn" class="btn btn-danger" disabled
+                    title="Очистить все товары из корзины">
+                <span class="icon">🛒🗑️</span> Очистить корзину
+            </button>
+            <button id="clearBtn" class="btn btn-danger" disabled
+                    title="Очистить все загруженные данные и начать заново">
+                <span class="icon">🗑️</span> Сбросить всё
+            </button>
+        </div>
+    </div>
     <div id="infoPanel" class="info-grid" style="display:none;">
         <div class="info-card">
             <div class="info-value" id="productCount">0</div>
@@ -890,6 +1244,7 @@
     let searchQuery = '';
     let barcodeSortOrder = 0;
     let showFileBarcodes = false; // UI: отображать ли колонки ШК по файлам
+    let filterNewItems = false;   // Фильтр новинок: показывать только то, чего нет в моём прайсе
 
     const myPriceInput = document.getElementById('myPriceInput');
     const competitorInput = document.getElementById('competitorInput');
@@ -904,6 +1259,7 @@
     const toggleFileBarcodesBtn = document.getElementById('toggleFileBarcodesBtn');
     const exportMyPriceBtn = document.getElementById('exportMyPriceBtn');
     const exportAllBtn = document.getElementById('exportAllBtn');
+    const exportCurrentBtn = document.getElementById('exportCurrentBtn');
     const exportCartBtn = document.getElementById('exportCartBtn');
     const clearCartBtn = document.getElementById('clearCartBtn');
     const sortPayBtn=document.getElementById('sortPayBtn');
@@ -944,6 +1300,7 @@
     toggleFileBarcodesBtn.addEventListener('click', toggleFileBarcodesVisibility);
 exportMyPriceBtn.addEventListener('click', async () => await generateExcel('myprice'));
 exportAllBtn.addEventListener('click', async () => await generateExcel('all'));
+    exportCurrentBtn.addEventListener('click', async () => await generateExcel('current'));
 exportCartBtn.addEventListener('click', async () => await generateExcel('cart'));
 
     clearCartBtn.addEventListener('click', clearCart);
@@ -1428,14 +1785,26 @@ return { barcode: item.barcode, packQty, autoDivFactor,
     }
 
     function toggleCart(barcode) {
-        const wrapper = document.querySelector('.table-wrapper');
-        const scrollTop = wrapper ? wrapper.scrollTop : 0;
         if (cart.has(barcode)) cart.delete(barcode);
         else cart.add(barcode);
         updateCartUI();
-        renderTable();
-        const newWrapper = document.querySelector('.table-wrapper');
-        if (newWrapper) newWrapper.scrollTop = scrollTop;
+
+        const inCart = cart.has(barcode);
+        document.querySelectorAll('tr[data-barcode]').forEach(row => {
+            if (row.dataset.barcode !== String(barcode)) return;
+            const isInMyPrice = row.dataset.inMyPrice === '1';
+            const isSynonym = row.dataset.isSynonym === '1';
+
+            row.classList.toggle('in-cart', inCart);
+            row.classList.toggle('my-price-row', !inCart && isInMyPrice && !isSynonym);
+
+            const btn = row.querySelector('.cart-btn');
+            if (btn) {
+                btn.textContent = inCart ? '✓' : '🛒';
+                btn.title = inCart ? 'Убрать из корзины' : 'Добавить в корзину';
+                btn.classList.toggle('in-cart', inCart);
+            }
+        });
     }
 
     function clearCart() {
@@ -1482,7 +1851,6 @@ return { barcode: item.barcode, packQty, autoDivFactor,
             bigDiffBtn.classList.remove('active');
             showMyPriceBtn.classList.remove('active');
             showCartBtn.classList.remove('active');
-            maxCoverageBtn.classList.remove('active');
         }
         renderTable();
         const newWrapper = document.querySelector('.table-wrapper');
@@ -1552,17 +1920,11 @@ return { barcode: item.barcode, packQty, autoDivFactor,
     function toggleMaxCoverage() {
         const wrapper = document.querySelector('.table-wrapper');
         const scrollTop = wrapper ? wrapper.scrollTop : 0;
-        if (sortMode === 'maxcoverage') {
-            sortMode = 'default';
-            maxCoverageBtn.classList.remove('active');
-        } else {
-            sortMode = 'maxcoverage';
+        filterNewItems = !filterNewItems;
+        if (filterNewItems) {
             maxCoverageBtn.classList.add('active');
-            sortPayBtn.classList.remove('active');
-        sortMatchesBtn.classList.remove('active');
-            bigDiffBtn.classList.remove('active');
-            showMyPriceBtn.classList.remove('active');
-            showCartBtn.classList.remove('active');
+        } else {
+            maxCoverageBtn.classList.remove('active');
         }
         renderTable();
         const newWrapper = document.querySelector('.table-wrapper');
@@ -1610,6 +1972,11 @@ return { barcode: item.barcode, packQty, autoDivFactor,
             );
         }
 
+        // Фильтр новинок (независимый от sortMode)
+        if (filterNewItems) {
+            data = data.filter(item => !item.isInMyPrice);
+        }
+
         if (sortMode === 'matches') {
             data.sort((a, b) => {
                 if (a.originalFileCount > 1 && b.originalFileCount === 1) return -1;
@@ -1624,7 +1991,7 @@ return { barcode: item.barcode, packQty, autoDivFactor,
             data.sort((a, b) => a.myPriceOrder - b.myPriceOrder);
         } else if (sortMode === 'cart') {
             data = data.filter(item => cart.has(item.barcode));
-        } else if (sortMode === 'maxcoverage') {
+        } else if (sortMode === 'maxcoverage' || filterNewItems) {
             data.sort((a, b) => b.coverageCount - a.coverageCount);
         }
 
@@ -1689,12 +2056,12 @@ return { barcode: item.barcode, packQty, autoDivFactor,
         const visibleCols = allColumns.filter(col => visibleColumns.has(col.key));
 
         let html = '<div class="table-wrapper"><table><thead><tr>';
-        html += `<th class="col-actions">Корзина</th>`;
+        html += `<th class="col-actions"></th>`;
 
         let sortIcon = '';
         if (barcodeSortOrder === 1) sortIcon = ' ▲';
         else if (barcodeSortOrder === -1) sortIcon = ' ▼';
-        html += `<th class="col-barcode" onclick="toggleBarcodeSort()" title="Нажмите для сортировки по штрихкоду">Штрихкод (канонический)${sortIcon}</th>`;
+        html += `<th class="col-barcode" onclick="toggleBarcodeSort()" title="Нажмите для сортировки по штрихкоду">Штрихкод${sortIcon}</th>`;
 
         // Колонки со штрихкодами по файлам (по умолчанию скрыты)
         allFilesData.forEach(({fileName}, idx) => {
@@ -1711,8 +2078,9 @@ return { barcode: item.barcode, packQty, autoDivFactor,
             const _fL = col.metaType ? null : col.fileName;
             // Мой прайс и мета: только колонка; Поставщик: файл + колонка
             if(_isMyP||_isMeta){
-                const _color = _isMyP ? "#28a745" : "#8e8e93";
-                html+=`<th title="${_cL}"><div class="column-header"><div class="column-header-title"><span class="column-name-text" style="color:${_color};font-weight:700;">${_cL}</span></div></div></th>`;
+                const _color = "#5e5ce6";
+                const _thClass = _isMyP ? "col-my-price" : "col-meta";
+                html+=`<th class="${_thClass}" title="${_cL}"><div class="column-header"><div class="column-header-title"><span class="column-name-text" style="color:${_color};font-weight:700;">${_cL}</span></div></div></th>`;
             } else {
                 html+=`<th title="${_fL} — ${_cL}"><div class="column-header"><div class="column-file-name" title="${_fL}">${_fL}</div><div class="column-header-title"><span class="column-name-text">${_cL}</span></div></div></th>`;
             }
@@ -1740,7 +2108,7 @@ return { barcode: item.barcode, packQty, autoDivFactor,
             if (isGroupStart) rowClass += (rowClass ? ' ' : '') + 'group-border-top';
             if (isGroupEnd) rowClass += (rowClass ? ' ' : '') + 'group-border-bottom';
 
-            html += `<tr class="${rowClass}">`;
+            html += `<tr class="${rowClass}" data-barcode="${item.barcode}" data-in-my-price="${item.isInMyPrice?'1':'0'}" data-is-synonym="${item.isSynonym?'1':'0'}">`;
             html += `<td class="col-actions">
                     <button class="cart-btn ${inCart ? 'in-cart' : ''}"
                             title="${inCart ? 'Убрать из корзины' : 'Добавить в корзину'}"
@@ -1949,6 +2317,7 @@ return { barcode: item.barcode, packQty, autoDivFactor,
     let dataToExport=[];
     if(mode==='cart')         dataToExport=groupedData.filter(item=>cart.has(item.barcode));
     else if(mode==='myprice') dataToExport=groupedData.filter(item=>item.isInMyPrice).sort((a,b)=>a.myPriceOrder-b.myPriceOrder);
+    else if(mode==='current') dataToExport=getSortedData();
     else                      dataToExport=groupedData;
 
     const workbook=new ExcelJS.Workbook();
@@ -1956,9 +2325,9 @@ return { barcode: item.barcode, packQty, autoDivFactor,
     const totalCols=1+fileNames.length+nameFileOrder.length+excelCols.length;
 
     // Заголовки: мой прайс — только колонка, поставщик — файл+колонка
-    const headers=['Штрихкод (канонический)'];
+    const headers=['Штрихкод'];
     fileNames.forEach(fn=>headers.push(`Штрихкод (${fn})`));
-    nameFileOrder.forEach(fn=>headers.push(`Наименование (${fn})`));
+    nameFileOrder.forEach(fn=>headers.push('Наименование'));
     excelCols.forEach(col=>{
         const _isMyP=!col.metaType&&col.fileName===MY_PRICE_FILE_NAME;
         if(_isMyP||col.metaType){
@@ -1969,14 +2338,19 @@ return { barcode: item.barcode, packQty, autoDivFactor,
     });
     const _xlH=worksheet.addRow(headers);
     _xlH.alignment={vertical:'middle',horizontal:'center',wrapText:true};
-    _xlH.height=50;
+    _xlH.height=45;
 
     // Данные
     dataToExport.forEach(item=>{
         {
             const row=[item.barcode];
             fileNames.forEach(fn=>row.push(item.originalBarcodesByFile.get(fn)||''));
-            nameFileOrder.forEach(fn=>row.push((item.namesByFile&&item.namesByFile.get(fn))||''));
+            if(mode==='current'){
+                const _bestName=(item.names||[]).filter(n=>n.fileName!==MY_PRICE_FILE_NAME).reduce((b,n)=>n.name&&n.name.length>b.length?n.name:b,'');
+                nameFileOrder.forEach((_fn,_i)=>row.push(_i===0?_bestName:''));
+            } else {
+                nameFileOrder.forEach(fn=>row.push((item.namesByFile&&item.namesByFile.get(fn))||''));
+            }
             const priceStartCol=row.length;
             const numericColsInRow=[];
             const _eg={'нал':[],'бн':[],'other':[]};
@@ -2068,7 +2442,7 @@ return { barcode: item.barcode, packQty, autoDivFactor,
     headerRow.font={bold:true};
     headerRow.fill={type:'pattern',pattern:'solid',fgColor:{argb:'FFE0E0E0'}};
     headerRow.alignment={vertical:'middle',horizontal:'center',wrapText:true};
-    headerRow.height=36;
+    headerRow.height=45;
     // Мой прайс колонки в заголовке — зелёный цвет
     excelCols.forEach((col,idx)=>{
     });
@@ -2080,6 +2454,7 @@ return { barcode: item.barcode, packQty, autoDivFactor,
     let fileName=`monitoring-${yyyy}-${mm}-${dd}.xlsx`;
     if(mode==='cart')    fileName=`monitoring-cart-${yyyy}-${mm}-${dd}.xlsx`;
     if(mode==='myprice') fileName=`monitoring-myprice-${yyyy}-${mm}-${dd}.xlsx`;
+    if(mode==='current') fileName=`monitoring-current-${yyyy}-${mm}-${dd}.xlsx`;
     const blob=new Blob([buffer],{type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});
     await saveBlobWithDialogOrDownload(blob,fileName);
 }
@@ -2091,6 +2466,7 @@ return { barcode: item.barcode, packQty, autoDivFactor,
 
         sortPayBtn.disabled=!hasData;
         exportAllBtn.disabled = !hasData;
+        exportCurrentBtn.disabled = !hasData;
         exportMyPriceBtn.disabled = !hasMyPrice || !hasData;
         clearBtn.disabled = !hasData;
         sortMatchesBtn.disabled = !hasData;
@@ -2130,6 +2506,7 @@ return { barcode: item.barcode, packQty, autoDivFactor,
         searchQuery = '';
         barcodeSortOrder = 0;
         showFileBarcodes = false;
+        filterNewItems = false;
 
         myPriceInput.value = '';
         competitorInput.value = '';

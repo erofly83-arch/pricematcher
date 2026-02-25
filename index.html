@@ -15,271 +15,268 @@
 
 /* ===== BODY & BACKGROUND ===== */
 body {
-  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Arial, sans-serif;
-  background: linear-gradient(135deg, #4f8ef7 0%, #7c3aed 55%, #a21caf 100%);
+  font-family: 'Segoe UI', Arial, sans-serif;
+  background: #f0f0f0;
   min-height: 100vh;
   padding: 0 0 32px 0;
-  color: #1c1c1e;
+  color: #1f1f1f;
 }
 
-/* ===== GLOBAL NAV ===== */
-.global-nav {
-  position: sticky;
-  top: 0;
-  z-index: 5000;
-  background: linear-gradient(90deg, #3b6fd4 0%, #6d28d9 60%, #9c1ac4 100%);
-  box-shadow: 0 4px 20px rgba(80,0,120,0.35);
-  border-bottom: none;
+/* ===== APP NAV ===== */
+.app-nav {
+  position: sticky; top: 0; z-index: 5000;
+  background: #14512e;
+  display: flex; align-items: stretch;
+  padding: 0 10px; gap: 2px;
+  border-bottom: 1px solid rgba(0,0,0,0.3);
 }
-.global-nav__inner {
-  max-width: 100%;
-  margin: 0 auto;
-  padding: 0 24px;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  flex-wrap: wrap;
-  min-height: 52px;
+.app-nav a {
+  color: rgba(255,255,255,0.55);
+  text-decoration: none; font-size: 13px; font-weight: 500;
+  font-family: 'Segoe UI', Arial, sans-serif;
+  padding: 8px 18px; border-bottom: 3px solid transparent;
+  white-space: nowrap; letter-spacing: 0.01em;
+  transition: color .15s, background .15s;
+  display: flex; align-items: center;
 }
-.global-nav__brand {
-  text-decoration: none;
-  font-weight: 800;
-  font-size: 17px;
-  color: #ffffff;
-  white-space: nowrap;
-  letter-spacing: -0.3px;
-  text-shadow: 0 1px 4px rgba(0,0,0,0.2);
-}
-.global-nav__links {
-  display: flex;
-  gap: 6px;
-  flex-wrap: wrap;
-  align-items: center;
-}
-.global-nav__link {
-  text-decoration: none;
-  font-size: 13px;
-  font-weight: 650;
-  color: rgba(255,255,255,0.88);
-  background: rgba(255,255,255,0.13);
-  border: 1px solid rgba(255,255,255,0.22);
-  padding: 7px 14px;
-  border-radius: 999px;
-  white-space: nowrap;
-  transition: transform .12s ease, background .12s ease;
-}
-.global-nav__link:hover {
-  transform: translateY(-1px);
-  background: rgba(255,255,255,0.24);
-  color: #fff;
-}
-.global-nav__link.is-active {
-  color: #6d28d9;
-  background: #ffffff;
-  border-color: #ffffff;
-  font-weight: 700;
-}
+.app-nav a:hover { color: rgba(255,255,255,0.9); background: rgba(255,255,255,0.07); }
+.app-nav a.nav-active { color: #fff; border-bottom-color: #5dce8a; font-weight: 700; }
 
 /* ===== MAIN CONTAINER ===== */
 .container {
   max-width: 100%;
-  margin: 20px 16px 0;
+  margin: 12px 12px 0;
   background: #ffffff;
-  border-radius: 20px;
-  padding: 24px;
-  box-shadow: 0 8px 40px rgba(80,0,120,0.22);
+  border-radius: 4px;
+  padding: 16px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+  border: 1px solid #d0d0d0;
 }
 
 h1 {
-  font-size: 26px;
+  font-size: 16px;
   font-weight: 700;
-  margin-bottom: 20px;
-  color: #1c1c1e;
-  letter-spacing: -0.5px;
+  margin-bottom: 14px;
+  color: #1f1f1f;
 }
 
 /* ===== UPLOAD SECTION ===== */
 .upload-section {
   display: grid;
-  grid-template-columns: 1.5fr 1.5fr 1fr;
-  gap: 12px;
-  margin-bottom: 14px;
+  grid-template-columns: 0.7fr 1.15fr 1.15fr;
+  gap: 7px;
+  margin-bottom: 10px;
+  align-items: stretch;
 }
 .upload-card {
-  background: #f5f3ff;
-  border-radius: 14px;
-  padding: 12px;
-  border: 2px dashed #a78bfa;
-  transition: all 0.2s;
+  background: #f8f8f8;
+  border-radius: 5px;
+  padding: 7px 9px;
+  border: 1px solid #d0d0d0;
+  transition: border-color 0.15s;
+  display: flex;
+  flex-direction: column;
 }
-.upload-card:hover { border-color: #6d28d9; }
-.upload-card.my-price { border-color: #34c759; background: #f0fdf4; }
-.upload-card.my-price:hover { border-color: #28a745; }
+.upload-card:hover { border-color: #217346; }
+.upload-card.my-price { border-color: #2d9a5f; background: #f0faf2; }
+.upload-card.my-price:hover { border-color: #155724; }
+.upload-card.suppliers { border-color: #4a90d9; background: #f0f6ff; }
+.upload-card.suppliers:hover { border-color: #2255a4; }
 .upload-label {
-  display: block;
-  font-size: 12px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
   font-weight: 700;
-  color: #6d28d9;
-  margin-bottom: 6px;
+  color: #555;
+  margin-bottom: 5px;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.3px;
 }
-.upload-card.my-price .upload-label { color: #34c759; }
+.upload-label-hint {
+  font-weight: 400;
+  font-size: 9px;
+  color: #a07800;
+  text-transform: none;
+  letter-spacing: 0;
+  opacity: .8;
+}
+.upload-card.my-price .upload-label { color: #155724; }
+.upload-card.suppliers .upload-label { color: #1a4a8a; }
+.upload-status {
+  font-size: 10px;
+  margin-top: 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.upload-status--idle  { color: #999; }
+.upload-status--ok    { color: #217346; font-weight: 600; }
+.upload-status--error { color: #c0392b; }
+
+.btn-xs { font-size: 10px !important; padding: 2px 6px !important; }
 .file-input-wrapper { position: relative; }
 .file-input-wrapper input[type="file"] { position: absolute; opacity: 0; width: 100%; height: 100%; cursor: pointer; }
 .file-input-display {
   display: flex;
   align-items: center;
-  gap: 6px;
-  padding: 8px 12px;
+  gap: 5px;
+  padding: 5px 9px;
   background: white;
-  border-radius: 10px;
-  font-size: 13px;
-  color: #1a73e8;
+  border-radius: 3px;
+  font-size: 11px;
+  color: #217346;
   font-weight: 600;
   cursor: pointer;
-  border: 1px solid #c4b5fd;
-  transition: all 0.2s;
+  border: 1px solid #c0c0c0;
+  transition: background 0.15s, border-color 0.15s;
+  white-space: nowrap;
+  overflow: hidden;
 }
-.file-input-display:hover { background: #ede9fe; border-color: #7c3aed; }
-.upload-card.my-price .file-input-display { color: #34c759; border-color: #a7f3c3; }
-.upload-card.my-price .file-input-display:hover { background: #e6f9ec; }
-.upload-card.synonyms { border-color: #ffcc00; background: #fff9e6; }
-.upload-card.synonyms .upload-label { color: #ff9500; }
+.file-input-display:hover { background: #eaf4ee; border-color: #217346; }
+.upload-card.my-price .file-input-display { color: #155724; border-color: #b8d8c8; }
+.upload-card.my-price .file-input-display:hover { background: #e0f0e8; }
+.upload-card.suppliers .file-input-display { color: #1a4a8a; border-color: #aac4e8; }
+.upload-card.suppliers .file-input-display:hover { background: #e0ecff; border-color: #4a90d9; }
+.upload-card.synonyms { border-color: #d4a017; background: #fffdf0; }
+.upload-card.synonyms .upload-label { color: #7d5a00; }
 
 /* ===== SEARCH ===== */
-.search-box { margin-bottom: 14px; }
+.search-box { margin-bottom: 10px; }
+.search-box--above-table { margin-top: 8px; margin-bottom: 6px; }
 .search-input {
   width: 100%;
-  padding: 10px 14px;
-  border: 2px solid #c4b5fd;
-  border-radius: 12px;
-  font-size: 14px;
+  padding: 6px 10px;
+  border: 1px solid #c0c0c0;
+  border-radius: 3px;
+  font-size: 13px;
   font-family: inherit;
-  background: #faf8ff;
-  transition: all 0.2s;
+  background: #fff;
+  transition: border-color 0.15s;
 }
-.search-input:focus { outline: none; border-color: #7c3aed; background: #f3f0ff; box-shadow: 0 0 0 3px rgba(124,58,237,0.1); }
+.search-input:focus { outline: none; border-color: #217346; box-shadow: 0 0 0 2px rgba(33,115,70,0.12); }
 
 /* ===== CONTROLS (grouped) ===== */
 .controls {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
-  margin-bottom: 14px;
+  gap: 6px;
+  margin-bottom: 10px;
   align-items: center;
 }
 .controls-group {
   display: flex;
-  gap: 5px;
+  gap: 4px;
   flex-wrap: wrap;
   align-items: center;
-  background: #f5f3ff;
-  border: 1px solid #ddd6fe;
-  border-radius: 12px;
-  padding: 6px 10px;
+  background: #f8f8f8;
+  border: 1px solid #d0d0d0;
+  border-radius: 3px;
+  padding: 5px 8px;
 }
 .controls-group-label {
   font-size: 10px;
   font-weight: 700;
-  color: #7c3aed;
+  color: #666;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.4px;
   margin-right: 2px;
   white-space: nowrap;
 }
-.controls-group.export-group { background: #f0fdf4; border-color: #bbf7d0; }
-.controls-group.export-group .controls-group-label { color: #16a34a; }
-.controls-group.danger-group { background: #fff1f2; border-color: #fecdd3; }
-.controls-group.danger-group .controls-group-label { color: #e11d48; }
+.controls-group.export-group { background: #f0faf2; border-color: #b8d8c8; }
+.controls-group.export-group .controls-group-label { color: #155724; }
+.controls-group.danger-group { background: #fff8f8; border-color: #f5c6c6; }
+.controls-group.danger-group .controls-group-label { color: #c0392b; }
 
 /* ===== BUTTONS ===== */
 .btn {
-  padding: 7px 12px;
-  border: none;
-  border-radius: 9px;
+  padding: 4px 10px;
+  border: 1px solid #c0c0c0;
+  border-radius: 3px;
   cursor: pointer;
-  font-weight: 700;
+  font-weight: 500;
   font-size: 12px;
-  transition: all 0.18s;
-  display: flex;
+  font-family: inherit;
+  transition: background 0.12s, border-color 0.12s;
+  display: inline-flex;
   align-items: center;
   gap: 4px;
-  line-height: 1;
+  line-height: 1.4;
   white-space: nowrap;
+  background: #fff;
+  color: #1f1f1f;
 }
-.btn span.icon { font-size: 14px; }
-.btn-primary { background: #1a73e8; color: white; }
-.btn-primary:hover { background: #1558c0; transform: translateY(-1px); box-shadow: 0 3px 10px rgba(26,115,232,0.35); }
-.btn-success { background: #1a73e8; color: white; }
-.btn-success:hover { background: #1558c0; transform: translateY(-1px); box-shadow: 0 3px 10px rgba(26,115,232,0.35); }
-.btn-warning { background: #ff9500; color: white; }
-.btn-warning:hover { background: #e08600; transform: translateY(-1px); box-shadow: 0 3px 8px rgba(255,149,0,0.3); }
-.btn-danger { background: #e11d48; color: white; }
-.btn-danger:hover { background: #be123c; transform: translateY(-1px); box-shadow: 0 3px 8px rgba(225,29,72,0.3); }
-.btn-secondary {
-  background: #ffffff;
-  color: #1a73e8;
-  border: 1.5px solid #c4b5fd;
-}
-.btn-secondary:hover { background: #ede9fe; border-color: #7c3aed; color: #7c3aed; }
-.btn-secondary.active { background: #1a73e8; color: white; border-color: #1a73e8; }
-.btn:disabled { background: #e5e5ea; color: #aeaeb2; cursor: not-allowed; transform: none; box-shadow: none; border-color: #e5e5ea; }
+.btn span.icon { font-size: 13px; }
+.btn:hover:not(:disabled) { background: #eaf4ee; border-color: #217346; color: #155724; }
+.btn-primary { background: #217346; color: white; border-color: #185c38; }
+.btn-primary:hover:not(:disabled) { background: #185c38; color: white; }
+.btn-success { background: #217346; color: white; border-color: #185c38; }
+.btn-success:hover:not(:disabled) { background: #185c38; color: white; }
+.btn-warning { background: #d4a017; color: white; border-color: #b8860b; }
+.btn-warning:hover:not(:disabled) { background: #b8860b; color: white; }
+.btn-danger { background: #fff; color: #c0392b; border-color: #e0a0a0; }
+.btn-danger:hover:not(:disabled) { background: #fce8e6; border-color: #c0392b; color: #c0392b; }
+.btn-secondary { background: #fff; color: #1f1f1f; border: 1px solid #c0c0c0; }
+.btn-secondary:hover:not(:disabled) { background: #eaf4ee; border-color: #217346; color: #155724; }
+.btn-secondary.active { background: #217346; color: white; border-color: #185c38; }
+.btn:disabled { background: #f5f5f5; color: #aaa; cursor: not-allowed; border-color: #e0e0e0; }
 .cart-badge {
-  background: #e11d48;
+  background: #c0392b;
   color: white;
-  border-radius: 10px;
-  padding: 1px 6px;
+  border-radius: 8px;
+  padding: 1px 5px;
   font-size: 11px;
   font-weight: 700;
-  min-width: 18px;
+  min-width: 16px;
   text-align: center;
 }
 
 /* ===== INFO CARDS ===== */
 .info-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-  gap: 10px;
-  margin-bottom: 14px;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 8px;
+  margin-bottom: 12px;
 }
 .info-card {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  border-radius: 14px;
-  padding: 12px 16px;
-  color: white;
+  background: #f8f8f8;
+  border: 1px solid #d0d0d0;
+  border-radius: 3px;
+  padding: 10px 14px;
+  color: #1f1f1f;
+  border-left: 3px solid #217346;
 }
-.info-card:nth-child(2) { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); }
-.info-card:nth-child(3) { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); }
-.info-card:nth-child(4) { background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); }
-.info-value { font-size: 22px; font-weight: 700; margin-bottom: 2px; letter-spacing: -0.5px; }
-.info-label { font-size: 11px; opacity: 0.9; font-weight: 500; }
+.info-card:nth-child(2) { border-left-color: #2d9a5f; }
+.info-card:nth-child(3) { border-left-color: #5a9e7a; }
+.info-card:nth-child(4) { border-left-color: #155724; }
+.info-value { font-size: 20px; font-weight: 700; margin-bottom: 2px; color: #217346; }
+.info-label { font-size: 11px; color: #666; font-weight: 500; }
 
 /* ===== HIDDEN COLUMNS PANEL ===== */
 .hidden-columns {
-  background: #fff3cd;
-  border: 1px solid #ffc107;
-  border-radius: 12px;
-  padding: 8px 10px;
-  margin-bottom: 10px;
+  background: #fffdf0;
+  border: 1px solid #d4a017;
+  border-radius: 3px;
+  padding: 6px 10px;
+  margin-bottom: 8px;
   display: none;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
   flex-wrap: wrap;
 }
-.hidden-columns-label { font-size: 12px; font-weight: 600; color: #856404; }
+.hidden-columns-label { font-size: 11px; font-weight: 600; color: #7d5a00; }
 .restore-column-btn {
-  padding: 4px 8px;
+  padding: 3px 7px;
   background: white;
-  border: 1px solid #ffc107;
-  border-radius: 6px;
+  border: 1px solid #d4a017;
+  border-radius: 3px;
   font-size: 11px;
-  font-weight: 600;
-  color: #856404;
+  font-weight: 500;
+  color: #7d5a00;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: background 0.12s;
 }
-.restore-column-btn:hover { background: #ffc107; color: white; }
+.restore-column-btn:hover { background: #fff3cd; border-color: #b8860b; }
 
 /* ===== LEGEND ===== */
 .legend-panel {
@@ -287,11 +284,11 @@ h1 {
   flex-wrap: wrap;
   gap: 8px;
   align-items: flex-start;
-  background: #f5f3ff;
-  border: 1px solid #ddd6fe;
-  border-radius: 12px;
-  padding: 8px 14px;
-  margin-bottom: 12px;
+  background: #f8f8f8;
+  border: 1px solid #d0d0d0;
+  border-radius: 3px;
+  padding: 6px 12px;
+  margin-bottom: 10px;
   font-size: 12px;
 }
 .legend-item { display: flex; align-items: center; gap: 5px; white-space: normal; max-width: 500px; line-height: 1.3; }
@@ -300,50 +297,52 @@ h1 {
 /* ===== TABLE ===== */
 .table-wrapper {
   overflow-x: auto;
-  border-radius: 14px;
-  border: 1.5px solid #ddd6fe;
+  border-radius: 0;
+  border: 1px solid #d0d0d0;
   max-height: 200vh;
 }
 table {
   width: 100%;
   border-collapse: collapse;
   min-width: 700px;
+  font-size: 13px;
 }
 th {
-  background: #f5f3ff;
+  background: #217346;
   padding: 5px 8px;
   text-align: left;
-  font-weight: 700;
+  font-weight: 600;
   font-size: 11px;
-  color: #6d28d9;
-  border-bottom: 2px solid #c4b5fd;
-  border-right: 1px solid #ddd6fe;
+  color: #fff;
+  border-bottom: 2px solid #185c38;
+  border-right: 1px solid #185c38;
   position: sticky;
   top: 0;
   z-index: 10;
-  letter-spacing: 0.3px;
+  letter-spacing: 0.2px;
   max-width: 160px;
   overflow: visible;
   vertical-align: top;
 }
 th:last-child { border-right: none; }
 th.col-barcode { min-width: 140px; max-width: 140px; cursor: pointer; user-select: none; }
-th.col-barcode:hover { background: #ede9fe; }
+th.col-barcode:hover { background: #185c38; }
 th.col-name { min-width: 320px; max-width: 320px; }
 th.col-actions { min-width: 55px; max-width: 55px; }
 .column-header { display: flex; flex-direction: column; gap: 2px; min-width: 80px; }
 th.col-meta, th.col-my-price { min-width: 55px; max-width: 55px; }
 th.col-meta .column-header, th.col-my-price .column-header { min-width: 40px; }
 .column-header-title { display: flex; align-items: center; gap: 3px; }
-.column-name-text { overflow: hidden; text-overflow: ellipsis; white-space: normal; word-break: break-word; font-size: 10px; line-height: 1.3; }
-.column-file-name { font-size: 10px; color: #1a73e8; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-transform: none; letter-spacing: 0; border-bottom: 1px solid #ddd6fe; padding-bottom: 2px; margin-bottom: 2px; }
+.column-name-text { overflow: hidden; text-overflow: ellipsis; white-space: normal; word-break: break-word; font-size: 10px; line-height: 1.3; color: rgba(255,255,255,0.9); }
+.column-file-name { font-size: 10px; color: rgba(255,255,255,0.75); font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-transform: none; letter-spacing: 0; border-bottom: 1px solid rgba(255,255,255,0.25); padding-bottom: 2px; margin-bottom: 2px; }
+.column-file-name--my-price { color: rgba(255,255,255,0.95); font-style: italic; }
 
 td {
-  padding: 4px 8px;
-  border-bottom: 1px solid #f0ebff;
-  border-right: 1px solid #e8e0fa;
+  padding: 5px 8px;
+  border-bottom: 1px solid #e0e0e0;
+  border-right: 1px solid #e8e8e8;
   font-size: 13px;
-  color: #1c1c1e;
+  color: #1f1f1f;
   max-width: 150px;
   vertical-align: top;
 }
@@ -351,27 +350,27 @@ td:last-child { border-right: none; }
 td.col-barcode { min-width: 140px; max-width: 140px; }
 td.col-name { min-width: 320px; max-width: 320px; line-height: 1.3; padding: 0; }
 .name-cell { width: 100%; }
-.name-item { padding: 4px 8px; border-bottom: 1px solid #e8e0fa; }
+.name-item { padding: 4px 8px; border-bottom: 1px solid #e8e8e8; }
 .name-item:last-child { border-bottom: none; }
 .name-compact { padding: 4px 8px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 td.col-actions { min-width: 44px; max-width: 44px; }
 
-tr { border-top: 1px solid #f0ebff; }
-tr.group-border-top { border-top: 2px solid #a78bfa; }
-tr.group-border-bottom { border-bottom: 2px solid #a78bfa; }
-tr:hover { background: #f8f6ff; }
-tr.my-price-row { background: #f0fdf4; }
-tr.my-price-row:hover { background: #e6f9ec; }
-tr.in-cart { background: #d4f4dd; }
-tr.in-cart:hover { background: #c0eeca; }
-tr.duplicate-row { background: #ffe6f0 !important; }
-tr.duplicate-row:hover { background: #ffd6e7 !important; }
-tr.duplicate-row.in-cart { background: #ffc6d8 !important; }
-tr.duplicate-row.in-cart:hover { background: #ffb6c8 !important; }
-tr.synonym-row { background: #e6f7ff !important; }
-tr.synonym-row:hover { background: #d1efff !important; }
-tr.synonym-row.in-cart { background: #b8e6ff !important; }
-tr.synonym-row.in-cart:hover { background: #a3dcff !important; }
+tr { border-top: 1px solid #e8e8e8; }
+tr.group-border-top { border-top: 2px solid #b0b8c1; }
+tr.group-border-bottom { border-bottom: 2px solid #b0b8c1; }
+tr:hover { background: #f0f7f2; }
+tr.my-price-row { background: #f0faf2; }
+tr.my-price-row:hover { background: #e4f4ea; }
+tr.in-cart { background: #d8f0de; }
+tr.in-cart:hover { background: #c8e8d0; }
+tr.duplicate-row { background: #fce8e6 !important; }
+tr.duplicate-row:hover { background: #f8d8d5 !important; }
+tr.duplicate-row.in-cart { background: #f5c6c2 !important; }
+tr.duplicate-row.in-cart:hover { background: #f0b8b4 !important; }
+tr.synonym-row { background: #e8f4ff !important; }
+tr.synonym-row:hover { background: #d8ecff !important; }
+tr.synonym-row.in-cart { background: #c5e2ff !important; }
+tr.synonym-row.in-cart:hover { background: #b5d8ff !important; }
 
 /* ===== MULTI-VALUE ===== */
 .multi-value-container { display: flex; flex-direction: column; gap: 4px; }
@@ -382,65 +381,92 @@ tr.synonym-row.in-cart:hover { background: #a3dcff !important; }
 .value-variant:last-child { border-bottom: none; padding-bottom: 0; }
 .price-val.is-min { color: #16a34a; font-weight: 700; }
 .price-clickable { cursor: pointer; transition: all 0.15s; }
-.price-clickable:hover { background: #fff3cd; padding: 2px 4px; margin: -2px -4px; border-radius: 4px; }
+.price-clickable:hover { background: #eaf4ee; padding: 2px 4px; margin: -2px -4px; border-radius: 3px; }
 
 /* ===== CART BUTTON ===== */
-.cart-btn { background: transparent; color: #34c759; border: none; padding: 1px; border-radius: 5px; cursor: pointer; font-size: 13px; line-height: 1; transition: all 0.2s; }
-.cart-btn:hover { background: #e6f9ec; transform: scale(1.05); }
-.cart-btn.in-cart { color: #34c759; }
+.cart-btn { background: transparent; color: #217346; border: none; padding: 1px; border-radius: 3px; cursor: pointer; font-size: 13px; line-height: 1; transition: background 0.15s; }
+.cart-btn:hover { background: #eaf4ee; }
+.cart-btn.in-cart { color: #155724; }
 
 /* ===== BARCODE CELL ===== */
 .barcode-cell { display: flex; align-items: center; gap: 4px; }
 .barcode-text { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.copy-btn { border: none; background: #ede9fe; border-radius: 4px; padding: 2px 5px; font-size: 11px; cursor: pointer; color: #7c3aed; flex-shrink: 0; }
-.copy-btn:hover { background: #c4b5fd; }
+.copy-btn { border: 1px solid #c0c0c0; background: #f8f8f8; border-radius: 3px; padding: 2px 5px; font-size: 11px; cursor: pointer; color: #555; flex-shrink: 0; }
+.copy-btn:hover { background: #eaf4ee; border-color: #217346; color: #155724; }
 
 /* ===== HIDDEN BARCODE COLS ===== */
 .hidden-barcode-col { display: none; }
 
 /* ===== EMPTY STATE ===== */
-.empty-state { text-align: center; padding: 40px 20px; color: #8e8e93; }
-.empty-state-icon { font-size: 48px; margin-bottom: 12px; }
-.empty-state h3 { font-size: 18px; font-weight: 600; margin-bottom: 6px; color: #1c1c1e; }
+.empty-state { text-align: center; padding: 40px 20px; color: #888; }
+.empty-state-icon { font-size: 42px; margin-bottom: 10px; }
+.empty-state h3 { font-size: 16px; font-weight: 600; margin-bottom: 6px; color: #1f1f1f; }
 .empty-state p { font-size: 13px; }
 
 /* ===== AUTO DIV BADGE ===== */
 .auto-div-badge { display: inline-block; margin-left: 4px; color: #ffcc00; font-weight: 900; font-size: 13px; line-height: 1; text-shadow: 0 1px 0 rgba(0,0,0,0.15); }
 
 /* ===== RESPONSIVE ===== */
-@media (max-width: 900px) { .upload-section { grid-template-columns: 1fr; } .container { margin: 12px 8px 0; padding: 16px; } }
+@media (max-width: 900px) { .upload-section { grid-template-columns: 1fr; } .container { margin: 8px 6px 0; padding: 12px; } }
 @media (max-width: 768px) { .info-grid { grid-template-columns: repeat(2, 1fr); } }
 
-:root { --global-nav-h: 52px; }
+
+
+/* ── Tutorial tooltip ─────────────────────────────────────────────────────── */
+#tutorialTooltip {
+    position: fixed;
+    z-index: 999999;
+    background: #0f172a;
+    color: #e2e8f0;
+    border: 1px solid #334155;
+    border-radius: 10px;
+    padding: 10px 14px;
+    max-width: 320px;
+    font-size: 13px;
+    line-height: 1.5;
+    box-shadow: 0 8px 32px rgba(0,0,0,.45);
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity .15s;
+}
+#tutorialTooltip.visible { opacity: 1; }
+#tutorialTooltip .tt-title {
+    font-weight: 700;
+    font-size: 13px;
+    color: #7dd3fc;
+    margin-bottom: 4px;
+}
+#tutorialTooltip .tt-body { color: #cbd5e1; font-size: 12px; }
+body.tutorial-active * { cursor: help !important; }
+body.tutorial-active button, body.tutorial-active input,
+body.tutorial-active .file-input-wrapper { cursor: help !important; }
+#tutorialBtn.active { background: #f59e0b; color: #fff; border-color: #d97706; }
+#tutorialBtn.active:hover { background: #d97706; }
+
 </style>
 </head>
 <body>
-<header class="global-nav">
-  <div class="global-nav__inner">
-    <a class="global-nav__brand" href="https://erofly83-arch.github.io/pricematcher/">
-      Навигатор
-    </a>
-
-    <nav class="global-nav__links" aria-label="Навигация по приложениям">
-      <a class="global-nav__link" href="https://erofly83-arch.github.io/synonyms/" data-match="/synonyms/">
-        Редактор JSON
-      </a>
-      <a class="global-nav__link" href="https://erofly83-arch.github.io/pricematcher/" data-match="/pricematcher/">
-        Мониторинг
-      </a>
-      <a class="global-nav__link" href="https://erofly83-arch.github.io/obrezatel/" data-match="/obrezatel/">
-        Обрезатель
-      </a>
-      <a class="global-nav__link" href="https://erofly83-arch.github.io/sininimfinder/" data-match="/sininimfinder/">
-        Поиск синонимов
-      </a>
-    </nav>
-  </div>
-</header>
+<nav class="app-nav">
+  <a href="https://erofly83-arch.github.io/obrezatel/">Excel в CSV</a>
+  <a href="https://erofly83-arch.github.io/pricematcher/" class="nav-active">Мониторинг</a>
+  <a href="https://erofly83-arch.github.io/poiskovikexcel/">Синонимы</a>
+</nav>
 <div class="container">
     <h1>📊 Сравнение цен</h1>
 
     <div class="upload-section">
+
+        <div class="upload-card synonyms">
+            <label class="upload-label">🔗 Синонимы <span class="upload-label-hint">необязательно</span></label>
+            <div class="file-input-wrapper">
+                <input type="file" id="synonymsInput" accept=".json"/>
+                <div class="file-input-display" title="Загрузить файл synonyms.json с группами штрихкодов">
+                    <span>🧩 synonyms.json</span>
+                </div>
+            </div>
+            <div id="synonymsStatus" class="upload-status upload-status--idle">Не загружены</div>
+        </div>
+
         <div class="upload-card my-price">
             <label class="upload-label">🏷️ Мой прайс</label>
             <div class="file-input-wrapper">
@@ -449,38 +475,39 @@ tr.synonym-row.in-cart:hover { background: #a3dcff !important; }
                     <span>📄 Выбрать файл</span>
                 </div>
             </div>
+            <div id="myPriceStatus" class="upload-status upload-status--idle">Не загружен</div>
         </div>
 
-        <div class="upload-card">
-            <label class="upload-label">📦 Прайсы для сравнения</label>
+        <div class="upload-card suppliers">
+            <label class="upload-label">📦 Прайсы поставщиков</label>
             <div class="file-input-wrapper">
                 <input type="file" id="competitorInput" multiple accept=".csv,.xlsx,.xls"/>
                 <div class="file-input-display" title="Загрузить файлы поставщиков">
                     <span>📁 Выбрать файлы</span>
                 </div>
             </div>
+            <div id="competitorStatus" class="upload-status upload-status--idle">Не загружены</div>
         </div>
 
-        <div class="upload-card synonyms">
-            <label class="upload-label">🔗 Синонимы штрихкодов (JSON)</label>
-            <div class="file-input-wrapper">
-                <input type="file" id="synonymsInput" accept=".json"/>
-                <div class="file-input-display" title="Загрузить файл synonyms.json с группами штрихкодов">
-                    <span>🧩 Выбрать synonyms.json</span>
-                </div>
-            </div>
-            <div id="synonymsStatus" style="margin-top:6px;font-size:11px;color:#34c759;">Встроенный файл синонимов (166 групп)</div>
-            <div style="display:flex;gap:6px;margin-top:6px;">
-                <button id="downloadSynBtn" class="btn btn-secondary" style="font-size:11px;padding:3px 8px;">⬇️ Скачать JSON</button>
-                <button id="resetSynBtn"    class="btn btn-secondary" style="font-size:11px;padding:3px 8px;">↩️ Встроенный</button>
-            </div>
-        </div>
     </div>
 
-    <div class="search-box">
-        <input type="text" id="searchInput" class="search-input"
-               placeholder="🔍 Поиск по названию товара..."
-               title="Введите название или часть названия для фильтрации товаров">
+    <div id="infoPanel" class="info-grid" style="display:none;">
+        <div class="info-card">
+            <div class="info-value" id="productCount">0</div>
+            <div class="info-label">Уникальных товаров</div>
+        </div>
+        <div class="info-card">
+            <div class="info-value" id="fileCount">0</div>
+            <div class="info-label">Файлов загружено</div>
+        </div>
+        <div class="info-card">
+            <div class="info-value" id="columnCount">0</div>
+            <div class="info-label">Колонок данных</div>
+        </div>
+        <div class="info-card">
+            <div class="info-value" id="matchCount">0</div>
+            <div class="info-label">Совпадений по штрихкоду</div>
+        </div>
     </div>
 
     <div class="controls">
@@ -546,6 +573,13 @@ tr.synonym-row.in-cart:hover { background: #a3dcff !important; }
         </div>
 
         <!-- ГРУППА: Управление корзиной и сброс -->
+        <div class="controls-group" id="tutorialGroup">
+            <span class="controls-group-label">❓ Помощь</span>
+            <button id="tutorialBtn" class="btn btn-secondary" title="Включить режим обучения: наведите мышь на любой элемент — появится подсказка">
+                🎓 Обучение
+            </button>
+        </div>
+
         <div class="controls-group danger-group">
             <span class="controls-group-label">⚠️ Очистка</span>
             <button id="clearCartBtn" class="btn btn-danger" disabled
@@ -556,24 +590,6 @@ tr.synonym-row.in-cart:hover { background: #a3dcff !important; }
                     title="Очистить все загруженные данные и начать заново">
                 <span class="icon">🗑️</span> Сбросить всё
             </button>
-        </div>
-    </div>
-    <div id="infoPanel" class="info-grid" style="display:none;">
-        <div class="info-card">
-            <div class="info-value" id="productCount">0</div>
-            <div class="info-label">Уникальных товаров</div>
-        </div>
-        <div class="info-card">
-            <div class="info-value" id="fileCount">0</div>
-            <div class="info-label">Файлов загружено</div>
-        </div>
-        <div class="info-card">
-            <div class="info-value" id="columnCount">0</div>
-            <div class="info-label">Колонок данных</div>
-        </div>
-        <div class="info-card">
-            <div class="info-value" id="matchCount">0</div>
-            <div class="info-label">Совпадений по штрихкоду</div>
         </div>
     </div>
 
@@ -588,6 +604,12 @@ tr.synonym-row.in-cart:hover { background: #a3dcff !important; }
         <div class="legend-item"><div class="legend-swatch" style="background:#ffe6f0;"></div><span><b>Дубль штрихкода</b> — Несколько совпадений в одном прайсе</span></div>
         <div class="legend-item"><div class="legend-swatch" style="background:#fff;border:2px solid #28a745;"></div><span style="color:#28a745;font-weight:600;">Минимальная цена</span></div>
     </div>
+    <div class="search-box search-box--above-table">
+        <input type="text" id="searchInput" class="search-input"
+               placeholder="🔍 Поиск по названию товара..."
+               title="Введите название или часть названия для фильтрации товаров">
+    </div>
+
     <div id="tableContainer">
         <div class="empty-state">
             <div class="empty-state-icon">📦</div>
@@ -598,583 +620,14 @@ tr.synonym-row.in-cart:hover { background: #a3dcff !important; }
 </div>
 
 <script>
-    // ======== СЛОВАРЬ СИНОНИМОВ ШТРИХКОДОВ (загружается из JSON) ========
-
-    const BUILTIN_SYNONYMS={
-  "40084107": [
-    "Шок Яйцо Киндер Фиксики 20гр/36шт"
-  ],
-  "40099484": [
-    "Жев. Орбит 15гр Классический 30шт/20бл"
-  ],
-  "42113164": [
-    "Жев. Орбит 15гр Нежная Мята 30шт/20бл"
-  ],
-  "42113270": [
-    "Жев. Орбит 15гр Арбуз 30шт/20бл"
-  ],
-  "42203100": [
-    "Жев. Орбит 15гр Клубника/Банан 30шт/20бл",
-    "42203100"
-  ],
-  "46040145": [
-    "Ирис Меллер 38гр Шоколад 24шт/8бл",
-    "87108156"
-  ],
-  "46065780": [
-    "Лед Чупа Чупс XXL Трио 40шт/12бл"
-  ],
-  "46078476": [
-    "Жев. Дирол 15.5гр Морозная Мята 30шт/24бл"
-  ],
-  "46078483": [
-    "Жев. Дирол 15.5гр Нежная Мята 30шт/24бл"
-  ],
-  "46149305": [
-    "Жев. Дирол 15.5гр Клубника/Черешня (Для Нее) 30шт/24бл",
-    "46149749",
-    "7622210618184",
-    "7622210365675"
-  ],
-  "46164179": [
-    "Жев. Дирол 15.5гр Маракуйя 30шт/24бл"
-  ],
-  "46164209": [
-    "Лед Холлс Оригинал 12шт/30бл"
-  ],
-  "46164230": [
-    "Лед Холлс Мед/Лимон 12шт/30бл"
-  ],
-  "46177889": [
-    "Лед Холлс Экстра/Ментол 12шт/30бл"
-  ],
-  "46187857": [
-    "Жев. Дирол 15.5гр Фрукты/Мята 30шт/24бл"
-  ],
-  "46204813": [
-    "Кофе Нескафе Голд 95гр/12шт ст/б"
-  ],
-  "46204837": [
-    "Кофе Нескафе Голд 47.5гр/12шт ст/б",
-    "46024756"
-  ],
-  "46214621": [
-    "Жев. Ментос 15.5гр Тутти-Фрутти 24шт/12бл",
-    "46265456"
-  ],
-  "46214638": [
-    "Жев. Ментос 15.5гр Нежная Мята 24шт/12бл"
-  ],
-  "46214645": [
-    "Жев. Ментос 15.5гр Клубника 24шт/12бл"
-  ],
-  "46227720": [
-    "Жев. Ментос 15.5гр Виноград 24шт/12бл"
-  ],
-  "46227737": [
-    "Жев. Ментос 15.5гр Арбуз 24шт/12бл"
-  ],
-  "50173808": [
-    "Жев. Орбит 15гр Сладкая Мята 30шт/20бл"
-  ],
-  "50173976": [
-    "Жев. Орбит 15гр Зимняя Свежесть 30шт/20бл"
-  ],
-  "57626543": [
-    "Жев. Дирол 15.5гр Арбуз 30шт/24бл",
-    "46103536",
-    "5700626163169"
-  ],
-  "80741244": [
-    "Шок Яйцо Киндер Лицензия 20гр/36шт"
-  ],
-  "80741251": [
-    "Шок Яйцо Киндер Девочки 20гр/36шт"
-  ],
-  "5000159438056": [
-    "Драже Скиттелс 38гр Кисломикс 12шт/12бл"
-  ],
-  "4011100156364": [
-    "Драже Скиттелс 38гр Фрукты 12шт/12/бл",
-    "5000159372923",
-    "4009900527576"
-  ],
-  "4600815107299": [
-    "Жев. Дирол 15.5гр Арбуз/Дыня 30шт/24бл",
-    "46058157",
-    "46103550"
-  ],
-  "7622201135492": [
-    "Жев. Дирол 15.5гр Клубника/Кокос 30шт/24бл",
-    "57027906",
-    "7622201136239"
-  ],
-  "7622201429942": [
-    "Жев. Дирол 15.5гр Клубничная поляна 30шт/24бл",
-    "46092076"
-  ],
-  "4600815109545": [
-    "Жев. Дирол 15.5гр Ледяная Мята 30шт/24бл",
-    "46090812"
-  ],
-  "4600815108661": [
-    "Жев. Дирол 15.5гр Мята 30шт/24бл"
-  ],
-  "7622210742407": [
-    "Жев. Дирол 15.5гр Мята Вайт 30шт/24бл",
-    "46190369"
-  ],
-  "7622201140892": [
-    "Жев. Дирол 15.5гр Уголь/Мята 30шт/24бл",
-    "57027913"
-  ],
-  "7622201461065": [
-    "Жев. Дирол 15.5гр Фруктовый Рандом (Колорс) 30шт/24бл",
-    "7622201461072"
-  ],
-  "7622202229787": [
-    "Жев. Дирол Виноград 30шт/24бл",
-    "7622202229770"
-  ],
-  "7622202288661": [
-    "Жев. Дирол ХХL Колор Клубника 18шт/20бл"
-  ],
-  "4602606003001": [
-    "Жев. Ментос 15.5гр Вишня 24шт/12бл",
-    "46260888"
-  ],
-  "4602606006071": [
-    "Жев. Ментос 15.5гр Свежая Мята 24шт/12бл"
-  ],
-  "4009900492942": [
-    "Жев. Орбит 15гр Баблминт 30шт/20бл",
-    "46141538"
-  ],
-  "4009900367356": [
-    "Жев. Орбит 15гр Освежающая Мята 30шт/20бл",
-    "42069942"
-  ],
-  "4607085682334": [
-    "Какао Микс Фикс 375гр/12шт пл/б",
-  ],
-  "4607065373337": [
-    "Корм для кошек Китекет 15кг/42шт"
-  ],
-  "4620007592597": [
-    "Кофе Амбассадор 150гр/6шт м/у"
-  ],
-  "4620007592580": [
-    "Кофе Амбассадор 75гр/12шт м/у"
-  ],
-  "4620007590951": [
-    "Кофе Амбассадор 95гр/6шт ст/б"
-  ],
-  "4607805480462": [
-    "Кофе Индийский 90гр/12шт ж/б"
-  ],
-  "4607001772972": [
-    "Кофе Карт Нуар 1.8гр 30шт/20бл",
-    "8714599516966"
-  ],
-  "4601985007310": [
-    "Кофе МКП Арабика 75гр/12шт м/у",
-    "4601985000519"
-  ],
-  "4601985007334": [
-    "Кофе МКП Арабика 95гр/12шт ст/б"
-  ],
-  "4601985002803": [
-    "Кофе МКП Арабика 95гр/8шт ст/б"
-  ],
-  "4601985000526": [
-    "Кофе МКП Коломбо 75гр/12шт м/у"
-  ],
-  "4601985002810": [
-    "Кофе МКП Коломбо 95гр/8шт ст/б"
-  ],
-  "4601985005507": [
-    "Кофе МКП Суаре 150гр/10шт м/у"
-  ],
-  "4601985000533": [
-    "Кофе МКП Суаре 75гр/12шт м/у"
-  ],
-  "4601985003541": [
-    "Кофе МКП Суаре 95гр/12шт м/у"
-  ],
-  "4601985002827": [
-    "Кофе МКП Суаре 95гр/12шт ст/б"
-  ],
-  "4607805480448": [
-    "Кофе Московский 90гр/12шт ж/б"
-  ],
-  "4600680011486": [
-    "Кофе Нескафе 3в1 Классик 20гр/20шт/20бл",
-    "4607150089747",
-    "46226914"
-  ],
-  "4600680011523": [
-    "Кофе Нескафе 3в1 Крепкий 20гр/20шт/20бл",
-    "46226921"
-  ],
-  "4600680008158": [
-    "Кофе Нескафе Голд 130гр/8шт м/у"
-  ],
-  "4600680000640": [
-    "Кофе Нескафе Голд 190гр/6шт ст/б",
-    "4606272002269",
-    "7616100981328"
-  ],
-  "4606272027231": [
-    "Кофе Нескафе Голд 190гр/8шт м/у"
-  ],
-  "4600680008387": [
-    "Кофе Нескафе Голд 220гр/12шт м/у"
-  ],
-  "4600680001975": [
-    "Кофе Нескафе Голд 500гр/12шт м/у",
-    "4600680001976",
-    "4600648001975"
-  ],
-  "4606272019922": [
-    "Кофе Нескафе Голд 750гр/6шт м/у",
-    "4600680001951"
-  ],
-  "4606272014217": [
-    "Кофе Нескафе Голд 75гр/8шт м/у",
-    "4600680000534"
-  ],
-  "4606272033300": [
-    "Кофе Нескафе Голд Бариста 85гр/6шт ст/б"
-  ],
-  "4600680011691": [
-    "Кофе Нескафе Классик 1000гр/6шт м/у"
-  ],
-  "4600680010595": [
-    "Кофе Нескафе Классик 130гр/12шт м/у"
-  ],
-  "4600680010601": [
-    "Кофе Нескафе Классик 190гр/8шт м/у"
-  ],
-  "4600680016641": [
-    "Кофе Нескафе Классик 320гр/8шт м/у"
-  ],
-  "4600680010557": [
-    "Кофе Нескафе Классик 500гр/6шт м/у"
-  ],
-  "4600680010588": [
-    "Кофе Нескафе Классик 60гр/12шт м/у"
-  ],
-  "7892222500092": [
-    "Кофе Пеле 100гр/24шт ж/б",
-    "7898647600898"
-  ],
-  "898647600904": [
-    "Кофе Пеле 200гр/24шт ж/б",
-    "7892222500108"
-  ],
-  "7892222110024": [
-    "Кофе Пеле 50гр/24шт ж/б",
-    "7898647600881"
-  ],
-  "4607066405129": [
-    "Кофе Тибио Голд 75гр/14шт м/у"
-  ],
-  "4607066404979": [
-    "Кофе Тибио Голд 95гр/6шт ст/б"
-  ],
-  "4607066405082": [
-    "Кофе Тибио Эксклюзив 75гр/14шт м/у",
-    "4046234771497"
-  ],
-  "4046234766974": [
-    "Кофе Тибио Эксклюзив 95гр/6шт ст/б",
-    "4607066404931"
-  ],
-  "4602216001213": [
-    "Кофе Черная карта 1000гр/6шт зерно м/у"
-  ],
-  "4602216000513": [
-    "Кофе Черная карта 500гр/6шт зерно м/у"
-  ],
-  "4620007590685": [
-    "Кофе Черная карта Голд 150гр/6шт м/у"
-  ],
-  "4620007590425": [
-    "Кофе Черная карта Голд 285гр/6шт м/у"
-  ],
-  "4620007590692": [
-    "Кофе Черная карта Голд 75гр/12шт м/у"
-  ],
-  "4620007592337": [
-    "Кофе Черная карта Голд 95гр/6шт ст/б"
-  ],
-  "4620007592405": [
-    "Кофе Черная карта Экскл Бразил 190гр/6шт ст/б"
-  ],
-  "4620007592689": [
-    "Кофе Черная карта Экскл Бразил 75гр/12шт м/у"
-  ],
-  "4607001771678": [
-    "Кофе Якобс Голд 500гр/6шт м/у"
-  ],
-  "8711000578704": [
-    "Кофе Якобс Голд 95гр/12шт ст/б",
-    "4607001771517"
-  ],
-  "4607001773283": [
-    "Кофе Якобс Миллиграно 70гр/12шт м/у"
-  ],
-  "4607001772903": [
-    "Кофе Якобс Монарх 1.8гр/30шт/20бл",
-    "4607001771548"
-  ],
-  "4607001772750": [
-    "Кофе Якобс Монарх 130гр/9шт м/у",
-    "4607001779452",
-    "8714599512197",
-    "4607001772774"
-  ],
-  "4607001771814": [
-    "Кофе Якобс Монарх 210гр/6шт м/у"
-  ],
-  "4607001772255": [
-    "Кофе Якобс Монарх 3в1 Классик 24шт/10бл",
-    "4607001772248"
-  ],
-  "4607001773214": [
-    "Кофе Якобс Монарх 3в1 Крепкий 24шт/10бл",
-    "4607001773207"
-  ],
-  "4607001773191": [
-    "Кофе Якобс Монарх 3в1 Мягкий 24шт/10бл",
-    "4607001773184"
-  ],
-  "4607001772477": [
-    "Кофе Якобс Монарх 47.5гр/12шт ст/б",
-    "4607001771760"
-  ],
-  "4607001772941": [
-    "Кофе Якобс Монарх 500гр/6шт м/у",
-    "4607001771838"
-  ],
-  "8714599512043": [
-    "Кофе Якобс Монарх 75гр/15шт м/у",
-    "4607001771807"
-  ],
-  "4607001772309": [
-    "Кофе Якобс Монарх 95гр/12шт ст/б",
-    "4607001771784",
-    "8714599524220",
-    "4607001776512"
-  ],
-  "7622201511135": [
-    "Лед Холлс Апельсин/Витамин С 12шт/30бл"
-  ],
-  "4650065522830": [
-    "Чай Акбар Золотой 100пак/6шт с/я"
-  ],
-  "4650065520973": [
-    "Чай Акбар Красно/Белый 100пак/6шт с/я"
-  ],
-  "4650065521154": [
-    "Чай Акбар Красно/Белый 25пак/15шт с/я"
-  ],
-  "4607051150676": [
-    "Чай Корона Рос Импер 100гр/16шт лист"
-  ],
-  "4607051150270": [
-    "Чай Корона Рос Импер 100пак/6шт"
-  ],
-  "4607051150683": [
-    "Чай Корона Рос Импер 200гр/12шт лист"
-  ],
-  "4607051150720": [
-    "Чай Корона Рос Импер 25пак/18шт"
-  ],
-  "4607051150478": [
-    "Чай Лисма Крепкий 100пак/6шт с/я"
-  ],
-  "4607051150201": [
-    "Чай Лисма Крепкий 25пак/18шт с/я"
-  ],
-  "4607051153417": [
-    "Чай Лисма Крепкий 300гр/18шт м/у"
-  ],
-  "4620015850269": [
-    "Чай Лисма Насыщенный 100пак/6шт с/я"
-  ],
-  "4620015850252": [
-    "Чай Лисма Насыщенный 25пак/18шт с/я"
-  ],
-  "4607051151369": [
-    "Чай Майский Отборный 100пак/6шт с/я"
-  ],
-  "4607051151345": [
-    "Чай Майский Отборный 25пак/18шт с/я"
-  ],
-  "4605246002014": [
-    "Чай Принцесса Нури Высок 100пак/18шт с/я"
-  ],
-  "4605246001970": [
-    "Чай Принцесса Нури Высок 25пак/18шт с/я"
-  ],
-  "4620015851778": [
-    "Чай Ричард Роял Ингл Брекфаст 100пак/6шт с/я"
-  ],
-  "4607051159945": [
-    "Чай Ричард Роял Цейлон 100пак/6шт с/я"
-  ],
-  "4607051159938": [
-    "Чай Ричард Роял Цейлон 25пак/12шт с/я"
-  ],
-  "4605504515188": [
-    "Шок Аленка 15гр/42шт/7бл",
-    "4600300000609"
-  ],
-  "4603955002165": [
-    "Шок Аленка 200гр/18шт"
-  ],
-  "4600300098552": [
-    "Шок Аленка 75гр/16шт/6бл",
-    "4600080294250"
-  ],
-  "7622201427061": [
-    "Шок Альпен Голд Арахис/Кукур хлопья 80гр/21шт",
-    "7622201696078"
-  ],
-  "7622201696344": [
-    "Шок Альпен Голд Белый минлаль/Кокос 90гр/21шт"
-  ],
-  "7622201137083": [
-    "Шок Альпен Голд Инжир/Кокос 80гр/20шт",
-    "7622201696283"
-  ],
-  "7622201706289": [
-    "Шок Альпен Голд Йогурт/Клубника 90гр/21шт"
-  ],
-  "7622201700553": [
-    "Шок Альпен Голд Йогурт/Черника 90гр/21шт"
-  ],
-  "7622201700768": [
-    "Шок Альпен Голд Капучино 90гр/21шт"
-  ],
-  "7622202220838": [
-    "Шок Альпен Голд Молочный 90гр/21шт",
-    "7622201695927"
-  ],
-  "7622201700645": [
-    "Шок Альпен Голд Орео 85гр/19шт"
-  ],
-  "7622202047206": [
-    "Шок Альпен Голд Орео Два шоколада 85гр/19шт"
-  ],
-  "7622201500658": [
-    "Шок Альпен Голд Орео Клубника 85гр/19шт",
-    "7622202047961"
-  ],
-  "7622202048234": [
-    "Шок Альпен Голд Орео Черника 85гр/19шт"
-  ],
-  "7622201700706": [
-    "Шок Альпен Голд Орео Чизкейк 85гр/19шт"
-  ],
-  "7622201700737": [
-    "Шок Альпен Голд Орео Шоколад 85гр/19шт"
-  ],
-  "7622201766610": [
-    "Шок Альпен Голд Пинаколада 80гр/20шт"
-  ],
-  "7622201696313": [
-    "Шок Альпен Голд Соленый арахис/Крекер 90гр/21шт"
-  ],
-  "7622201696047": [
-    "Шок Альпен Голд Соленый миндаль/Карамель 80гр/21шт"
-  ],
-  "7622202007743": [
-    "Шок Альпен Голд Тропический кокос 80гр/21шт"
-  ],
-  "7622201695958": [
-    "Шок Альпен Голд Фундук 90гр/21шт"
-  ],
-  "7622201695989": [
-    "Шок Альпен Голд Фундук/Изюм 90гр/21шт"
-  ],
-  "4600823030091": [
-    "Шок Бабаевский бат Сливочный 50гр/20шт/6бл"
-  ],
-  "4600823651319": [
-    "Шок Бабаевский Люкс 75гр/19шт/4бл",
-  ],
-  "7622210343161": [
-    "Шок Воздушный Белый 85гр/20шт",
-    "7622201777142"
-  ],
-  "7622201777227": [
-    "Шок Воздушный Молочный 85гр/20шт"
-  ],
-  "7622201777111": [
-    "Шок Воздушный Темный 85гр/20шт"
-  ],
-  "4008400200217": [
-    "Шок Киндер 100гр/10шт/4бл",
-    "40084701"
-  ],
-  "8000500033784": [
-    "Шок Киндер 50гр/20шт/4бл",
-    "80177609"
-  ],
-  "7622201769444": [
-    "Шок Милка Бабблс Банан/Йогурт 87гр/16шт",
-    "7622202048623"
-  ],
-  "7622202048685": [
-    "Шок Милка Бабблс Молочный 87гр/16шт"
-  ],
-  "7622202048296": [
-    "Шок Милка дробл Фундук 80гр/20шт"
-  ],
-  "7622210345806": [
-    "Шок Милка Карамель 80гр/20шт",
-    "7622201769574"
-  ],
-  "7622202048487": [
-    "Шок Милка Клубника 80гр/20шт"
-  ],
-  "7622202048517": [
-    "Шок Милка Миндаль/Лесн ягоды 80гр/20шт"
-  ],
-  "7622202048326": [
-    "Шок Милка Молочный 80гр/20шт"
-  ],
-  "7622202048562": [
-    "Шок Милка Ореховая паста 80гр/20шт",
-    "7622202237140"
-  ],
-  "7622202048357": [
-    "Шок Милка Фундук/Изюм 80гр/20шт"
-  ],
-  "7622201773472": [
-    "Шок Милка цельный Миндаль 80гр/20шт",
-    "7622202048456"
-  ],
-  "7622201771140": [
-    "Шок Милка цельный Фундук 80гр/19шт",
-    "7622202048388"
-  ],
-  "4607065001445": [
-    "Шок Сникерс бат 50.5гр/48шт/6бл"
-  ],
-  "4660085515163": [
-    "Шок Сникерс Супер бат 80гр/32шт/4бл"
-  ]
-};
-    let barcodeAliasMap=new Map(),synonymsLoaded=false,_usingBuiltin=true;
+    let barcodeAliasMap=new Map(),synonymsLoaded=false,_usingBuiltin=false;
     function _buildAliasMap(j){const m=new Map();Object.keys(j).forEach(k=>{const mk=String(k).trim();if(!mk)return;m.set(mk,mk);const l=j[k];if(Array.isArray(l))l.forEach(b=>{const v=String(b).trim();if(v)m.set(v,mk);});});return m;}
-    barcodeAliasMap=_buildAliasMap(BUILTIN_SYNONYMS);synonymsLoaded=true;
+    // По умолчанию синонимы не загружены
 
     function resetBarcodeAliases(){
-        barcodeAliasMap=_buildAliasMap(BUILTIN_SYNONYMS);synonymsLoaded=true;_usingBuiltin=true;
-        const s=document.getElementById('synonymsStatus');if(s){s.style.color='#34c759';s.textContent='Встроенный файл синонимов (166 групп)';}
+        barcodeAliasMap=new Map();synonymsLoaded=false;_usingBuiltin=false;
+        const s=document.getElementById('synonymsStatus');
+        if(s){s.className='upload-status upload-status--idle';s.textContent='Не загружены';}
     }
 
     function loadBarcodeAliasesFromFile(file) {
@@ -1189,7 +642,7 @@ tr.synonym-row.in-cart:hover { background: #a3dcff !important; }
                 const text = e.target.result;
                 const json = JSON.parse(text);
                 barcodeAliasMap=_buildAliasMap(json);synonymsLoaded=true;_usingBuiltin=false;
-                if(status){status.style.color='#34c759';status.textContent='Загружен пользовательский файл, групп: '+Object.keys(json).length;}
+                if(status){status.className='upload-status upload-status--ok';status.textContent='✅ Групп: '+Object.keys(json).length;}
                 if (allFilesData.length > 0) {
                     processData();
                     renderTable();
@@ -1199,8 +652,8 @@ tr.synonym-row.in-cart:hover { background: #a3dcff !important; }
                 console.error('Ошибка чтения synonyms.json:', err);
                 resetBarcodeAliases();
                 if (status) {
-                    status.style.color = '#ff3b30';
-                    status.textContent = 'Ошибка: неверный формат JSON';
+                    status.className = 'upload-status upload-status--error';
+                    status.textContent = '❌ Неверный формат JSON';
                 }
                 alert('Ошибка при чтении файла синонимов. Проверьте формат JSON.');
             }
@@ -1208,8 +661,8 @@ tr.synonym-row.in-cart:hover { background: #a3dcff !important; }
         reader.onerror = () => {
             resetBarcodeAliases();
             if (status) {
-                status.style.color = '#ff3b30';
-                status.textContent = 'Ошибка чтения файла';
+                status.className = 'upload-status upload-status--error';
+                status.textContent = '❌ Ошибка чтения файла';
             }
             alert('Не удалось прочитать файл синонимов.');
         };
@@ -1305,8 +758,8 @@ exportCartBtn.addEventListener('click', async () => await generateExcel('cart'))
 
     clearCartBtn.addEventListener('click', clearCart);
     sortPayBtn.addEventListener('click',applySortByPayment);
-    downloadSynBtn.addEventListener('click',downloadCurrentSynonyms);
-    resetSynBtn.addEventListener('click',()=>{resetBarcodeAliases();document.getElementById('synonymsInput').value='';if(allFilesData.length>0){processData();renderTable();updateUI();}});
+    downloadSynBtn && downloadSynBtn.addEventListener('click',downloadCurrentSynonyms);
+    resetSynBtn && resetSynBtn.addEventListener('click',()=>{resetBarcodeAliases();document.getElementById('synonymsInput').value='';if(allFilesData.length>0){processData();renderTable();updateUI();}});
     clearBtn.addEventListener('click', clearAll);
 
     function normalizeString(str) {
@@ -1391,6 +844,7 @@ function samePrice(a, b) {
             const file = e.target.files[0];
             if (!file) return;
             myPriceData = await parseFile(file, '🏷️ Мой прайс');
+        const _mpSt=document.getElementById('myPriceStatus');if(_mpSt){_mpSt.className='upload-status upload-status--ok';_mpSt.textContent='✅ '+file.name;}
             processAllData();
         } catch (error) {
             console.error("Ошибка загрузки файла:", error);
@@ -1407,6 +861,8 @@ function samePrice(a, b) {
                 const fileData = await parseFile(file, removeFileExtension(file.name));
                 competitorFilesData.push(fileData);
             }
+            const _cSt=document.getElementById('competitorStatus');
+            if(_cSt){_cSt.className='upload-status upload-status--ok';_cSt.textContent='✅ '+files.length+' файл'+(files.length===1?'':'а'+(files.length<5?'':'ов'))+'  ('+files.map(f=>f.name.replace(/\.(csv|xlsx?)/i,'')).join(', ').substring(0,60)+')';}
             processAllData();
         } catch (error) {
             console.error("Ошибка загрузки файлов:", error);
@@ -1469,6 +925,7 @@ function samePrice(a, b) {
         updateHiddenColumnsPanel();
         renderTable();
         updateUI();
+        showCompletionToast();
     }
 
     function autoDetectColumns() {
@@ -2078,9 +1535,9 @@ return { barcode: item.barcode, packQty, autoDivFactor,
             const _fL = col.metaType ? null : col.fileName;
             // Мой прайс и мета: только колонка; Поставщик: файл + колонка
             if(_isMyP||_isMeta){
-                const _color = "#5e5ce6";
                 const _thClass = _isMyP ? "col-my-price" : "col-meta";
-                html+=`<th class="${_thClass}" title="${_cL}"><div class="column-header"><div class="column-header-title"><span class="column-name-text" style="color:${_color};font-weight:700;">${_cL}</span></div></div></th>`;
+                const _fileLabel = MY_PRICE_FILE_NAME;
+                html+=`<th class="${_thClass}" title="${_fileLabel} — ${_cL}"><div class="column-header"><div class="column-file-name column-file-name--my-price" title="${_fileLabel}">${_fileLabel}</div><div class="column-header-title"><span class="column-name-text">${_cL}</span></div></div></th>`;
             } else {
                 html+=`<th title="${_fL} — ${_cL}"><div class="column-header"><div class="column-file-name" title="${_fL}">${_fL}</div><div class="column-header-title"><span class="column-name-text">${_cL}</span></div></div></th>`;
             }
@@ -2259,39 +1716,23 @@ return { barcode: item.barcode, packQty, autoDivFactor,
         if (newWrapper) newWrapper.scrollTop = scrollTop;
     }
 
-    // Сохранение через системный диалог (Chrome/Edge и др. Chromium), иначе fallback на FileSaver.js saveAs()
-    async function saveBlobWithDialogOrDownload(blob, fileName) {
-        // File System Access API (диалог выбора места сохранения)
-        if (window.showSaveFilePicker) {
-            try {
-                const handle = await window.showSaveFilePicker({
-                    suggestedName: fileName,
-                    types: [{
-                        description: 'Excel (.xlsx)',
-                        accept: {
-                            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': ['.xlsx']
-                        }
-                    }]
-                });
+    // ── helpers ──────────────────────────────────────────────────────────────
 
-                const writable = await handle.createWritable();
-                await writable.write(blob);
-                await writable.close();
-                return; // успешно сохранили через диалог
-            } catch (err) {
-                // Если пользователь отменил диалог — просто выходим молча
-                if (err && (err.name === 'AbortError' || err.name === 'NotAllowedError')) return;
-                // Иначе — упадём в обычное скачивание
-                console.warn('Save picker failed, fallback to download:', err);
-            }
-        }
-
-        // Fallback: стандартное скачивание (как раньше)
-        await saveBlobWithDialogOrDownload(blob, fileName);
+    // Проверить разрешение на запись в сохранённую директорию
+    // Простое сохранение через стандартный диалог браузера
+    function saveBlobWithDialogOrDownload(blob, fileName) {
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = fileName;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        setTimeout(() => URL.revokeObjectURL(url), 1000);
     }
 
-
     async function generateExcel(mode) {
+    try {
     const _exMeta=allColumns.filter(c=>c.metaType&&visibleColumns.has(c.key));
     const _exMyP =allColumns.filter(c=>!c.metaType&&c.fileName===MY_PRICE_FILE_NAME&&visibleColumns.has(c.key));
     const _exSup =allColumns.filter(c=>!c.metaType&&c.fileName!==MY_PRICE_FILE_NAME&&visibleColumns.has(c.key));
@@ -2457,6 +1898,10 @@ return { barcode: item.barcode, packQty, autoDivFactor,
     if(mode==='current') fileName=`monitoring-current-${yyyy}-${mm}-${dd}.xlsx`;
     const blob=new Blob([buffer],{type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});
     await saveBlobWithDialogOrDownload(blob,fileName);
+    } catch(err) {
+        console.error('generateExcel error:', err);
+        alert('Ошибка при создании Excel-файла:\n' + (err.message || err));
+    }
 }
 
 
@@ -2511,6 +1956,9 @@ return { barcode: item.barcode, packQty, autoDivFactor,
         myPriceInput.value = '';
         competitorInput.value = '';
         synonymsInput.value = '';
+        const _mpSt2=document.getElementById('myPriceStatus');if(_mpSt2){_mpSt2.className='upload-status upload-status--idle';_mpSt2.textContent='Не загружен';}
+        const _cSt2=document.getElementById('competitorStatus');if(_cSt2){_cSt2.className='upload-status upload-status--idle';_cSt2.textContent='Не загружены';}
+        const _snSt2=document.getElementById('synonymsStatus');if(_snSt2){_snSt2.className='upload-status upload-status--idle';_snSt2.textContent='Не загружены';}
         resetBarcodeAliases();
         searchInput.value = '';
         sortPayBtn.classList.remove('active');
@@ -2542,17 +1990,229 @@ return { barcode: item.barcode, packQty, autoDivFactor,
     window.toggleBarcodeSort = toggleBarcodeSort;
     window.dividePrice = dividePrice;
     window.editColumnName = editColumnName;
-</script>
-<script>
-(function(){
-  const href = location.href;
-  document.querySelectorAll('.global-nav__link').forEach(a => {
-    const m = a.getAttribute('data-match') || '';
-    if (m && href.includes(m)) a.classList.add('is-active');
-    // запасной вариант: если совпадает дом+путь целиком
-    if (!m && href.startsWith(a.href)) a.classList.add('is-active');
-  });
-})();
+
+    // ════════════════════════════════════════════════════════════════════════
+    // РЕЖИМ ОБУЧЕНИЯ
+    // ════════════════════════════════════════════════════════════════════════
+    (function initTutorial() {
+        // ── Словарь подсказок ─────────────────────────────────────────────
+        const TIPS = {
+            // Загрузка файлов
+            'myPriceInput':          { t: '📋 Мой прайс', b: 'Загрузите ваш прайс-лист (CSV, XLS, XLSX). Именно его товары будут базой для сравнения — программа покажет, у кого из поставщиков дешевле.' },
+            'competitorInput':       { t: '📦 Прайсы поставщиков', b: 'Загрузите один или несколько файлов поставщиков. Программа сравнит цены со всеми сразу и выделит лучшие предложения.' },
+            'synonymsInput':         { t: '🔗 Синонимы штрихкодов', b: 'Необязательно. JSON-файл с группами штрихкодов-синонимов: если один и тот же товар в разных файлах записан разными кодами — программа объединит их в одну строку.' },
+            'synonymsStatus':        { t: '📊 Статус синонимов', b: 'Показывает: загружен ли файл синонимов и сколько в нём групп. Если синонимы не загружены — товары сопоставляются только по точному совпадению штрихкода.' },
+            'downloadSynBtn':        { t: '⬇️ Скачать JSON', b: 'Скачать текущий загруженный файл синонимов — чтобы сохранить или отредактировать вне программы.' },
+            'resetSynBtn':           { t: '✖️ Сбросить синонимы', b: 'Отключить сопоставление по синонимам. После сброса товары будут группироваться только по точному совпадению штрихкода.' },
+            // Поиск
+            'searchInput':           { t: '🔍 Поиск по названию', b: 'Введите часть названия товара — таблица мгновенно отфильтруется. Поиск работает по всем загруженным наименованиям.' },
+            // Фильтры
+            'sortMatchesBtn':        { t: '🔝 Сначала совпадения', b: 'Сортирует таблицу так, чтобы товары, найденные сразу у нескольких поставщиков, шли первыми — удобно для поиска лучшей цены.' },
+            'bigDiffBtn':            { t: '📉 Большая разница', b: 'Показывает только товары, у которых разница между вашей ценой и ценой поставщика превышает 10%. Помогает быстро найти самые выгодные позиции.' },
+            'showMyPriceBtn':        { t: '🏷️ Только мой прайс', b: 'Оставляет в таблице только товары, которые есть в вашем прайсе. Удобно сравнивать именно свой ассортимент.' },
+            'showCartBtn':           { t: '🛒 Только корзина', b: 'Показывает только товары, отмеченные кнопкой 🛒 (добавленные в корзину). Удобно для финального просмотра перед экспортом.' },
+            'maxCoverageBtn':        { t: '📊 По охвату', b: 'Сортирует товары по количеству поставщиков, у которых есть цена на этот товар. Вверху — самые «популярные» позиции.' },
+            'filterNewItemsBtn':     { t: '🆕 Новинки', b: 'Показывает только товары поставщиков, которых нет в вашем прайсе. Удобно искать новые позиции для добавления в ассортимент.' },
+            // Вид
+            'compactMatchesBtn':     { t: '📐 Компактный вид', b: 'Уменьшает высоту строк: все наименования товара показываются в одну строку с многоточием. Позволяет видеть больше позиций на экране.' },
+            'toggleFileBarcodesBtn': { t: '# Штрихкоды по файлам', b: 'Показывает/скрывает колонки со штрихкодами из каждого файла. Полезно при отладке сопоставления — можно увидеть, какой именно код был в исходном файле.' },
+            'sortPayBtn':            { t: '💳 Нал / Безнал', b: 'Сортирует колонки поставщиков: сначала идут колонки с наличными ценами, затем безналичные. Программа определяет тип по названию колонки.' },
+            // Экспорт
+            'exportMyPriceBtn':      { t: '⭐ Экспорт: Мой прайс', b: 'Скачивает Excel только с товарами из вашего прайса. В файл войдут видимые колонки: остаток, цены поставщиков и выбранные данные.' },
+            'exportAllBtn':          { t: '💾 Экспорт: Всё', b: 'Скачивает Excel со всеми товарами из всех файлов — без учёта текущего фильтра и поиска. Полный срез данных.' },
+            'exportCurrentBtn':      { t: '🔍 Экспорт: Текущий вид', b: 'Скачивает Excel именно то, что видно сейчас: с учётом поиска, фильтров, сортировки и скрытых колонок.' },
+            'exportCartBtn':         { t: '🛒 Экспорт: Корзина', b: 'Скачивает Excel только с отмеченными товарами (корзина). Удобно для отправки заказа поставщику.' },
+            // Очистка
+            'clearCartBtn':          { t: '🗑️ Очистить корзину', b: 'Снимает отметку 🛒 со всех товаров. Корзина очищается, но данные и таблица остаются.' },
+            'clearBtn':              { t: '⚠️ Очистить всё', b: 'Удаляет все загруженные файлы и сбрасывает программу в начальное состояние. Это действие нельзя отменить.' },
+            // Обучение
+            'tutorialBtn':           { t: '🎓 Режим обучения', b: 'Вы уже в режиме обучения! Наводите мышь на любой элемент интерфейса — появится подсказка с описанием. Нажмите ещё раз, чтобы выйти.' },
+        };
+
+        // ── Подсказки для динамических элементов таблицы (по CSS-классу) ──
+        const CLASS_TIPS = [
+            { sel: '.cart-btn',         t: '🛒 Добавить в корзину', b: 'Нажмите, чтобы добавить товар в корзину. Повторное нажатие — убрать. Товары в корзине можно потом экспортировать отдельно.' },
+            { sel: '.copy-btn',         t: '📋 Скопировать штрихкод', b: 'Копирует штрихкод в буфер обмена. Удобно для поиска товара в других системах.' },
+            { sel: 'td.col-barcode',    t: '# Штрихкод', b: 'Уникальный идентификатор товара. По нему программа объединяет строки из разных файлов в одну группу.' },
+            { sel: 'td.col-name',       t: '📝 Наименование', b: 'Названия товара из разных файлов. Если у одного штрихкода несколько названий — все показываются в одной ячейке.' },
+            { sel: 'th.col-meta',       t: '📊 Мой прайс: метаданные', b: 'Колонка из вашего прайса: Остаток, В пути и т.д. Помогает видеть контекст при сравнении с ценами поставщиков.' },
+            { sel: 'th.col-my-price',   t: '🏷️ Мой прайс: цена', b: 'Ваша текущая цена на этот товар. Сравнивайте с ценами поставщиков, чтобы найти лучшее предложение.' },
+            { sel: 'th.col-barcode',    t: '# Штрихкод (клик = сортировка)', b: 'Нажмите на заголовок, чтобы отсортировать таблицу по штрихкоду. Повторный клик — обратная сортировка.' },
+            { sel: 'th.col-name',       t: '📝 Наименование товара', b: 'Название товара. Программа показывает все варианты названий, найденные в загруженных файлах.' },
+            { sel: 'th.col-actions',    t: '🎛️ Действия', b: 'Кнопки управления строкой: добавить/убрать из корзины.' },
+            { sel: '.price-clickable',  t: '💰 Цена (кликабельна)', b: 'Нажмите на цену, чтобы выбрать её как предпочтительную для экспорта. Выбранная цена выделяется.' },
+            { sel: 'tr.my-price-row td', t: '🏷️ Строка из моего прайса', b: 'Эта строка — из вашего прайса. Светло-зелёный фон означает, что штрихкод найден в вашем файле.' },
+            { sel: 'tr.synonym-row td', t: '🔗 Совпадение по синониму', b: 'Этот товар объединён с группой через синоним штрихкода. Голубой фон — признак синонимной строки.' },
+            { sel: '.legend-item',      t: '📖 Легенда', b: 'Объяснение цветовых обозначений таблицы: зелёный — мой прайс, голубой — синонимы, красный — дубликаты.' },
+            { sel: '.restore-column-btn', t: '👁️ Восстановить колонку', b: 'Нажмите, чтобы снова показать скрытую колонку в таблице.' },
+            { sel: '.hide-col-btn',     t: '✕ Скрыть колонку', b: 'Нажмите, чтобы убрать эту колонку из таблицы. Скрытые колонки можно вернуть через панель выше.' },
+        ];
+
+        // ── Создаём тултип ────────────────────────────────────────────────
+        const tip = document.createElement('div');
+        tip.id = 'tutorialTooltip';
+        tip.innerHTML = '<div class="tt-title"></div><div class="tt-body"></div>';
+        document.body.appendChild(tip);
+        const tipTitle = tip.querySelector('.tt-title');
+        const tipBody  = tip.querySelector('.tt-body');
+        let tutorialActive = false;
+        let hideTimer = null;
+
+        function showTip(x, y, title, body) {
+            clearTimeout(hideTimer);
+            tipTitle.textContent = title;
+            tipBody.textContent  = body;
+            // Позиционируем с отступом от курсора
+            const margin = 14;
+            const tw = 340, th = 120;
+            let left = x + margin;
+            let top  = y + margin;
+            if (left + tw > window.innerWidth)  left = x - tw - margin;
+            if (top  + th > window.innerHeight) top  = y - th - margin;
+            tip.style.left = left + 'px';
+            tip.style.top  = top  + 'px';
+            tip.classList.add('visible');
+        }
+
+        function hideTip(delay = 80) {
+            clearTimeout(hideTimer);
+            hideTimer = setTimeout(() => tip.classList.remove('visible'), delay);
+        }
+
+        function findTip(el) {
+            // Сначала ищем по ID
+            if (el.id && TIPS[el.id]) return TIPS[el.id];
+            // Затем по CSS-классам (от конкретного к общему)
+            for (const {sel, t, b} of CLASS_TIPS) {
+                if (el.matches && el.matches(sel)) return {t, b};
+            }
+            // Ищем у ближайшего подходящего предка
+            const parent = el.parentElement;
+            if (parent && parent !== document.body) return findTip(parent);
+            return null;
+        }
+
+        function onMouseMove(e) {
+            if (!tutorialActive) return;
+            const el = document.elementFromPoint(e.clientX, e.clientY);
+            if (!el || el === tip) return;
+            const info = findTip(el);
+            if (info) {
+                showTip(e.clientX, e.clientY, info.t, info.b);
+            } else {
+                hideTip(200);
+            }
+        }
+
+        // Хранилище отключённых title-атрибутов
+        const _savedTitles = new Map();
+
+        function _disableTitles() {
+            document.querySelectorAll('[title]').forEach(el => {
+                _savedTitles.set(el, el.getAttribute('title'));
+                el.setAttribute('data-title-bak', el.getAttribute('title'));
+                el.removeAttribute('title');
+            });
+        }
+
+        function _restoreTitles() {
+            _savedTitles.forEach((val, el) => {
+                // Вернуть только если не был заменён чем-то другим
+                if (!el.hasAttribute('title')) el.setAttribute('title', val);
+            });
+            _savedTitles.clear();
+        }
+
+        // Также отключаем title у элементов, добавляемых в DOM во время обучения
+        let _titleObserver = null;
+
+        function toggleTutorial() {
+            tutorialActive = !tutorialActive;
+            const btn = document.getElementById('tutorialBtn');
+            if (tutorialActive) {
+                document.body.classList.add('tutorial-active');
+                _disableTitles();
+                // Следим за новыми элементами с title (динамическая таблица)
+                _titleObserver = new MutationObserver(() => {
+                    document.querySelectorAll('[title]').forEach(el => {
+                        if (!_savedTitles.has(el)) {
+                            _savedTitles.set(el, el.getAttribute('title'));
+                            el.removeAttribute('title');
+                        }
+                    });
+                });
+                _titleObserver.observe(document.body, { subtree: true, childList: true, attributes: true, attributeFilter: ['title'] });
+                document.addEventListener('mousemove', onMouseMove);
+                btn.classList.add('active');
+                btn.textContent = '🎓 Выйти из обучения';
+            } else {
+                document.body.classList.remove('tutorial-active');
+                if (_titleObserver) { _titleObserver.disconnect(); _titleObserver = null; }
+                _restoreTitles();
+                document.removeEventListener('mousemove', onMouseMove);
+                tip.classList.remove('visible');
+                btn.classList.remove('active');
+                btn.textContent = '🎓 Обучение';
+            }
+        }
+
+        // Ждём загрузки DOM
+        document.addEventListener('DOMContentLoaded', () => {
+            const btn = document.getElementById('tutorialBtn');
+            if (btn) btn.addEventListener('click', toggleTutorial);
+        });
+        // Если DOM уже готов
+        if (document.readyState !== 'loading') {
+            const btn = document.getElementById('tutorialBtn');
+            if (btn) btn.addEventListener('click', toggleTutorial);
+        }
+    })();
+
+
+    // ── Тост об успешном завершении мониторинга ───────────────────────────────
+    function showCompletionToast() {
+        // Показываем только если загружены прайсы поставщиков
+        if (competitorFilesData.length === 0) return;
+        const total = groupedData.length;
+        const matched = groupedData.filter(i => i.isInMyPrice).length;
+        const suppliers = competitorFilesData.length;
+        if (total === 0) return;
+
+        let toast = document.getElementById('_completionToast');
+        if (!toast) {
+            toast = document.createElement('div');
+            toast.id = '_completionToast';
+            Object.assign(toast.style, {
+                position: 'fixed', bottom: '24px', right: '24px',
+                background: '#0f172a', color: '#f1f5f9',
+                border: '1px solid #22c55e',
+                padding: '14px 18px', borderRadius: '10px',
+                fontSize: '13px', lineHeight: '1.6',
+                boxShadow: '0 6px 28px rgba(0,0,0,.45)',
+                zIndex: '99998', maxWidth: '300px',
+                transition: 'opacity .4s, transform .4s',
+                transform: 'translateY(20px)', opacity: '0'
+            });
+            document.body.appendChild(toast);
+        }
+        toast.innerHTML =
+            `<div style="font-size:15px;font-weight:700;color:#22c55e;margin-bottom:6px;">✅ Мониторинг готов!</div>` +
+            `<div>📦 Товаров: <b style="color:#7dd3fc">${total.toLocaleString('ru')}</b></div>` +
+            (matched ? `<div>🏷️ Совпало с прайсом: <b style="color:#7dd3fc">${matched.toLocaleString('ru')}</b></div>` : '') +
+            `<div>📂 Поставщиков: <b style="color:#7dd3fc">${suppliers}</b></div>`;
+
+        // Animate in
+        requestAnimationFrame(() => {
+            toast.style.opacity = '1';
+            toast.style.transform = 'translateY(0)';
+        });
+        clearTimeout(toast._timer);
+        toast._timer = setTimeout(() => {
+            toast.style.opacity = '0';
+            toast.style.transform = 'translateY(20px)';
+        }, 9000);
+    }
+
 </script>
 
 </body>

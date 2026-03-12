@@ -257,6 +257,511 @@
 <style>
 .ptags-section {
   background: var(--bg);
+  padding: 56px 0 52px;
+  position: relative; overflow: hidden;
+}
+.ptags-section::before {
+  content: '';
+  position: absolute; inset: 0; pointer-events: none;
+  background-image:
+    radial-gradient(circle, rgba(59,111,212,.07) 1px, transparent 1px);
+  background-size: 28px 28px;
+}
+.ptags-header {
+  margin-bottom: 36px;
+  position: relative; z-index: 1;
+}
+.ptags-eyebrow {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: var(--accent-bg); color: var(--accent);
+  border: 1px solid rgba(59,111,212,.18);
+  border-radius: var(--radius-md); padding: 5px 12px;
+  font-size: 11px; font-weight: 700;
+  letter-spacing: .07em; text-transform: uppercase;
+  margin-bottom: 14px;
+}
+.ptags-title {
+  font-size: clamp(22px, 2.8vw, 34px);
+  font-weight: 700; color: var(--text-primary);
+  line-height: 1.2; letter-spacing: -.02em;
+  margin-bottom: 10px;
+}
+.ptags-title .hl { color: var(--accent); }
+.ptags-sub {
+  font-size: 16px; color: var(--text-secondary);
+  line-height: 1.65; max-width: 600px;
+}
+.ptags-groups {
+  display: flex; flex-direction: column; gap: 24px;
+  position: relative; z-index: 1;
+}
+/* первые 2 группы всегда видны, остальные скрыты */
+.ptags-group { display: block; }
+.ptags-group.ptags-hidden {
+  display: none;
+}
+.ptags-group.ptags-hidden.ptags-expanded {
+  display: block;
+}
+.ptags-group-label {
+  font-size: 10px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: .08em;
+  color: var(--text-muted);
+  margin-bottom: 10px;
+  display: flex; align-items: center; gap: 8px;
+}
+.ptags-group-label::after {
+  content: ''; flex: 1; height: 1px; background: var(--border);
+}
+.ptags-row {
+  display: flex; flex-wrap: wrap; gap: 8px;
+}
+/* прямоугольные теги */
+.ptag {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--surface);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-md);
+  padding: 8px 14px;
+  font-size: 13px; font-weight: 500;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all .2s cubic-bezier(.4,0,.2,1);
+  font-family: 'Inter', sans-serif;
+  line-height: 1.3;
+  box-shadow: 0 1px 3px rgba(0,0,0,.05);
+  text-align: left;
+}
+.ptag:hover, .ptag:focus-visible {
+  background: var(--accent-bg);
+  border-color: var(--accent);
+  color: var(--accent);
+  box-shadow: 0 4px 14px rgba(59,111,212,.15);
+  transform: translateY(-1px);
+  outline: none;
+}
+.ptag-icon {
+  width: 18px; height: 18px; border-radius: 5px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.ptag-icon--amber { background: #FEF3C7; color: #D97706; }
+.ptag-icon--blue  { background: var(--accent-bg); color: var(--accent); }
+.ptag-icon--green { background: var(--green-bg); color: var(--green); }
+.ptag-icon--red   { background: var(--red-bg); color: var(--red); }
+/* кнопка «показать ещё» */
+.ptags-show-more {
+  display: inline-flex; align-items: center; gap: 7px;
+  margin-top: 28px;
+  background: var(--surface);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-md);
+  padding: 9px 18px;
+  font-size: 13px; font-weight: 600;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all .2s cubic-bezier(.4,0,.2,1);
+  font-family: 'Inter', sans-serif;
+  box-shadow: 0 1px 3px rgba(0,0,0,.05);
+  position: relative; z-index: 1;
+}
+.ptags-show-more:hover {
+  background: var(--accent-bg);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+.ptags-show-more svg {
+  transition: transform .25s;
+}
+.ptags-show-more.open svg { transform: rotate(180deg); }
+.ptags-count-badge {
+  background: var(--accent-bg); color: var(--accent);
+  font-size: 11px; font-weight: 700;
+  border-radius: 5px; padding: 1px 7px;
+}
+/* CTA */
+.ptags-cta-row {
+  display: flex; align-items: center; gap: 12px;
+  flex-wrap: wrap; margin-top: 40px;
+  position: relative; z-index: 1;
+}
+.ptags-cta-note {
+  font-size: 12px; color: var(--text-muted);
+  margin-top: 10px; width: 100%;
+  display: flex; align-items: center; gap: 5px;
+}
+
+/* ── Modal ── */
+.ptags-overlay {
+  display: none; position: fixed; inset: 0;
+  background: rgba(10,15,30,.55);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  z-index: 10200;
+  align-items: center; justify-content: center;
+  padding: 20px;
+}
+.ptags-overlay.open { display: flex; }
+.ptags-modal {
+  background: var(--surface);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border);
+  box-shadow: 0 24px 72px rgba(10,15,30,.22);
+  width: 100%; max-width: 480px;
+  overflow: hidden;
+  animation: ptModalIn .22s cubic-bezier(.4,0,.2,1);
+}
+@keyframes ptModalIn {
+  from { opacity:0; transform: scale(.96) translateY(8px); }
+  to   { opacity:1; transform: scale(1) translateY(0); }
+}
+.ptm-header {
+  display: flex; align-items: flex-start; gap: 12px;
+  padding: 18px 20px 14px;
+  border-bottom: 1px solid var(--border);
+}
+.ptm-header-icon {
+  width: 38px; height: 38px; border-radius: 10px;
+  background: #FEF9C3; color: #CA8A04;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; margin-top: 1px;
+}
+.ptm-header-title {
+  font-size: 14px; font-weight: 700;
+  color: var(--text-primary); line-height: 1.4; flex: 1;
+}
+.ptm-close {
+  width: 30px; height: 30px; border-radius: 8px;
+  background: var(--bg); border: 1px solid var(--border);
+  color: var(--text-muted); font-size: 16px; line-height: 1;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; flex-shrink: 0;
+  transition: all .15s; font-family: inherit;
+}
+.ptm-close:hover { background: var(--red-bg); color: var(--red); border-color: #FCA5A5; }
+.ptm-body { padding: 18px 20px; }
+.ptm-pain-block {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 12px 14px; margin-bottom: 14px;
+  font-size: 13px; color: var(--text-secondary); line-height: 1.65;
+}
+.ptm-divider {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 10px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: .08em; color: var(--text-muted);
+  margin-bottom: 12px;
+}
+.ptm-divider::before, .ptm-divider::after {
+  content: ''; flex: 1; height: 1px; background: var(--border);
+}
+.ptm-solution {
+  display: flex; align-items: flex-start; gap: 12px;
+  margin-bottom: 4px;
+}
+.ptm-sol-icon {
+  width: 36px; height: 36px; border-radius: 9px;
+  background: var(--green-bg);
+  border: 1px solid var(--green-border);
+  color: var(--green);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.ptm-sol-title {
+  font-size: 14px; font-weight: 700;
+  color: var(--text-primary); margin-bottom: 6px; line-height: 1.35;
+}
+.ptm-sol-desc {
+  font-size: 13px; color: var(--text-secondary); line-height: 1.65;
+}
+.ptm-footer {
+  display: flex; gap: 8px; flex-wrap: wrap;
+  padding: 12px 20px 16px;
+  border-top: 1px solid var(--border);
+  background: var(--surface-alt);
+}
+.ptm-footer .btn { flex: 1; min-width: 130px; justify-content: center; }
+@media (max-width: 600px) {
+  .ptag { font-size: 12px; padding: 7px 11px; }
+  .ptags-title { font-size: 22px; }
+}
+</style>
+
+  <div class="container" style="position:relative;z-index:1;">
+
+    <div class="ptags-header reveal">
+      <div class="ptags-eyebrow">
+        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        Узнайте своё решение
+      </div>
+      <h2 class="ptags-title">Это <span class="hl">про вас?</span></h2>
+      <p class="ptags-sub">Нажмите на свою ситуацию - покажем, как именно программа её решает. Нашли себя? Тогда вы точно по адресу.</p>
+    </div>
+
+    <div class="ptags-groups reveal reveal-delay-1">
+
+      <!-- группа 1 — всегда видна -->
+      <div class="ptags-group">
+        <div class="ptags-group-label">Время и рутина</div>
+        <div class="ptags-row">
+          <button class="ptag" onclick="openPainModal('hours')">
+            <span class="ptag-icon ptag-icon--amber"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></span>
+            Часы на сводную таблицу
+          </button>
+          <button class="ptag" onclick="openPainModal('weekly')">
+            <span class="ptag-icon ptag-icon--amber"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></span>
+            Каждую неделю заново
+          </button>
+          <button class="ptag" onclick="openPainModal('vlookup')">
+            <span class="ptag-icon ptag-icon--amber"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></span>
+            Формулы ВПР сломались
+          </button>
+          <button class="ptag" onclick="openPainModal('columns')">
+            <span class="ptag-icon ptag-icon--amber"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg></span>
+            Столбцы переименовали
+          </button>
+          <button class="ptag" onclick="openPainModal('sheets')">
+            <span class="ptag-icon ptag-icon--amber"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></span>
+            Прайс на нескольких листах
+          </button>
+          <button class="ptag" onclick="openPainModal('bigfile')">
+            <span class="ptag-icon ptag-icon--amber"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></span>
+            Большой прайс - Excel тормозит
+          </button>
+        </div>
+      </div>
+
+      <!-- группа 2 — всегда видна -->
+      <div class="ptags-group">
+        <div class="ptags-group-label">Коды и форматы</div>
+        <div class="ptags-row">
+          <button class="ptag" onclick="openPainModal('nobarcode')">
+            <span class="ptag-icon ptag-icon--blue"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="3" height="18"/><rect x="9" y="3" width="1" height="18"/><rect x="13" y="3" width="2" height="18"/><rect x="18" y="3" width="3" height="18"/></svg></span>
+            Нет штрихкодов, только артикулы
+          </button>
+          <button class="ptag" onclick="openPainModal('crosscode')">
+            <span class="ptag-icon ptag-icon--blue"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></span>
+            Разные коды на один товар
+          </button>
+          <button class="ptag" onclick="openPainModal('formats')">
+            <span class="ptag-icon ptag-icon--blue"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></span>
+            Разные форматы прайсов
+          </button>
+          <button class="ptag" onclick="openPainModal('cashless')">
+            <span class="ptag-icon ptag-icon--blue"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3h5a4 4 0 0 1 0 8H8"/><line x1="6" y1="15" x2="17" y2="15"/><line x1="8" y1="3" x2="8" y2="21"/></svg></span>
+            Нал и безнал путаются
+          </button>
+          <button class="ptag" onclick="openPainModal('blockprice')">
+            <span class="ptag-icon ptag-icon--blue"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 5v3h-7V8z"/></svg></span>
+            Цена за упаковку, не за штуку
+          </button>
+        </div>
+      </div>
+
+      <!-- группа 3 — скрытая -->
+      <div class="ptags-group ptags-hidden">
+        <div class="ptags-group-label">Анализ цен</div>
+        <div class="ptags-row">
+          <button class="ptag" onclick="openPainModal('minprice')">
+            <span class="ptag-icon ptag-icon--green"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg></span>
+            Не вижу минимум сразу
+          </button>
+          <button class="ptag" onclick="openPainModal('coverage')">
+            <span class="ptag-icon ptag-icon--green"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></span>
+            Не знаю, сколько товаров нашлось
+          </button>
+          <button class="ptag" onclick="openPainModal('delta')">
+            <span class="ptag-icon ptag-icon--green"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></span>
+            Где моя цена выше рынка?
+          </button>
+          <button class="ptag" onclick="openPainModal('newpos')">
+            <span class="ptag-icon ptag-icon--green"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg></span>
+            Пропускаю новинки ассортимента
+          </button>
+          <button class="ptag" onclick="openPainModal('stock')">
+            <span class="ptag-icon ptag-icon--green"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 8h14M5 8a2 2 0 1 0 0-4h14a2 2 0 1 0 0 4M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8M10 12h4"/></svg></span>
+            Не вижу остатки у поставщиков
+          </button>
+        </div>
+      </div>
+
+      <!-- группа 4 — скрытая -->
+      <div class="ptags-group ptags-hidden">
+        <div class="ptags-group-label">Заказ и логистика</div>
+        <div class="ptags-row">
+          <button class="ptag" onclick="openPainModal('order')">
+            <span class="ptag-icon ptag-icon--green"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg></span>
+            Долго оформляю заказ вручную
+          </button>
+          <button class="ptag" onclick="openPainModal('markup')">
+            <span class="ptag-icon ptag-icon--green"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></span>
+            Надо учесть доставку в цене
+          </button>
+          <button class="ptag" onclick="openPainModal('multiorder')">
+            <span class="ptag-icon ptag-icon--green"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16 16h6v6h-6z"/><path d="M2 2h6v6H2z"/><path d="M9 2h6v6H9z"/><path d="M2 9h6v6H2z"/></svg></span>
+            Заказ у нескольких поставщиков
+          </button>
+          <button class="ptag" onclick="openPainModal('qty')">
+            <span class="ptag-icon ptag-icon--green"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg></span>
+            Сложно посчитать итоговую сумму
+          </button>
+        </div>
+      </div>
+
+      <!-- группа 5 — скрытая -->
+      <div class="ptags-group ptags-hidden">
+        <div class="ptags-group-label">Безопасность и стоимость</div>
+        <div class="ptags-row">
+          <button class="ptag" onclick="openPainModal('cloud')">
+            <span class="ptag-icon ptag-icon--red"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></span>
+            Боюсь отправлять прайсы в облако
+          </button>
+          <button class="ptag" onclick="openPainModal('sub')">
+            <span class="ptag-icon ptag-icon--red"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg></span>
+            Надоела ежемесячная подписка
+          </button>
+          <button class="ptag" onclick="openPainModal('install')">
+            <span class="ptag-icon ptag-icon--red"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></span>
+            Нужно чтобы без IT и установки
+          </button>
+          <button class="ptag" onclick="openPainModal('colleague')">
+            <span class="ptag-icon ptag-icon--red"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
+            Хочу передать коллеге настройки
+          </button>
+        </div>
+      </div>
+
+    </div><!-- /ptags-groups -->
+
+    <button class="ptags-show-more" id="ptShowMore" onclick="togglePainGroups()">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+      Показать ещё
+      <span class="ptags-count-badge" id="ptCountBadge">+11</span>
+    </button>
+
+    <div class="ptags-cta-row reveal reveal-delay-2">
+      <a href="https://erofly83-arch.github.io/demo/" class="btn btn-primary btn-primary-lg" target="_blank" rel="noopener">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+        Попробовать демо бесплатно
+      </a>
+      <a href="#contact" class="btn btn-outline btn-outline-lg">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+        Обсудить задачу
+      </a>
+      <div class="ptags-cta-note">
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        Без регистрации - данные не покидают ваш компьютер
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ── Pain Modal ── -->
+<div class="ptags-overlay" id="ptaModal" onclick="if(event.target===this)closePainModal()">
+  <div class="ptags-modal" role="dialog" aria-modal="true" aria-labelledby="ptmTitle">
+    <div class="ptm-header">
+      <div class="ptm-header-icon" id="ptmIcon">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+      </div>
+      <div class="ptm-header-title" id="ptmTitle">Заголовок</div>
+      <button class="ptm-close" onclick="closePainModal()" aria-label="Закрыть">✕</button>
+    </div>
+    <div class="ptm-body">
+      <div class="ptm-pain-block" id="ptmPainText"></div>
+      <div class="ptm-divider">Решение</div>
+      <div class="ptm-solution">
+        <div class="ptm-sol-icon">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <div>
+          <div class="ptm-sol-title" id="ptmSolTitle"></div>
+          <div class="ptm-sol-desc" id="ptmSolDesc"></div>
+        </div>
+      </div>
+    </div>
+    <div class="ptm-footer">
+      <a href="https://erofly83-arch.github.io/demo/" class="btn btn-primary" target="_blank" rel="noopener">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+        Попробовать
+      </a>
+      <button class="btn btn-outline" onclick="closePainModal()">Закрыть</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  var _pains = {
+    hours:     { title: 'Часы на сводную таблицу', pain: 'Каждый раз одно и то же: скачать прайсы, открыть Excel, выстроить таблицу, прописать ВПР, проверить результат. 2-4 часа на задачу, которую можно решить за минуты.', solTitle: 'Автоматическое сравнение за минуты', solDesc: 'Загрузите прайсы - программа сопоставит их по штрихкодам и соберёт сводную таблицу сама. Без формул, без ручного выравнивания столбцов. Первая настройка один раз, дальше быстрее с каждым разом.' },
+    weekly:    { title: 'Каждую неделю заново', pain: 'Новые прайсы от поставщиков - и снова всё сначала. Каждый раз выстраивать одну и ту же структуру, потому что Excel ничего не помнит.', solTitle: 'Шаблоны колонок и файл памяти', solDesc: 'Один раз укажите программе, где в прайсе штрихкод, цена и наименование. Настройка сохранится в файле памяти. При следующей загрузке того же поставщика всё определится автоматически.' },
+    vlookup:   { title: 'Формулы ВПР сломались', pain: 'Поставщик добавил строку или переименовал столбец - и вся сводная таблица рассыпалась. Половина ВПР возвращает ошибку, разбираться снова на час.', solTitle: 'Никаких формул - только загрузка', solDesc: 'В программе не нужны ВПР и сводные таблицы вообще. Сопоставление работает по штрихкодам - добавился товар или изменилась структура прайса, программа просто пересчитает всё заново.' },
+    columns:   { title: 'Поставщик переименовал столбцы', pain: 'Получили новый прайс - а столбцы называются иначе, чем в прошлый раз. Снова вручную искать, где цена, где артикул, где остаток.', solTitle: 'Настройка за минуту, один раз', solDesc: 'Кликните на заголовок столбца и выберите его роль: штрихкод, цена, наименование, остаток. Следующий раз программа определит их автоматически по ключевым словам из базы. Изменились снова - перенастройка за минуту.' },
+    sheets:    { title: 'Прайс на нескольких листах', pain: 'Поставщик прислал файл, где категории разбиты по листам: лист «Масло», лист «Фильтры», лист «Запчасти». Чтобы всё свести, надо вручную объединять листы.', solTitle: 'Выбор нужного листа при загрузке', solDesc: 'Программа показывает все листы файла - выберите нужный и настройте колонки. Каждый лист можно загрузить отдельно как самостоятельный прайс и передать в мониторинг со своим именем.' },
+    bigfile:   { title: 'Большой прайс - Excel тормозит', pain: 'Файл на 5 000-15 000 строк от нескольких поставщиков - и Excel уже через минуту начинает подвисать при каждом действии с таблицей.', solTitle: 'Быстрая работа в браузере', solDesc: 'Программа обрабатывает файлы через оптимизированный JavaScript - сравнение 10 прайсов по 2 000 строк занимает секунды. Рекомендуем Chrome или Edge на компьютере с 8+ ГБ оперативной памяти.' },
+    nobarcode:  { title: 'Нет штрихкодов, только артикулы', pain: 'Поставщик присылает прайс только с артикулами - штрихкодов нет совсем. Сопоставить с вашим прайсом вручную нереально при большом ассортименте.', solTitle: 'Артикулы как кросскоды', solDesc: 'Назначьте колонку с артикулом как «Штрихкод поставщика», затем через базу кросскодов привяжите артикулы к вашим EAN-кодам. После этого сопоставление работает автоматически.' },
+    crosscode:  { title: 'Разные коды на один товар', pain: 'Один и тот же товар - у вас EAN 4607177450123, у поставщика артикул AB-4412. Программа их не совместит, если не знает что это одно и то же.', solTitle: 'База кросскодов', solDesc: 'Свяжите коды один раз - вручную или через «Поиск кросскодов», который сам предложит пары по схожести наименований. После подтверждения связь сохранится навсегда и будет применяться автоматически.' },
+    formats:    { title: 'Разные форматы прайсов', pain: 'У каждого поставщика свой формат: один шлёт xlsx, другой csv с точкой с запятой, третий - xls со скрытыми строками сверху. Приводить всё к одному виду - отдельная работа.', solTitle: 'Любой формат без подготовки', solDesc: 'Программа принимает .xlsx, .xls и .csv в любой структуре - с объединёнными ячейками, пустыми строками в шапке, любым разделителем в CSV. Просто загрузите как есть и укажите нужные столбцы.' },
+    cashless:   { title: 'Нал и безнал путаются', pain: 'У поставщика в прайсе две цены: наличный и безналичный расчёт. При сравнении они смешиваются - непонятно, какой минимум реальный для вашей формы оплаты.', solTitle: 'Автоматические группы оплаты', solDesc: 'Назовите колонки «Цена нал» и «Цена бн» - программа разобьёт их по группам и найдёт минимум в каждой отдельно. Нал и безнал не смешиваются, подсветка минимума работает раздельно.' },
+    blockprice: { title: 'Цена за упаковку, не за штуку', pain: 'Поставщик указал цену за блок или коробку. В сравнении она выглядит как самая низкая - но на самом деле за штуку выходит дороже, чем у другого поставщика.', solTitle: 'Кнопка ÷ - деление на штуку', solDesc: 'Нажмите ÷ рядом с ценой, выберите кратность упаковки (2-100 шт.) - цена пересчитается за единицу прямо в таблице. Если программа сама определила блочную цену - пересчёт произойдёт автоматически.' },
+    minprice:   { title: 'Не вижу минимум сразу', pain: 'Смотришь на строку с 5-7 ценами от разных поставщиков и глазами ищешь самую маленькую. На 500 позициях это занимает время и легко ошибиться.', solTitle: 'Подсветка минимальной цены', solDesc: 'Включите «Мин. цена» - в каждой строке таблицы минимум подсветится зелёным автоматически. Нал и безнал подсвечиваются раздельно. В выгрузке Excel минимум выделяется красным жирным.' },
+    coverage:   { title: 'Не знаю, сколько товаров нашлось', pain: 'Загрузил прайсы, получил таблицу - но непонятно, сколько позиций реально сопоставилось с поставщиками, а сколько осталось без цены.', solTitle: 'Панель статистики с покрытием', solDesc: 'После загрузки программа показывает: всего товаров, совпадений по штрихкоду, совпадений по кросскодам, без совпадений и процент покрытия. Сразу понятно, насколько полно сравнение и где достраивать базу кросскодов.' },
+    delta:      { title: 'Где моя цена выше рынка?', pain: 'Хочется видеть не просто минимум у поставщиков, а конкретные позиции, где ваша цена реализации заметно выше или ниже рыночной.', solTitle: 'Фильтр «Дельта %»', solDesc: 'Выберите две колонки для сравнения - например, «Мой прайс» и «Лучший поставщик». Задайте диапазон отклонения и направление: дешевле или дороже. Таблица покажет только строки, подходящие под условие.' },
+    newpos:     { title: 'Пропускаю новинки ассортимента', pain: 'Поставщик добавил в прайс новые позиции - но вы об этом узнаёте случайно или не узнаёте вовсе, потому что сравниваете только то, что уже есть в вашем прайсе.', solTitle: 'Фильтр «Поиск новинок»', solDesc: 'Один клик - и таблица показывает только товары из прайсов поставщиков, которых нет в вашем прайсе. Идеально для регулярного расширения ассортимента.' },
+    stock:      { title: 'Не вижу остатки у поставщиков', pain: 'Нашли самую выгодную цену, оформили заказ - а у поставщика этого товара нет в наличии. Приходится перезаказывать и терять время.', solTitle: 'Остатки из прайса в таблице', solDesc: 'Если в прайсе поставщика есть колонка «Остаток», «Наличие» или «Склад» - программа автоматически подхватит её и добавит отдельным столбцом в таблицу мониторинга.' },
+    order:      { title: 'Долго оформляю заказ вручную', pain: 'Нашли лучшие цены, теперь надо вручную выписать нужные позиции по каждому поставщику, посчитать суммы и как-то оформить заявку. Ещё час работы.', solTitle: 'Корзина и выгрузка за один клик', solDesc: 'Включите режим заказа - клик по цене открывает диалог добавления в корзину. Выбрали количество, подтвердили. Когда всё набрано - скачайте заказ в Excel: отдельный лист для каждого поставщика с итоговой суммой.' },
+    markup:     { title: 'Надо учесть доставку в цене', pain: 'Закупочная цена у поставщика низкая, но доставка платная - итоговая себестоимость другая. В сравнении это не учитывается и реальная выгода неочевидна.', solTitle: 'Наценка по категориям прямо в корзине', solDesc: 'При формировании заказа в корзине задайте наценку отдельно для каждой категории товаров - процент или фиксированную сумму. Программа пересчитает итоговую цену с учётом наценки. Используйте для закладки стоимости доставки, НДС или торговой наценки.' },
+    multiorder: { title: 'Заказ у нескольких поставщиков', pain: 'Выгодно закупить часть товаров у одного поставщика, часть у другого. Но оформлять несколько заявок параллельно - запутаешься в том, кому что заказал.', solTitle: 'Корзина с разбивкой по поставщикам', solDesc: 'Добавляйте товары от разных поставщиков в одну корзину - программа автоматически группирует позиции по каждому поставщику. При выгрузке каждый поставщик получает свой лист в Excel с итоговой суммой заказа.' },
+    qty:        { title: 'Сложно посчитать итоговую сумму', pain: 'Набрали позиции от нескольких поставщиков, теперь надо вручную суммировать, умножать на количество и считать общий бюджет заказа.', solTitle: 'Итоги автоматически в корзине и Excel', solDesc: 'Корзина показывает сумму по каждому поставщику в реальном времени по мере добавления товаров. В выгрузке Excel на каждом листе поставщика - автоматическая строка итого с общей суммой заказа.' },
+    cloud:      { title: 'Боюсь отправлять прайсы в облако', pain: 'Ваши закупочные цены - коммерческая тайна. Загружать их в облачный сервис значит доверять безопасности чужого сервера и его сотрудникам.', solTitle: 'Всё обрабатывается локально в браузере', solDesc: 'Программа использует браузерный File API - файл открывается как в Excel, данные читаются на вашем устройстве. Ни один байт не отправляется на серверы. Проверьте сами: DevTools - Network - ни одного запроса с данными.' },
+    sub:        { title: 'Надоела ежемесячная подписка', pain: 'Облачные сервисы мониторинга стоят от нескольких тысяч рублей в месяц. За год набегает значительная сумма - и платить надо даже в месяцы со спадом активности.', solTitle: 'Разовая оплата 14 990 ₽', solDesc: 'Платите один раз - пользуетесь без ограничений. Никаких ежемесячных списаний, тарифных планов и лимитов на количество поставщиков. В стоимость входит настройка под ваши прайсы и обучение.' },
+    install:    { title: 'Нужно чтобы без IT и установки', pain: 'В компании нет своего IT-специалиста, а устанавливать что-то на рабочий компьютер через системного администратора - долго и бюрократично.', solTitle: 'Работает прямо в браузере', solDesc: 'Никакой установки - откройте ссылку в Chrome, Edge, Firefox или Safari и сразу начните работать. Можно добавить на рабочий стол как PWA-приложение через сам браузер, без прав администратора.' },
+    colleague:  { title: 'Хочу передать коллеге настройки', pain: 'Потратили время на настройку: прописали шаблоны колонок, накопили базу кросскодов. Коллега открывает программу - и у него всё с нуля.', solTitle: 'Файл памяти передаётся как обычный файл', solDesc: 'Все настройки и кросскоды хранятся в одном JSON-файле на вашем диске. Передайте его коллеге - он загрузит программу, откроет этот файл и получит вашу полную базу. Удобно хранить файл памяти в общей папке на корпоративном диске.' }
+  };
+
+  window.openPainModal = function(key) {
+    var d = _pains[key]; if (!d) return;
+    document.getElementById('ptmTitle').textContent    = d.title;
+    document.getElementById('ptmPainText').textContent = d.pain;
+    document.getElementById('ptmSolTitle').textContent = d.solTitle;
+    document.getElementById('ptmSolDesc').textContent  = d.solDesc;
+    document.getElementById('ptaModal').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  };
+
+  window.closePainModal = function() {
+    document.getElementById('ptaModal').classList.remove('open');
+    document.body.style.overflow = '';
+  };
+
+  window.togglePainGroups = function() {
+    var btn   = document.getElementById('ptShowMore');
+    var badge = document.getElementById('ptCountBadge');
+    var hidden = document.querySelectorAll('.ptags-hidden');
+    var isOpen = btn.classList.contains('open');
+    hidden.forEach(function(g) {
+      if (isOpen) g.classList.remove('ptags-expanded');
+      else g.classList.add('ptags-expanded');
+    });
+    btn.classList.toggle('open');
+    if (isOpen) {
+      btn.childNodes[2].textContent = ' Показать ещё';
+      badge.textContent = '+11';
+      btn.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    } else {
+      btn.childNodes[2].textContent = ' Свернуть';
+      badge.style.display = 'none';
+    }
+  };
+
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') window.closePainModal();
+  });
+})();
+</script>
+.ptags-section {
+  background: var(--bg);
   padding: 48px 0 44px;
   position: relative; overflow: hidden;
 }

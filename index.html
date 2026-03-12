@@ -491,15 +491,16 @@
   <div class="container" style="position:relative;z-index:1;">
 
     <div class="ptags-header reveal">
-      <div class="ptags-eyebrow">
-        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-        Узнайте своё решение
-      </div>
       <h2 class="ptags-title">Это <span class="hl">про вас?</span></h2>
       <p class="ptags-sub">Нажмите на свою ситуацию - покажем, как именно программа её решает. Нашли себя? Тогда вы точно по адресу.</p>
+      <button class="ptags-show-more" id="ptShowMore" onclick="toggleAllPains()" style="margin-top:20px;">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        Показать все ситуации
+        <span class="ptags-count-badge" id="ptCountBadge">23</span>
+      </button>
     </div>
 
-    <div class="ptags-groups reveal reveal-delay-1">
+    <div class="ptags-groups" id="ptAllGroups" style="display:none;margin-top:28px;">
 
       <!-- группа 1 — всегда видна -->
       <div class="ptags-group">
@@ -560,7 +561,7 @@
       </div>
 
       <!-- группа 3 — скрытая -->
-      <div class="ptags-group ptags-hidden">
+      <div class="ptags-group">
         <div class="ptags-group-label">Анализ цен</div>
         <div class="ptags-row">
           <button class="ptag" onclick="openPainModal('minprice')">
@@ -583,11 +584,15 @@
             <span class="ptag-icon ptag-icon--green"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 8h14M5 8a2 2 0 1 0 0-4h14a2 2 0 1 0 0 4M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8M10 12h4"/></svg></span>
             Не вижу остатки у поставщиков
           </button>
+          <button class="ptag" onclick="openPainModal('category')">
+            <span class="ptag-icon ptag-icon--green"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="9" height="9" rx="1"/><rect x="13" y="2" width="9" height="9" rx="1"/><rect x="2" y="13" width="9" height="9" rx="1"/><rect x="13" y="13" width="9" height="9" rx="1"/></svg></span>
+            Нельзя быстро отфильтровать по типу товара
+          </button>
         </div>
       </div>
 
       <!-- группа 4 — скрытая -->
-      <div class="ptags-group ptags-hidden">
+      <div class="ptags-group">
         <div class="ptags-group-label">Заказ и логистика</div>
         <div class="ptags-row">
           <button class="ptag" onclick="openPainModal('order')">
@@ -610,7 +615,7 @@
       </div>
 
       <!-- группа 5 — скрытая -->
-      <div class="ptags-group ptags-hidden">
+      <div class="ptags-group">
         <div class="ptags-group-label">Безопасность и стоимость</div>
         <div class="ptags-row">
           <button class="ptag" onclick="openPainModal('cloud')">
@@ -634,13 +639,7 @@
 
     </div><!-- /ptags-groups -->
 
-    <button class="ptags-show-more" id="ptShowMore" onclick="togglePainGroups()">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
-      Показать ещё
-      <span class="ptags-count-badge" id="ptCountBadge">+11</span>
-    </button>
-
-    <div class="ptags-cta-row reveal reveal-delay-2">
+    <div class="ptags-cta-row" id="ptCta" style="display:none;margin-top:32px;">
       <a href="https://erofly83-arch.github.io/demo/" class="btn btn-primary btn-primary-lg" target="_blank" rel="noopener">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
         Попробовать демо бесплатно
@@ -717,7 +716,8 @@
     cloud:      { title: 'Боюсь отправлять прайсы в облако', pain: 'Ваши закупочные цены - коммерческая тайна. Загружать их в облачный сервис значит доверять безопасности чужого сервера и его сотрудникам.', solTitle: 'Всё обрабатывается локально в браузере', solDesc: 'Программа использует браузерный File API - файл открывается как в Excel, данные читаются на вашем устройстве. Ни один байт не отправляется на серверы. Проверьте сами: DevTools - Network - ни одного запроса с данными.' },
     sub:        { title: 'Надоела ежемесячная подписка', pain: 'Облачные сервисы мониторинга стоят от нескольких тысяч рублей в месяц. За год набегает значительная сумма - и платить надо даже в месяцы со спадом активности.', solTitle: 'Разовая оплата 14 990 ₽', solDesc: 'Платите один раз - пользуетесь без ограничений. Никаких ежемесячных списаний, тарифных планов и лимитов на количество поставщиков. В стоимость входит настройка под ваши прайсы и обучение.' },
     install:    { title: 'Нужно чтобы без IT и установки', pain: 'В компании нет своего IT-специалиста, а устанавливать что-то на рабочий компьютер через системного администратора - долго и бюрократично.', solTitle: 'Работает прямо в браузере', solDesc: 'Никакой установки - откройте ссылку в Chrome, Edge, Firefox или Safari и сразу начните работать. Можно добавить на рабочий стол как PWA-приложение через сам браузер, без прав администратора.' },
-    colleague:  { title: 'Хочу передать коллеге настройки', pain: 'Потратили время на настройку: прописали шаблоны колонок, накопили базу кросскодов. Коллега открывает программу - и у него всё с нуля.', solTitle: 'Файл памяти передаётся как обычный файл', solDesc: 'Все настройки и кросскоды хранятся в одном JSON-файле на вашем диске. Передайте его коллеге - он загрузит программу, откроет этот файл и получит вашу полную базу. Удобно хранить файл памяти в общей папке на корпоративном диске.' }
+    colleague:  { title: 'Хочу передать коллеге настройки', pain: 'Потратили время на настройку: прописали шаблоны колонок, накопили базу кросскодов. Коллега открывает программу - и у него всё с нуля.', solTitle: 'Файл памяти передаётся как обычный файл', solDesc: 'Все настройки и кросскоды хранятся в одном JSON-файле на вашем диске. Передайте его коллеге - он загрузит программу, откроет этот файл и получит вашу полную базу. Удобно хранить файл памяти в общей папке на корпоративном диске.' },
+    category:   { title: 'Нельзя быстро отфильтровать по типу товара', pain: 'В таблице тысячи строк от разных поставщиков - масло, фильтры, запчасти вперемешку. Чтобы работать с одной группой, приходится вручную искать или держать несколько файлов.', solTitle: 'Умные категории по ключевым словам', solDesc: 'Создайте категорию и пропишите ключевые слова - например «кофе». Программа автоматически отберёт все строки, в наименовании которых встречается это слово или его синонимы из базы брендов. Синонимы настраиваются: «кофе», «coffee», «Coffesso» - всё попадёт в одну категорию. Фильтр по категориям работает в один клик прямо в таблице мониторинга.' }
   };
 
   window.openPainModal = function(key) {
@@ -735,21 +735,24 @@
     document.body.style.overflow = '';
   };
 
-  window.togglePainGroups = function() {
-    var btn   = document.getElementById('ptShowMore');
-    var badge = document.getElementById('ptCountBadge');
-    var hidden = document.querySelectorAll('.ptags-hidden');
+  window.toggleAllPains = function() {
+    var btn    = document.getElementById('ptShowMore');
+    var groups = document.getElementById('ptAllGroups');
+    var cta    = document.getElementById('ptCta');
+    var badge  = document.getElementById('ptCountBadge');
     var isOpen = btn.classList.contains('open');
-    hidden.forEach(function(g) {
-      if (isOpen) g.classList.remove('ptags-expanded');
-      else g.classList.add('ptags-expanded');
-    });
-    btn.classList.toggle('open');
     if (isOpen) {
-      btn.childNodes[2].textContent = ' Показать ещё';
-      badge.textContent = '+11';
-      btn.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      groups.style.display = 'none';
+      cta.style.display    = 'none';
+      btn.classList.remove('open');
+      btn.querySelector('svg').style.transform = '';
+      btn.childNodes[2].textContent = ' Показать все ситуации';
+      badge.style.display = '';
     } else {
+      groups.style.display = 'flex';
+      cta.style.display    = 'flex';
+      btn.classList.add('open');
+      btn.querySelector('svg').style.transform = 'rotate(180deg)';
       btn.childNodes[2].textContent = ' Свернуть';
       badge.style.display = 'none';
     }

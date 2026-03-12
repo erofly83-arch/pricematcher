@@ -2648,16 +2648,27 @@
 
   window.openContactModal = function() {
     var overlay = document.getElementById('cmOverlay');
-    overlay.classList.add('open');
+    // Снимаем aria-hidden ДО показа, чтобы браузер не фокусировал
+    // скрытый от AT элемент при появлении display:flex
     overlay.removeAttribute('aria-hidden');
+    overlay.classList.add('open');
     document.body.style.overflow = 'hidden';
-    setTimeout(function(){ document.getElementById('cmPhone').focus(); }, 80);
+    // Явно переводим фокус на поле ввода после отрисовки кадра
+    requestAnimationFrame(function() {
+      var phone = document.getElementById('cmPhone');
+      if (phone) phone.focus();
+    });
   };
 
   window.closeContactModal = function() {
-    document.getElementById('cmOverlay').classList.remove('open');
-    document.getElementById('cmOverlay').setAttribute('aria-hidden','true');
+    var overlay = document.getElementById('cmOverlay');
+    // Запоминаем элемент, открывший модалку, чтобы вернуть на него фокус
+    overlay.classList.remove('open');
     document.body.style.overflow = '';
+    // Скрываем от AT только после того как элемент убран из видимости
+    requestAnimationFrame(function() {
+      overlay.setAttribute('aria-hidden', 'true');
+    });
   };
 
   window.submitContactModal = async function() {

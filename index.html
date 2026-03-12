@@ -11,6 +11,20 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 <style>
+/* ── Marquee fix: calc(-100% + 140px) не учитывает узкие экраны ── */
+@media (max-width: 767px) {
+  .browser-url-text {
+    text-overflow: clip;
+    animation: browser-marquee-fix 11s ease-in-out infinite !important;
+  }
+  @keyframes browser-marquee-fix {
+    0%,  20% { transform: translateX(0); }
+    55%, 75% { transform: translateX(calc(-100% + 60px)); }
+    100%     { transform: translateX(0); }
+  }
+}
+</style>
+<style>
   /* Увеличенное расстояние между кнопками в мобильном меню */
   .mob-nav-action {
     margin-bottom: 12px !important;
@@ -235,6 +249,431 @@
   <img id="uniLightboxImg" src="" style="max-width:92vw;max-height:90vh;border-radius:12px;box-shadow:0 32px 80px rgba(0,0,0,.6);" alt="">
   <button onclick="event.stopPropagation();document.getElementById('uniLightbox').style.display='none'" style="position:absolute;top:20px;right:24px;width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);color:#fff;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;">✕</button>
 </div>
+
+<!-- ══════════════════════════════════════════════
+     PAIN TAGS — «Это про вас?»
+══════════════════════════════════════════════ -->
+<section class="ptags-section" id="ptags" aria-label="Узнайте своё решение">
+<style>
+.ptags-section {
+  background: var(--bg);
+  padding: 48px 0 44px;
+  position: relative; overflow: hidden;
+}
+.ptags-section::before {
+  content: '';
+  position: absolute; inset: 0; pointer-events: none;
+  background-image:
+    radial-gradient(circle, rgba(59,111,212,.07) 1px, transparent 1px);
+  background-size: 28px 28px;
+}
+.ptags-header {
+  text-align: center; margin-bottom: 32px;
+  position: relative; z-index: 1;
+}
+.ptags-eyebrow {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: var(--accent-bg); color: var(--accent);
+  border: 1px solid rgba(59,111,212,.18);
+  border-radius: 99px; padding: 5px 14px;
+  font-size: 11px; font-weight: 700;
+  letter-spacing: .07em; text-transform: uppercase;
+  margin-bottom: 14px;
+}
+.ptags-title {
+  font-size: clamp(22px, 2.8vw, 34px);
+  font-weight: 700; color: var(--text-primary);
+  line-height: 1.2; letter-spacing: -.02em;
+  margin-bottom: 10px;
+}
+.ptags-title .hl { color: var(--accent); }
+.ptags-sub {
+  font-size: 16px; color: var(--text-secondary);
+  line-height: 1.65; max-width: 520px; margin: 0 auto;
+}
+.ptags-groups {
+  display: flex; flex-direction: column; gap: 20px;
+  position: relative; z-index: 1;
+  max-width: 860px; margin: 0 auto;
+}
+.ptags-group-label {
+  font-size: 10px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: .08em;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+}
+.ptags-row {
+  display: flex; flex-wrap: wrap; gap: 8px;
+}
+.ptag {
+  display: inline-flex; align-items: center; gap: 7px;
+  background: var(--surface);
+  border: 1px solid var(--border-strong);
+  border-radius: 99px;
+  padding: 8px 16px;
+  font-size: 13px; font-weight: 500;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all .2s cubic-bezier(.4,0,.2,1);
+  white-space: nowrap;
+  font-family: 'Inter', sans-serif;
+  line-height: 1;
+  box-shadow: 0 1px 3px rgba(0,0,0,.05);
+}
+.ptag:hover, .ptag:focus-visible {
+  background: var(--accent-bg);
+  border-color: var(--accent);
+  color: var(--accent);
+  box-shadow: 0 4px 14px rgba(59,111,212,.18);
+  transform: translateY(-1px);
+}
+.ptag-dot {
+  width: 7px; height: 7px; border-radius: 50%;
+  flex-shrink: 0;
+}
+.ptag-dot--amber { background: #F59E0B; }
+.ptag-dot--blue  { background: var(--accent); }
+.ptag-dot--green { background: var(--green); }
+.ptag-dot--red   { background: var(--red); }
+.ptags-cta-row {
+  display: flex; align-items: center; justify-content: center;
+  gap: 12px; flex-wrap: wrap;
+  margin-top: 36px;
+  position: relative; z-index: 1;
+}
+.ptags-cta-note {
+  width: 100%; text-align: center;
+  font-size: 12px; color: var(--text-muted);
+  margin-top: 10px;
+  display: flex; align-items: center; justify-content: center; gap: 5px;
+}
+
+/* ── Modal ── */
+.ptags-overlay {
+  display: none; position: fixed; inset: 0;
+  background: rgba(10,15,30,.55);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  z-index: 10200;
+  align-items: center; justify-content: center;
+  padding: 20px;
+}
+.ptags-overlay.open { display: flex; }
+.ptags-modal {
+  background: var(--surface);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border);
+  box-shadow: 0 24px 72px rgba(10,15,30,.22);
+  width: 100%; max-width: 460px;
+  overflow: hidden;
+  animation: ptModalIn .22s cubic-bezier(.4,0,.2,1);
+}
+@keyframes ptModalIn {
+  from { opacity:0; transform: scale(.96) translateY(8px); }
+  to   { opacity:1; transform: scale(1)  translateY(0); }
+}
+.ptm-header {
+  display: flex; align-items: center; gap: 12px;
+  padding: 18px 20px 14px;
+  border-bottom: 1px solid var(--border);
+}
+.ptm-header-icon {
+  width: 38px; height: 38px; border-radius: 10px;
+  background: #FEF9C3; color: #CA8A04;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.ptm-header-title {
+  font-size: 14px; font-weight: 700;
+  color: var(--text-primary); line-height: 1.35; flex: 1;
+}
+.ptm-close {
+  width: 30px; height: 30px; border-radius: 8px;
+  background: var(--bg); border: 1px solid var(--border);
+  color: var(--text-muted); font-size: 16px; line-height: 1;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; flex-shrink: 0;
+  transition: all .15s;
+  font-family: inherit;
+}
+.ptm-close:hover { background: var(--red-bg); color: var(--red); border-color: #FCA5A5; }
+.ptm-body { padding: 18px 20px; }
+.ptm-pain-block {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 12px 14px; margin-bottom: 14px;
+  font-size: 13px; color: var(--text-secondary); line-height: 1.6;
+}
+.ptm-divider {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 10px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: .08em; color: var(--text-muted);
+  margin-bottom: 12px;
+}
+.ptm-divider::before, .ptm-divider::after {
+  content: ''; flex: 1; height: 1px; background: var(--border);
+}
+.ptm-solution {
+  display: flex; align-items: flex-start; gap: 12px;
+  margin-bottom: 18px;
+}
+.ptm-sol-icon {
+  width: 36px; height: 36px; border-radius: 9px;
+  background: var(--green-bg);
+  border: 1px solid var(--green-border);
+  color: var(--green);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.ptm-sol-title {
+  font-size: 14px; font-weight: 700;
+  color: var(--text-primary); margin-bottom: 5px; line-height: 1.3;
+}
+.ptm-sol-desc {
+  font-size: 13px; color: var(--text-secondary); line-height: 1.65;
+}
+.ptm-footer {
+  display: flex; gap: 8px; flex-wrap: wrap;
+  padding: 12px 20px 16px;
+  border-top: 1px solid var(--border);
+  background: var(--surface-alt);
+}
+.ptm-footer .btn { flex: 1; min-width: 130px; justify-content: center; }
+@media (max-width: 540px) {
+  .ptag { font-size: 12px; padding: 7px 13px; }
+  .ptags-title { font-size: 22px; }
+  .ptags-sub { font-size: 14px; }
+}
+</style>
+
+  <div class="container" style="position:relative;z-index:1;">
+
+    <div class="ptags-header reveal">
+      <div class="ptags-eyebrow">
+        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        Узнайте своё решение
+      </div>
+      <h2 class="ptags-title">Это <span class="hl">про вас?</span></h2>
+      <p class="ptags-sub">Нажмите на свою ситуацию - покажем, как именно программа её решает. Нашли себя? Тогда вы точно по адресу.</p>
+    </div>
+
+    <div class="ptags-groups reveal reveal-delay-1">
+
+      <div>
+        <div class="ptags-group-label">Время и рутина</div>
+        <div class="ptags-row">
+          <button class="ptag" onclick="openPainModal('hours')">
+            <span class="ptag-dot ptag-dot--amber"></span>Часы на сводную таблицу
+          </button>
+          <button class="ptag" onclick="openPainModal('weekly')">
+            <span class="ptag-dot ptag-dot--amber"></span>Каждую неделю заново
+          </button>
+          <button class="ptag" onclick="openPainModal('vlookup')">
+            <span class="ptag-dot ptag-dot--amber"></span>Формулы ВПР сломались
+          </button>
+          <button class="ptag" onclick="openPainModal('columns')">
+            <span class="ptag-dot ptag-dot--amber"></span>Столбцы переименовали
+          </button>
+        </div>
+      </div>
+
+      <div>
+        <div class="ptags-group-label">Коды и форматы</div>
+        <div class="ptags-row">
+          <button class="ptag" onclick="openPainModal('nobarcode')">
+            <span class="ptag-dot ptag-dot--blue"></span>Нет штрихкодов
+          </button>
+          <button class="ptag" onclick="openPainModal('crosscode')">
+            <span class="ptag-dot ptag-dot--blue"></span>Разные коды на товар
+          </button>
+          <button class="ptag" onclick="openPainModal('formats')">
+            <span class="ptag-dot ptag-dot--blue"></span>Разные форматы прайсов
+          </button>
+          <button class="ptag" onclick="openPainModal('cashless')">
+            <span class="ptag-dot ptag-dot--blue"></span>Нал и безнал путаются
+          </button>
+        </div>
+      </div>
+
+      <div>
+        <div class="ptags-group-label">Заказ, цены, безопасность</div>
+        <div class="ptags-row">
+          <button class="ptag" onclick="openPainModal('minprice')">
+            <span class="ptag-dot ptag-dot--green"></span>Не вижу минимум сразу
+          </button>
+          <button class="ptag" onclick="openPainModal('order')">
+            <span class="ptag-dot ptag-dot--green"></span>Долго оформляю заказ
+          </button>
+          <button class="ptag" onclick="openPainModal('newpos')">
+            <span class="ptag-dot ptag-dot--green"></span>Пропускаю новинки
+          </button>
+          <button class="ptag" onclick="openPainModal('cloud')">
+            <span class="ptag-dot ptag-dot--red"></span>Боюсь отправлять в облако
+          </button>
+          <button class="ptag" onclick="openPainModal('sub')">
+            <span class="ptag-dot ptag-dot--red"></span>Надоела подписка
+          </button>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="ptags-cta-row reveal reveal-delay-2">
+      <a href="https://erofly83-arch.github.io/demo/" class="btn btn-primary btn-primary-lg" target="_blank" rel="noopener">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+        Попробовать демо бесплатно
+      </a>
+      <a href="#contact" class="btn btn-outline btn-outline-lg">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+        Обсудить задачу
+      </a>
+      <div class="ptags-cta-note">
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        Без регистрации - данные не покидают ваш компьютер
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ── Pain Modal ── -->
+<div class="ptags-overlay" id="ptaModal" onclick="if(event.target===this)closePainModal()">
+  <div class="ptags-modal" role="dialog" aria-modal="true" aria-labelledby="ptmTitle">
+    <div class="ptm-header">
+      <div class="ptm-header-icon" id="ptmIcon">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+      </div>
+      <div class="ptm-header-title" id="ptmTitle">Заголовок</div>
+      <button class="ptm-close" onclick="closePainModal()" aria-label="Закрыть">✕</button>
+    </div>
+    <div class="ptm-body">
+      <div class="ptm-pain-block" id="ptmPainText"></div>
+      <div class="ptm-divider">Решение</div>
+      <div class="ptm-solution">
+        <div class="ptm-sol-icon">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <div>
+          <div class="ptm-sol-title" id="ptmSolTitle"></div>
+          <div class="ptm-sol-desc" id="ptmSolDesc"></div>
+        </div>
+      </div>
+    </div>
+    <div class="ptm-footer">
+      <a href="https://erofly83-arch.github.io/demo/" class="btn btn-primary" target="_blank" rel="noopener">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+        Попробовать
+      </a>
+      <button class="btn btn-outline" onclick="closePainModal()">Закрыть</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  var _pains = {
+    hours: {
+      title: 'Часы на сводную таблицу',
+      pain: 'Каждый раз одно и то же: скачать прайсы, открыть Excel, выстроить таблицу, прописать ВПР, проверить результат. 2-4 часа на задачу, которую можно решить за минуты.',
+      solTitle: 'Автоматическое сравнение за минуты',
+      solDesc: 'Загрузите прайсы - программа сопоставит их по штрихкодам и соберёт сводную таблицу сама. Без формул, без ручного выравнивания столбцов. Первая настройка - один раз, дальше быстрее с каждым разом.'
+    },
+    weekly: {
+      title: 'Каждую неделю заново',
+      pain: 'Новые прайсы от поставщиков - и снова всё сначала. Каждый раз выстраивать одну и ту же структуру, потому что Excel ничего не помнит.',
+      solTitle: 'Шаблоны колонок и файл памяти',
+      solDesc: 'Один раз укажите программе, где в прайсе штрихкод, цена и наименование. Настройка сохранится в файле памяти. При следующей загрузке того же поставщика всё определится автоматически - вам только подтвердить.'
+    },
+    vlookup: {
+      title: 'Формулы ВПР сломались',
+      pain: 'Поставщик добавил строку или переименовал столбец - и вся сводная таблица рассыпалась. Половина ВПР возвращает ошибку, разбираться снова на час.',
+      solTitle: 'Никаких формул - только загрузка',
+      solDesc: 'В программе не нужны ВПР и сводные таблицы вообще. Сопоставление работает по штрихкодам - добавился товар или изменилась структура прайса, программа просто пересчитает всё заново.'
+    },
+    columns: {
+      title: 'Поставщик переименовал столбцы',
+      pain: 'Получили новый прайс - а столбцы называются иначе, чем в прошлый раз. Снова вручную искать где цена, где артикул, где остаток.',
+      solTitle: 'Настройка за минуту - один раз',
+      solDesc: 'Кликните на заголовок столбца и выберите его роль: штрихкод, цена, наименование, остаток. Следующий раз программа попробует определить их автоматически по ключевым словам из базы. Изменились снова - перенастройка занимает минуту.'
+    },
+    nobarcode: {
+      title: 'У поставщика нет штрихкодов',
+      pain: 'Поставщик присылает прайс только с артикулами - штрихкодов нет совсем. Сопоставить с вашим прайсом вручную нереально при большом ассортименте.',
+      solTitle: 'Артикулы как кросскоды',
+      solDesc: 'Назначьте колонку с артикулом как «Штрихкод поставщика», затем через базу кросскодов привяжите артикулы к вашим EAN-кодам. После этого сопоставление работает автоматически при каждой следующей загрузке.'
+    },
+    crosscode: {
+      title: 'Разные коды на один товар',
+      pain: 'Один и тот же товар - у вас EAN 4607177450123, у поставщика артикул AB-4412. Программа их не совместит, если не знает что это одно и то же.',
+      solTitle: 'База кросскодов',
+      solDesc: 'Свяжите коды один раз - вручную или через «Поиск кросскодов», который сам предложит пары по схожести наименований. После подтверждения связь сохранится навсегда и будет применяться автоматически.'
+    },
+    formats: {
+      title: 'Разные форматы прайсов',
+      pain: 'У каждого поставщика свой формат: один шлёт xlsx, другой csv с точкой с запятой, третий - xls со скрытыми строками сверху. Приводить всё к одному виду - отдельная работа.',
+      solTitle: 'Любой формат без подготовки',
+      solDesc: 'Программа принимает .xlsx, .xls и .csv в любой структуре - с объединёнными ячейками, пустыми строками в шапке, любым разделителем в CSV. Просто загрузите как есть и укажите нужные столбцы.'
+    },
+    cashless: {
+      title: 'Нал и безнал путаются',
+      pain: 'У поставщика в прайсе две цены: наличный и безналичный расчёт. При сравнении они смешиваются - непонятно, какой минимум реальный для вашей формы оплаты.',
+      solTitle: 'Автоматические группы оплаты',
+      solDesc: 'Назовите колонки «Цена нал» и «Цена бн» - программа разобьёт их по группам и найдёт минимум в каждой отдельно. Нал и безнал никогда не смешиваются, подсветка минимума работает раздельно по каждой группе.'
+    },
+    minprice: {
+      title: 'Не вижу минимум сразу',
+      pain: 'Смотришь на строку с 5-7 ценами от разных поставщиков и глазами ищешь самую маленькую. На 500 позициях это занимает время и можно ошибиться.',
+      solTitle: 'Подсветка минимальной цены',
+      solDesc: 'Включите «Мин. цена» - и в каждой строке таблицы минимум подсветится зелёным автоматически. Нал и безнал подсвечиваются раздельно. В выгрузке Excel минимум выделяется красным жирным - тоже автоматически.'
+    },
+    order: {
+      title: 'Долго оформляю заказ',
+      pain: 'Нашли лучшие цены, теперь надо вручную выписать нужные позиции по каждому поставщику, посчитать суммы и как-то оформить заявку. Ещё час работы.',
+      solTitle: 'Корзина и выгрузка за один клик',
+      solDesc: 'Включите режим заказа - клик по цене открывает диалог добавления в корзину. Выбрали количество, подтвердили. Когда всё набрано - скачайте заказ в Excel: отдельный лист для каждого поставщика с итоговой суммой.'
+    },
+    newpos: {
+      title: 'Пропускаю новинки ассортимента',
+      pain: 'Поставщик добавил в прайс новые позиции - но вы об этом узнаёте случайно или не узнаёте вовсе, потому что сравниваете только то, что уже есть в вашем прайсе.',
+      solTitle: 'Фильтр «Поиск новинок»',
+      solDesc: 'Один клик на «Поиск новинок» - и таблица показывает только товары из прайсов поставщиков, которых нет в вашем прайсе. Идеально для регулярного расширения ассортимента.'
+    },
+    cloud: {
+      title: 'Боюсь отправлять прайсы в облако',
+      pain: 'Ваши закупочные цены - это коммерческая тайна. Загружать их в облачный сервис значит доверять безопасности чужого сервера, политикам конфиденциальности и чужим сотрудникам.',
+      solTitle: 'Всё обрабатывается локально в браузере',
+      solDesc: 'Программа использует браузерный File API - файл открывается как в Excel, данные читаются на вашем устройстве. Ни один байт не отправляется на серверы. Проверить просто: DevTools → Network - ни одного запроса с данными.'
+    },
+    sub: {
+      title: 'Надоела ежемесячная подписка',
+      pain: 'Облачные сервисы мониторинга стоят от нескольких тысяч рублей в месяц. За год набегает значительная сумма - и платить надо, даже в месяцы со спадом активности.',
+      solTitle: 'Разовая оплата 14 990 ₽',
+      solDesc: 'Платите один раз - пользуетесь без ограничений. Никаких ежемесячных списаний, тарифных планов и лимитов на количество поставщиков. В стоимость входит настройка под ваши прайсы и обучение.'
+    }
+  };
+
+  window.openPainModal = function(key) {
+    var d = _pains[key]; if (!d) return;
+    document.getElementById('ptmTitle').textContent    = d.title;
+    document.getElementById('ptmPainText').textContent = d.pain;
+    document.getElementById('ptmSolTitle').textContent = d.solTitle;
+    document.getElementById('ptmSolDesc').textContent  = d.solDesc;
+    var overlay = document.getElementById('ptaModal');
+    overlay.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  };
+
+  window.closePainModal = function() {
+    document.getElementById('ptaModal').classList.remove('open');
+    document.body.style.overflow = '';
+  };
+
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') window.closePainModal();
+  });
+})();
+</script>
 
 <!-- ══════════════════════════════════════════════
      GUARANTEE STRIP

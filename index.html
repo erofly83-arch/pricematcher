@@ -77,7 +77,7 @@
 
       <!-- Right side -->
       <div class="nav-right">
-        <a href="#contact" class="btn btn-outline" style="font-size:13px;padding:7px 14px;">Обсудить задачу</a>
+        <a href="#" onclick="openContactModal();return false;" class="btn btn-outline" style="font-size:13px;padding:7px 14px;">Обсудить задачу</a>
         <a href="https://erofly83-arch.github.io/demo/" class="btn btn-primary" target="_blank" rel="noopener" style="font-size:13px;padding:7px 14px;">
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
           Запустить демо
@@ -122,7 +122,7 @@
     Вопросы и ответы
   </a>
   <div class="mob-nav-sep"></div>
-  <a href="#contact" class="mob-nav-action mob-nav-action--outline">
+  <a href="#" onclick="openContactModal();return false;" class="mob-nav-action mob-nav-action--outline">
     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
     Обсудить задачу
   </a>
@@ -644,7 +644,7 @@
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
         Попробовать демо бесплатно
       </a>
-      <a href="#contact" class="btn btn-outline btn-outline-lg">
+      <a href="#" onclick="openContactModal();return false;" class="btn btn-outline btn-outline-lg">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
         Обсудить задачу
       </a>
@@ -781,7 +781,7 @@
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
         100% гарантия
       </div>
-      <a href="#contact" class="guarantee-badge" style="text-decoration:none;cursor:pointer;">
+      <a href="#" onclick="openContactModal();return false;" class="guarantee-badge" style="text-decoration:none;cursor:pointer;">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
         Запросить возврат
       </a>
@@ -2171,7 +2171,7 @@
           <div class="calc-loss-sub">Программа окупится за <span id="calcLossROI">-</span> - дальше чистая прибыль</div>
         </div>
 
-        <a href="#contact" class="btn calc-cta-btn">
+        <a href="#" onclick="openContactModal();return false;" class="btn calc-cta-btn">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
           Начать экономить - 14 990 ₽
         </a>
@@ -2407,5 +2407,271 @@
      JAVASCRIPT
 ══════════════════════════════════════════════ -->
 <script src="app.js"></script>
+
+<!-- ══════════════════════════════════════════════
+     CONTACT MODAL
+══════════════════════════════════════════════ -->
+<div class="cm-overlay" id="cmOverlay" onclick="if(event.target===this)closeContactModal()" aria-hidden="true">
+  <div class="cm-modal" role="dialog" aria-modal="true" aria-labelledby="cmTitle">
+
+    <div class="cm-header">
+      <div class="cm-header-icon">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+      </div>
+      <div>
+        <div class="cm-title" id="cmTitle">Обсудить задачу и сроки</div>
+        <div class="cm-sub">Ответим обычно в течение часа</div>
+      </div>
+      <button class="cm-close" onclick="closeContactModal()" aria-label="Закрыть">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+
+    <div class="cm-body" id="cmForm">
+      <div class="cm-field-label">Ваш телефон</div>
+      <div class="cm-field-wrap">
+        <div class="cm-field-icon">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.39 2 2 0 0 1 3.58 1.18h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.73a16 16 0 0 0 6.29 6.29l1.62-1.62a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+        </div>
+        <input class="cm-input" id="cmPhone" type="tel" placeholder="+7 900 000-00-00" autocomplete="tel" inputmode="tel">
+      </div>
+      <div class="cm-err" id="cmErr">Пожалуйста, введите номер телефона.</div>
+      <button class="cm-submit" id="cmBtn" onclick="submitContactModal()">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+        Отправить заявку
+      </button>
+      <div class="cm-alts">
+        <span class="cm-alts-label">или напишите напрямую</span>
+        <div class="cm-alts-row">
+          <a href="https://t.me/vorontsov_dmitriy" class="cm-alt-btn" target="_blank" rel="noopener">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+            Telegram
+          </a>
+          <a href="tel:+79130998250" class="cm-alt-btn">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.39 2 2 0 0 1 3.58 1.18h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.73a16 16 0 0 0 6.29 6.29l1.62-1.62a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+            +7 913 099-82-50
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div class="cm-success" id="cmSuccess" style="display:none;">
+      <div class="cm-success-icon">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+      </div>
+      <div class="cm-success-title">Заявка отправлена!</div>
+      <div class="cm-success-sub">Ответим в течение часа. Telegram отвечаем быстрее — напишите напрямую.</div>
+      <a href="https://t.me/vorontsov_dmitriy" class="cm-submit" style="text-decoration:none;display:inline-flex;margin-top:4px;" target="_blank" rel="noopener">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+        Написать в Telegram
+      </a>
+    </div>
+
+  </div>
+</div>
+
+<style>
+.cm-overlay {
+  display: none; position: fixed; inset: 0;
+  background: rgba(10,15,30,.55);
+  backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);
+  z-index: 10300;
+  align-items: center; justify-content: center;
+  padding: 20px;
+}
+.cm-overlay.open { display: flex; }
+.cm-modal {
+  background: var(--surface);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border);
+  box-shadow: 0 24px 72px rgba(10,15,30,.22);
+  width: 100%; max-width: 420px;
+  overflow: hidden;
+  animation: cmIn .22s cubic-bezier(.4,0,.2,1);
+}
+@keyframes cmIn {
+  from { opacity:0; transform: scale(.96) translateY(10px); }
+  to   { opacity:1; transform: scale(1)  translateY(0); }
+}
+.cm-header {
+  display: flex; align-items: center; gap: 12px;
+  padding: 18px 20px 16px;
+  border-bottom: 1px solid var(--border);
+}
+.cm-header-icon {
+  width: 40px; height: 40px; border-radius: 10px;
+  background: var(--accent-bg); color: var(--accent);
+  border: 1px solid rgba(59,111,212,.18);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.cm-title {
+  font-size: 15px; font-weight: 700; color: var(--text-primary);
+  line-height: 1.3;
+}
+.cm-sub {
+  font-size: 12px; color: var(--text-muted); margin-top: 2px;
+}
+.cm-close {
+  width: 30px; height: 30px; border-radius: 8px;
+  background: var(--bg); border: 1px solid var(--border);
+  color: var(--text-muted);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; margin-left: auto; flex-shrink: 0;
+  transition: all .15s; font-family: inherit;
+}
+.cm-close:hover { background: var(--red-bg); color: var(--red); border-color: #FCA5A5; }
+.cm-body { padding: 20px; }
+.cm-field-label {
+  font-size: 12px; font-weight: 600; color: var(--text-secondary);
+  margin-bottom: 8px; letter-spacing: .01em;
+}
+.cm-field-wrap {
+  position: relative; margin-bottom: 6px;
+}
+.cm-field-icon {
+  position: absolute; left: 12px; top: 50%; transform: translateY(-50%);
+  color: var(--text-muted); pointer-events: none;
+  display: flex; align-items: center;
+}
+.cm-input {
+  width: 100%; height: 44px;
+  padding: 0 14px 0 38px;
+  border: 1.5px solid var(--border-strong);
+  border-radius: var(--radius-md);
+  font-size: 15px; font-family: 'Inter', sans-serif;
+  color: var(--text-primary);
+  background: var(--surface);
+  outline: none; transition: border-color .18s, box-shadow .18s;
+}
+.cm-input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(59,111,212,.12);
+}
+.cm-err {
+  font-size: 12px; color: var(--red);
+  margin-bottom: 12px; display: none;
+}
+.cm-submit {
+  width: 100%; height: 46px;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  background: var(--accent); color: #fff;
+  border: none; border-radius: var(--radius-md);
+  font-size: 14px; font-weight: 700;
+  font-family: 'Inter', sans-serif;
+  cursor: pointer;
+  transition: box-shadow .2s, transform .2s;
+  margin-bottom: 18px;
+}
+.cm-submit:hover {
+  box-shadow: 0 6px 20px rgba(59,111,212,.35);
+  transform: translateY(-1px);
+}
+.cm-submit:disabled { opacity: .65; cursor: not-allowed; transform: none; box-shadow: none; }
+.cm-alts { border-top: 1px solid var(--border); padding-top: 16px; }
+.cm-alts-label {
+  font-size: 11px; color: var(--text-muted); font-weight: 500;
+  display: block; margin-bottom: 10px; text-align: center;
+}
+.cm-alts-row { display: flex; gap: 8px; }
+.cm-alt-btn {
+  flex: 1; height: 38px;
+  display: flex; align-items: center; justify-content: center; gap: 6px;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-md);
+  font-size: 13px; font-weight: 600;
+  color: var(--text-secondary);
+  text-decoration: none;
+  transition: all .18s;
+  font-family: 'Inter', sans-serif;
+}
+.cm-alt-btn:hover {
+  background: var(--accent-bg); border-color: var(--accent); color: var(--accent);
+}
+/* success state */
+.cm-success {
+  padding: 36px 24px 32px;
+  display: flex; flex-direction: column; align-items: center; text-align: center; gap: 8px;
+}
+.cm-success-icon {
+  width: 56px; height: 56px; border-radius: 50%;
+  background: var(--green-bg); border: 1px solid var(--green-border);
+  color: var(--green);
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: 6px;
+}
+.cm-success-title {
+  font-size: 18px; font-weight: 700; color: var(--text-primary);
+}
+.cm-success-sub {
+  font-size: 14px; color: var(--text-secondary); line-height: 1.6;
+  max-width: 300px;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+</style>
+
+<script>
+(function(){
+  var GAS_URL = 'https://script.google.com/macros/s/AKfycbwx02B-sEgTdtsyPZHoZUnhs0T162vB2dBLks05grDyph3CMJdA-OHAK2x-9o4aT5Sv/exec';
+
+  window.openContactModal = function() {
+    var overlay = document.getElementById('cmOverlay');
+    overlay.classList.add('open');
+    overlay.removeAttribute('aria-hidden');
+    document.body.style.overflow = 'hidden';
+    setTimeout(function(){ document.getElementById('cmPhone').focus(); }, 80);
+  };
+
+  window.closeContactModal = function() {
+    document.getElementById('cmOverlay').classList.remove('open');
+    document.getElementById('cmOverlay').setAttribute('aria-hidden','true');
+    document.body.style.overflow = '';
+  };
+
+  window.submitContactModal = async function() {
+    var btn    = document.getElementById('cmBtn');
+    var phone  = document.getElementById('cmPhone').value.trim();
+    var errBox = document.getElementById('cmErr');
+
+    if (!phone) {
+      errBox.style.display = 'block';
+      document.getElementById('cmPhone').focus();
+      return;
+    }
+    errBox.style.display = 'none';
+
+    var origHTML = btn.innerHTML;
+    btn.disabled = true;
+    btn.innerHTML = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="animation:spin .8s linear infinite"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg>&nbsp;Отправка…';
+
+    var NL   = '\n';
+    var text = '🔔 Новая заявка — Прайс-менеджер' + NL + NL +
+      '📞 Телефон: ' + phone + NL +
+      '⏰ ' + new Date().toLocaleString('ru-RU');
+
+    try {
+      await fetch(GAS_URL, {
+        method: 'POST', mode: 'no-cors',
+        headers: { 'Content-Type': 'text/plain' },
+        body: JSON.stringify({ phone: phone, text: text })
+      });
+      document.getElementById('cmForm').style.display    = 'none';
+      document.getElementById('cmSuccess').style.display = 'flex';
+    } catch(err) {
+      btn.disabled = false;
+      btn.innerHTML = origHTML;
+      errBox.textContent = 'Ошибка отправки. Напишите напрямую в Telegram.';
+      errBox.style.display = 'block';
+    }
+  };
+
+  document.addEventListener('keydown', function(e){
+    if (e.key === 'Escape') window.closeContactModal();
+  });
+  document.getElementById('cmPhone').addEventListener('keydown', function(e){
+    if (e.key === 'Enter') window.submitContactModal();
+  });
+})();
+</script>
 </body>
 </html>
